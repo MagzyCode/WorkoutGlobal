@@ -1,4 +1,4 @@
-namespace WorkoutGlobal.Api
+namespace WebApplication1
 {
     public class WeatherForecast
     {
