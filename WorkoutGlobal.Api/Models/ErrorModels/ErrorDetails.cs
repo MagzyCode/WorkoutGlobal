@@ -2,6 +2,9 @@
 
 namespace WorkoutGlobal.Api.Models.ErrorModels
 {
+    /// <summary>
+    /// Represent common model for all errors.
+    /// </summary>
     public class ErrorDetails
     {
         /// <summary>
@@ -27,7 +30,11 @@ namespace WorkoutGlobal.Api.Models.ErrorModels
         /// Ensure that the username and password included in the request are correct.
         /// </example> 
         public string Details { get; set; }
-
+        
+        /// <summary>
+        /// Represents string format of error.
+        /// </summary>
+        /// <returns>Json format of error.</returns>
         public override string ToString() => JsonSerializer.Serialize(this);
     }
 }

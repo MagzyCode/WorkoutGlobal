@@ -5,11 +5,22 @@ using WorkoutGlobal.Api.Models.ErrorModels;
 
 namespace WorkoutGlobal.Api.Controllers
 {
+    /// <summary>
+    /// Represents health controller.
+    /// </summary>
     [Route("api/health")]
     [ApiController]
     public class HealthController : ControllerBase
     {
+        /// <summary>
+        /// Health repository instance.
+        /// </summary>
         private readonly IHealthRepository _healthRepository;
+
+        /// <summary>
+        /// Sets health repository.
+        /// </summary>
+        /// <param name="healthRepository">Health repository instance.</param>
         public HealthController(IHealthRepository healthRepository)
         {
             _healthRepository = healthRepository;

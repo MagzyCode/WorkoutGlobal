@@ -3,8 +3,17 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace WorkoutGlobal.Monitoring.Controllers
 {
+    /// <summary>
+    /// Health check controller.
+    /// </summary>
     public class HealthChecksController : Controller
     {
+        /// <summary>
+        /// Get status of given health checks.
+        /// </summary>
+        /// <param name="healthReport">Health checks report.</param>
+        /// <returns>Status code of health check and list of errors.</returns>
+        /// <exception cref="Exception">Throw when health checks report status is unvalid.</exception>
         [HttpGet]
         public IActionResult GetHealthChecksStatus(HealthReport healthReport)
         {
