@@ -10,12 +10,11 @@ namespace WorkoutGlobal.Api.Repositories.BaseRepositories
             WorkoutGlobalContext workoutGlobalContext, 
             IConfiguration configurationManager) 
             : base(workoutGlobalContext, configurationManager)
-        {
-        }
+        { }
 
-        public void Create(TModel model)
+        public async Task CreateAsync(TModel model)
         {
-            Context.Set<TModel>().Add(model);
+            await Context.Set<TModel>().AddAsync(model);
         }
 
         public void Delete(TModel model)
@@ -25,12 +24,16 @@ namespace WorkoutGlobal.Api.Repositories.BaseRepositories
 
         public IQueryable<TModel> GetAll()
         {
-            return Context.Set<TModel>();
+            var result = Context.Set<TModel>();
+
+            return result;
         }
 
-        public TModel GetModel(Guid id)
+        public async Task<TModel> GetModelAsync(Guid id)
         {
-            return Context.Set<TModel>().Find(id);
+            var model = await Context.Set<TModel>().FindAsync(); ;
+
+            return model;
         }
 
         public void Update(TModel model)
@@ -38,6 +41,6 @@ namespace WorkoutGlobal.Api.Repositories.BaseRepositories
             Context.Set<TModel>().Update(model);
         }
 
-        public void SaveChanges() => Context.SaveChanges();
+        public async Task SaveChangesAsync() => await Context.SaveChangesAsync();
     }
 }

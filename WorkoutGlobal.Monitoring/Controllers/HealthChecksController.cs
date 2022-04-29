@@ -6,16 +6,24 @@ namespace WorkoutGlobal.Monitoring.Controllers
     public class HealthChecksController : Controller
     {
         [HttpGet]
-        public IActionResult Status(HealthReport healthReport)
+        public IActionResult GetHealthChecksStatus(HealthReport healthReport)
         {
-            var isHealthy = healthReport.Entries
-                .All(x => x.Value.Status == HealthStatus.Healthy);
+            var checksHealthDescription = new List<string>();
 
-            var status = isHealthy 
-                ? StatusCodes.Status200OK
-                : StatusCodes.Status500InternalServerError;
+            foreach (var check in healthReport.Entries)
+                checksHealthDescription.Add($"Check '{check.Key} had status {check.Value.Status}'");
 
-            return View(status);
+            return View(new
+            {
+                StatusCode = healthReport.Status switch
+                {
+                    HealthStatus.Healthy => StatusCodes.Status200OK,
+                    HealthStatus.Degraded => StatusCodes.Status200OK,
+                    HealthStatus.Unhealthy => StatusCodes.Status503ServiceUnavailable,
+                    _ => throw new Exception("Uncorrect type of health report status")
+                },
+                Errors = checksHealthDescription
+            });
         }
     }
 }

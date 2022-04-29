@@ -26,9 +26,7 @@ namespace WorkoutGlobal.Api.Repositories.HealthRepository
         {
             using var httpClient = new HttpClient()
             {
-                //BaseAddress = new Uri(
-                //    uriString: Configuration.GetSection("profiles:WorkoutGlobal.Api:applicationUrl").Value)
-                BaseAddress = new Uri("https://localhost:7159")
+                BaseAddress = new Uri(Configuration.GetSection("AplicationUrl").Value)
             };
 
             var response = await httpClient.GetAsync("api/health/ping");

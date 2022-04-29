@@ -1,14 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Xunit;
 using FluentAssertions;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using WorkoutGlobal.Monitoring.Controllers;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Http;
 
 namespace WorkoutGlobal.Monitoring.Tests
 {
@@ -28,17 +24,13 @@ namespace WorkoutGlobal.Monitoring.Tests
 
             var controller = new HealthChecksController();
 
-            // act & assert
-            var actionResult = controller.Status(checks) as ViewResult ;
+            // act
+            var actionResult = controller.GetHealthChecksStatus(checks) as ViewResult;
+            var model = actionResult?.Model;
 
+            // assert
             actionResult.Should().NotBeNull();
-
-            var model = actionResult!.Model as int?;
-
-            model.Should().NotBeNull()
-                .And.BeOfType(typeof(int))
-                .And.Be(StatusCodes.Status200OK);
+            model.Should().NotBeNull();
         }
-
     }
 }

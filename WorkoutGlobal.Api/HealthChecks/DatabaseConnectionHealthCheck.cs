@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.Diagnostics.HealthChecks;
-using WorkoutGlobal.Api.Contracts.RepositoryContracts;
 using WorkoutGlobal.Api.Contracts.RepositoryManagerContracts;
 
 namespace WorkoutGlobal.Api.HealthChecks

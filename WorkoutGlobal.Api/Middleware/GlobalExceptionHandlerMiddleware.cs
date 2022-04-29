@@ -1,13 +1,16 @@
-﻿using WorkoutGlobal.Api.Models.ErrorModels;
+﻿using System.Diagnostics;
+using WorkoutGlobal.Api.Models.ErrorModels;
 
 namespace WorkoutGlobal.Api.Middleware
 {
     public class GlobalExceptionHandlerMiddleware
     {
         private readonly RequestDelegate _next;
-        public GlobalExceptionHandlerMiddleware(RequestDelegate next)
+        private readonly IHostEnvironment _environment;
+        public GlobalExceptionHandlerMiddleware(RequestDelegate next, IHostEnvironment environment)
         {
             _next = next;
+            _environment = environment;
         }
         public async Task InvokeAsync(HttpContext httpContext)
         {
@@ -19,12 +22,16 @@ namespace WorkoutGlobal.Api.Middleware
             {
                 httpContext.Response.ContentType = "application/json";
 
-                await httpContext.Response.WriteAsync(new ErrorDetails()
+                var responce = new ErrorDetails()
                 {
                     StatusCode = StatusCodes.Status500InternalServerError,
                     Message = "Internal server error on WorkoutGlobal API.",
-                    Details = "Ensure that request was correct."
-                }.ToString());
+                    Details = _environment.IsDevelopment()
+                        ? new StackTrace().ToString()
+                        : "Ensure that request was correct."
+                };
+
+                await httpContext.Response.WriteAsync(responce.ToString());
             }
         }
     }

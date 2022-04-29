@@ -17,6 +17,6 @@ namespace WorkoutGlobal.Api.Repositories.BaseRepositories
 
         public WorkoutGlobalContext Context => _workoutGlobalContext;
 
-        //public IConfiguration Configuration => _configuration;
+        public IConfiguration Configuration => _configuration;
     }
 }
