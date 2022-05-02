@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Diagnostics.HealthChecks;
 using System.Net;
+using WorkoutGlobal.Api.Context;
 using WorkoutGlobal.Api.Contracts.RepositoryContracts;
-using WorkoutGlobal.Api.DatabaseContext;
 using WorkoutGlobal.Api.Repositories.BaseRepositories;
 
 namespace WorkoutGlobal.Api.Repositories.HealthRepository

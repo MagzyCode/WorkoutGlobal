@@ -1,5 +1,5 @@
-﻿using WorkoutGlobal.Api.Contracts.RepositoryContracts;
-using WorkoutGlobal.Api.DatabaseContext;
+﻿using WorkoutGlobal.Api.Context;
+using WorkoutGlobal.Api.Contracts.RepositoryContracts;
 
 namespace WorkoutGlobal.Api.Repositories.BaseRepositories
 {

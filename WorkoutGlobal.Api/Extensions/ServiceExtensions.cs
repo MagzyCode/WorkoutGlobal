@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using WorkoutGlobal.Api.Context;
 using WorkoutGlobal.Api.Contracts.RepositoryContracts;
 using WorkoutGlobal.Api.Contracts.RepositoryManagerContracts;
-using WorkoutGlobal.Api.DatabaseContext;
 using WorkoutGlobal.Api.Repositories.BaseRepositories;
 using WorkoutGlobal.Api.Repositories.HealthRepository;
 

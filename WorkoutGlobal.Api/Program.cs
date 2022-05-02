@@ -14,6 +14,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.ConfigureSqlContext(builder.Configuration);
 builder.Services.ConfigureRepositories();
+builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddHealthChecks()
     .AddCheck<DatabaseConnectionHealthCheck>(nameof(DatabaseConnectionHealthCheck))
     .AddCheck<ApiWorkHealthCheck>(nameof(ApiWorkHealthCheck));
