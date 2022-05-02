@@ -1,3 +1,4 @@
+using FluentValidation.AspNetCore;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
@@ -38,6 +39,12 @@ builder.Services.AddAuthentication(options =>
                 builder.Configuration.GetSection("JwtSettings:Key").Value))
     };
 });
+builder.Services.AddControllers()
+    .AddFluentValidation(configuration =>
+    {
+        configuration.RegisterValidatorsFromAssemblyContaining<Program>();
+        configuration.DisableDataAnnotationsValidation = true;
+    });
 
 
 var app = builder.Build();
