@@ -13,51 +13,24 @@ namespace WorkoutGlobal.Api.Models.Validators.UserValidators
         /// </summary>
         public UserRegistrationDtoValidator()
         {
-            RuleFor(user => user.Name)
+            RuleFor(user => user.UserName)
                 .NotNull()
                 .NotEmpty()
-                .Length(2, 50);
-
-            RuleFor(user => user.Surname)
+                .Length(3, 40)
+                .Matches(@"[^\sА-Яа-я@%?#<>%/]")
+                    .WithMessage("Check your '{PropertyName}' for using forbidden сharacters (@%?#<>%/) and cyrillic.");
+            
+            RuleFor(user => user.Password)
                 .NotNull()
                 .NotEmpty()
-                .Length(2, 50);
+                .Length(6, 50)
+                .Matches(@"[^\sА-Яа-я@%?#<>%/]")
+                    .WithMessage("Check your '{PropertyName}' for using forbidden сharacters (@%?#<>%/) and cyrillic.");
 
-            RuleFor(user => user.Patronymic)
+            RuleFor(user => user.ConfirmPassword)
                 .NotNull()
                 .NotEmpty()
-                .Length(2, 50);
-
-            RuleFor(user => user.DateOfBirth)
-                .NotNull()
-                .NotEmpty()
-                .GreaterThan(DateTime.Parse("01/01/1900 00:00:00"));
-
-            RuleFor(user => user.Country)
-                .NotNull()
-                .NotEmpty()
-                .Length(2, 150);
-
-            RuleFor(user => user.City)
-                .NotNull()
-                .NotEmpty()
-                .Length(2, 150);
-
-            RuleFor(user => user.Street)
-                .NotNull()
-                .NotEmpty()
-                .Length(2, 150);
-
-            RuleFor(user => user.StreetNumber)
-                .NotNull()
-                .NotEmpty()
-                .Length(1, 6);
-
-            When(user => user.StreetNumber != null, () =>
-            {
-                RuleFor(user => user.RoomNumber)
-                    .Length(1, 8);
-            });
+                .Equal(user => user.Password);
         }
     }
 }

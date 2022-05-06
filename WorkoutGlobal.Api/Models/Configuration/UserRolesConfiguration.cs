@@ -5,22 +5,23 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 namespace WorkoutGlobal.Api.Models.Configuration
 {
     /// <summary>
-    /// Seeding database with initial roles for users.
+    /// Represent seeding of user roles.
     /// </summary>
     public class UserRolesConfiguration : IEntityTypeConfiguration<IdentityUserRole<string>>
     {
         /// <summary>
-        /// Seeding database with initial admin role for user.
+        /// Seeding database with initial user roles values.
         /// </summary>
         /// <param name="builder">Model builder.</param>
         public void Configure(EntityTypeBuilder<IdentityUserRole<string>> builder)
         {
             builder.HasData(
-                new IdentityUserRole<string>()
+                new IdentityUserRole<string>
                 {
-                    UserId = "07ca8c3c-2a1b-4423-98fd-f4bb8359feb8",
+                    UserId = "b5b84fd7-5366-44eb-9d1b-408c6a4a8926",
                     RoleId = "6abe6f33-ae4b-4430-8f14-493dc9a5a9d1"
-                });
+                }
+           );
         }
     }
 }

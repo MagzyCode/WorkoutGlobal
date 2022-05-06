@@ -3,6 +3,7 @@ using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.IdentityModel.Tokens;
+using System.Reflection;
 using System.Text;
 using WorkoutGlobal.Api.Extensions;
 using WorkoutGlobal.Api.HealthChecks;
@@ -12,10 +13,16 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddHealthChecks();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options => 
+{
+    var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
+});
 builder.Services.ConfigureSqlContext(builder.Configuration);
 builder.Services.ConfigureRepositories();
 builder.Services.AddAutoMapper(typeof(Program));
+builder.Services.ConfigureIdentity();
+builder.Services.ConfigureAttributes();
 builder.Services.AddHealthChecks()
     .AddCheck<DatabaseConnectionHealthCheck>(nameof(DatabaseConnectionHealthCheck))
     .AddCheck<ApiWorkHealthCheck>(nameof(ApiWorkHealthCheck));
@@ -33,7 +40,6 @@ builder.Services.AddAuthentication(options =>
         ValidateIssuerSigningKey = true,
         ValidIssuer = builder.Configuration.GetSection("JwtSettings:ValidIssuer").Value,
         ValidAudience = builder.Configuration.GetSection("JwtSettings:ValidAudience").Value,
-        // TODO: Search info about where correctly store secret key.
         IssuerSigningKey = new SymmetricSecurityKey(
             Encoding.UTF8.GetBytes(
                 builder.Configuration.GetSection("JwtSettings:Key").Value))

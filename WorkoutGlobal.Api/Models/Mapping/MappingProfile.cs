@@ -13,8 +13,12 @@ namespace WorkoutGlobal.Api.Models.Mapping
         /// </summary>
         public MappingProfile()
         {
-            CreateMap<UserRegistrationDto, User>();
-            CreateMap<UserAuthorizationDto, User>();
+            CreateMap<UserRegistrationDto, UserCredentials>();
+
+            CreateMap<UserRegistrationDto, UserCredentialsDto>();
+            CreateMap<UserAuthorizationDto, UserCredentialsDto>();
+
+            CreateMap<UserCredentialsDto, UserCredentials>();
         }
     }
 }

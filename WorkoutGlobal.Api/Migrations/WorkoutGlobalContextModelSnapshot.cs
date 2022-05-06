@@ -52,14 +52,14 @@ namespace WorkoutGlobal.Api.Migrations
                         new
                         {
                             Id = "f4a4ce79-c6b3-4e12-9c98-ff07b5030752",
-                            ConcurrencyStamp = "a3e622ae-c8a1-4a58-9cd6-b824b61639d7",
+                            ConcurrencyStamp = "e2cd9e2e-351f-40e7-89b6-44c2ffc33d01",
                             Name = "User",
                             NormalizedName = "USER"
                         },
                         new
                         {
                             Id = "6abe6f33-ae4b-4430-8f14-493dc9a5a9d1",
-                            ConcurrencyStamp = "ccd38d53-4273-428f-b560-31bd15af75de",
+                            ConcurrencyStamp = "ecae841c-ff05-49ba-b85f-a510b4884196",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         });
@@ -154,7 +154,7 @@ namespace WorkoutGlobal.Api.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = "07ca8c3c-2a1b-4423-98fd-f4bb8359feb8",
+                            UserId = "b5b84fd7-5366-44eb-9d1b-408c6a4a8926",
                             RoleId = "6abe6f33-ae4b-4430-8f14-493dc9a5a9d1"
                         });
                 });
@@ -178,7 +178,7 @@ namespace WorkoutGlobal.Api.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("WorkoutGlobal.Api.Models.User", b =>
+            modelBuilder.Entity("WorkoutGlobal.Api.Models.UserCredentials", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -186,18 +186,9 @@ namespace WorkoutGlobal.Api.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
-                    b.Property<string>("ClassificationBookNumber")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("DateOfBirth")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("DateOfRegistration")
-                        .HasColumnType("datetime2");
 
                     b.Property<string>("Email")
                         .HasMaxLength(256)
@@ -212,9 +203,6 @@ namespace WorkoutGlobal.Api.Migrations
                     b.Property<DateTimeOffset?>("LockoutEnd")
                         .HasColumnType("datetimeoffset");
 
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("NormalizedEmail")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
@@ -226,7 +214,7 @@ namespace WorkoutGlobal.Api.Migrations
                     b.Property<string>("PasswordHash")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Patronymic")
+                    b.Property<string>("PasswordSalt")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PhoneNumber")
@@ -235,13 +223,7 @@ namespace WorkoutGlobal.Api.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
 
-                    b.Property<string>("ResidentPlace")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("SecurityStamp")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Surname")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("TwoFactorEnabled")
@@ -266,52 +248,17 @@ namespace WorkoutGlobal.Api.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "07ca8c3c-2a1b-4423-98fd-f4bb8359feb8",
+                            Id = "b5b84fd7-5366-44eb-9d1b-408c6a4a8926",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "bc2166da-7bac-4623-a05f-2fc14ac0f197",
-                            DateOfBirth = new DateTime(2000, 9, 21, 16, 15, 0, 0, DateTimeKind.Unspecified),
-                            DateOfRegistration = new DateTime(2022, 5, 2, 19, 19, 43, 158, DateTimeKind.Local).AddTicks(387),
+                            ConcurrencyStamp = "61c1819d-99be-4736-b706-2c0c9cf3a8bb",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
-                            Name = "Mikhail",
-                            Patronymic = "Andreevich",
+                            PasswordHash = "21c9b9e74e5071de6d6c872ccae5af4deb3b42563cd649a3179a5780163b6238",
+                            PasswordSalt = "46da4fb783d806ab",
                             PhoneNumberConfirmed = false,
-                            ResidentPlace = "Republic of Belarus, Minsk, Sovetskaya Street, 28/25",
-                            SecurityStamp = "cab59ed5-95fa-4fa6-8d14-1e6ba096b693",
-                            Surname = "Kazarevich",
-                            TwoFactorEnabled = false
-                        });
-                });
-
-            modelBuilder.Entity("WorkoutGlobal.Api.Models.UserCredentials", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<byte[]>("AccountImage")
-                        .HasColumnType("varbinary(max)");
-
-                    b.Property<string>("Password")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId")
-                        .IsUnique()
-                        .HasFilter("[UserId] IS NOT NULL");
-
-                    b.ToTable("UserCredentials");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("b5b84fd7-5366-44eb-9d1b-408c6a4a8926"),
-                            Password = "qwerty123",
-                            UserId = "07ca8c3c-2a1b-4423-98fd-f4bb8359feb8"
+                            SecurityStamp = "6af3a568-76ec-4b6a-8ee4-04d79b25f272",
+                            TwoFactorEnabled = false,
+                            UserName = "MagzyCode"
                         });
                 });
 
@@ -326,7 +273,7 @@ namespace WorkoutGlobal.Api.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("WorkoutGlobal.Api.Models.User", null)
+                    b.HasOne("WorkoutGlobal.Api.Models.UserCredentials", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -335,7 +282,7 @@ namespace WorkoutGlobal.Api.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("WorkoutGlobal.Api.Models.User", null)
+                    b.HasOne("WorkoutGlobal.Api.Models.UserCredentials", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -350,7 +297,7 @@ namespace WorkoutGlobal.Api.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("WorkoutGlobal.Api.Models.User", null)
+                    b.HasOne("WorkoutGlobal.Api.Models.UserCredentials", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -359,25 +306,11 @@ namespace WorkoutGlobal.Api.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("WorkoutGlobal.Api.Models.User", null)
+                    b.HasOne("WorkoutGlobal.Api.Models.UserCredentials", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("WorkoutGlobal.Api.Models.UserCredentials", b =>
-                {
-                    b.HasOne("WorkoutGlobal.Api.Models.User", "User")
-                        .WithOne("UserCredentials")
-                        .HasForeignKey("WorkoutGlobal.Api.Models.UserCredentials", "UserId");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("WorkoutGlobal.Api.Models.User", b =>
-                {
-                    b.Navigation("UserCredentials");
                 });
 #pragma warning restore 612, 618
         }

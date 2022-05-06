@@ -9,43 +9,22 @@ namespace WorkoutGlobal.UI.Controllers
     /// </summary>
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
-
+        
         /// <summary>
         /// Sets logger of controller.
         /// </summary>
-        /// <param name="logger"></param>
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController()
         {
-            _logger = logger;
+
         }
 
         /// <summary>
-        /// Index action-method.
+        /// Represents action-method for user log in.
         /// </summary>
-        /// <returns>Index view.</returns>
-        public IActionResult Index()
+        /// <returns>Login view.</returns>
+        public IActionResult Login()
         {
             return View();
-        }
-        
-        /// <summary>
-        /// Privacy action-method.
-        /// </summary>
-        /// <returns>Privacy view.</returns>
-        public IActionResult Privacy()
-        {
-            return View();
-        }
-
-        /// <summary>
-        /// Error action-method.
-        /// </summary>
-        /// <returns>View with errors.</returns>
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
     }
 }

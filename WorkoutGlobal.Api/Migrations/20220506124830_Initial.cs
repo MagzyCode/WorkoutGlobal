@@ -1,12 +1,13 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
+#pragma warning disable 1591
 
 namespace WorkoutGlobal.Api.Migrations
 {
     public partial class Initial : Migration
     {
-        /// <inheritdoc/>
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
@@ -28,13 +29,7 @@ namespace WorkoutGlobal.Api.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Surname = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Patronymic = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    DateOfBirth = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ResidentPlace = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ClassificationBookNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    DateOfRegistration = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    PasswordSalt = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -161,49 +156,25 @@ namespace WorkoutGlobal.Api.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "UserCredentials",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Password = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    AccountImage = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_UserCredentials", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_UserCredentials_AspNetUsers_UserId",
-                        column: x => x.UserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id");
-                });
+            migrationBuilder.InsertData(
+                table: "AspNetRoles",
+                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
+                values: new object[] { "6abe6f33-ae4b-4430-8f14-493dc9a5a9d1", "ecae841c-ff05-49ba-b85f-a510b4884196", "Admin", "ADMIN" });
 
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "6abe6f33-ae4b-4430-8f14-493dc9a5a9d1", "ccd38d53-4273-428f-b560-31bd15af75de", "Admin", "ADMIN" });
-
-            migrationBuilder.InsertData(
-                table: "AspNetRoles",
-                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "f4a4ce79-c6b3-4e12-9c98-ff07b5030752", "a3e622ae-c8a1-4a58-9cd6-b824b61639d7", "User", "USER" });
+                values: new object[] { "f4a4ce79-c6b3-4e12-9c98-ff07b5030752", "e2cd9e2e-351f-40e7-89b6-44c2ffc33d01", "User", "USER" });
 
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
-                columns: new[] { "Id", "AccessFailedCount", "ClassificationBookNumber", "ConcurrencyStamp", "DateOfBirth", "DateOfRegistration", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "Name", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "Patronymic", "PhoneNumber", "PhoneNumberConfirmed", "ResidentPlace", "SecurityStamp", "Surname", "TwoFactorEnabled", "UserName" },
-                values: new object[] { "07ca8c3c-2a1b-4423-98fd-f4bb8359feb8", 0, null, "bc2166da-7bac-4623-a05f-2fc14ac0f197", new DateTime(2000, 9, 21, 16, 15, 0, 0, DateTimeKind.Unspecified), new DateTime(2022, 5, 2, 19, 19, 43, 158, DateTimeKind.Local).AddTicks(387), null, false, false, null, "Mikhail", null, null, null, "Andreevich", null, false, "Republic of Belarus, Minsk, Sovetskaya Street, 28/25", "cab59ed5-95fa-4fa6-8d14-1e6ba096b693", "Kazarevich", false, null });
+                columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PasswordSalt", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
+                values: new object[] { "b5b84fd7-5366-44eb-9d1b-408c6a4a8926", 0, "61c1819d-99be-4736-b706-2c0c9cf3a8bb", null, false, false, null, null, null, "21c9b9e74e5071de6d6c872ccae5af4deb3b42563cd649a3179a5780163b6238", "46da4fb783d806ab", null, false, "6af3a568-76ec-4b6a-8ee4-04d79b25f272", false, "MagzyCode" });
 
             migrationBuilder.InsertData(
                 table: "AspNetUserRoles",
                 columns: new[] { "RoleId", "UserId" },
-                values: new object[] { "6abe6f33-ae4b-4430-8f14-493dc9a5a9d1", "07ca8c3c-2a1b-4423-98fd-f4bb8359feb8" });
-
-            migrationBuilder.InsertData(
-                table: "UserCredentials",
-                columns: new[] { "Id", "AccountImage", "Password", "UserId" },
-                values: new object[] { new Guid("b5b84fd7-5366-44eb-9d1b-408c6a4a8926"), null, "qwerty123", "07ca8c3c-2a1b-4423-98fd-f4bb8359feb8" });
+                values: new object[] { "6abe6f33-ae4b-4430-8f14-493dc9a5a9d1", "b5b84fd7-5366-44eb-9d1b-408c6a4a8926" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -243,16 +214,8 @@ namespace WorkoutGlobal.Api.Migrations
                 column: "NormalizedUserName",
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_UserCredentials_UserId",
-                table: "UserCredentials",
-                column: "UserId",
-                unique: true,
-                filter: "[UserId] IS NOT NULL");
         }
 
-        /// <inheritdoc/>
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
@@ -269,9 +232,6 @@ namespace WorkoutGlobal.Api.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
-
-            migrationBuilder.DropTable(
-                name: "UserCredentials");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

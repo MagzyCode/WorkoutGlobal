@@ -17,9 +17,10 @@ namespace WorkoutGlobal.Api.Models.Configuration
             builder.HasData(
                 new UserCredentials()
                 {
-                    Id = new Guid("b5b84fd7-5366-44eb-9d1b-408c6a4a8926"),
-                    Password = "qwerty123",
-                    UserId = "07ca8c3c-2a1b-4423-98fd-f4bb8359feb8"
+                    Id = "b5b84fd7-5366-44eb-9d1b-408c6a4a8926",
+                    UserName = "MagzyCode",
+                    PasswordSalt = "46da4fb783d806ab",
+                    PasswordHash = "21c9b9e74e5071de6d6c872ccae5af4deb3b42563cd649a3179a5780163b6238"
                 });
         }
     }

@@ -8,7 +8,7 @@ namespace WorkoutGlobal.Api.Context
     /// <summary>
     /// Represents context of WorkoutGlobal project.
     /// </summary>
-    public class WorkoutGlobalContext : IdentityDbContext<User>
+    public class WorkoutGlobalContext : IdentityDbContext<UserCredentials>
     {
         /// <summary>
         /// Sets context options for context.
@@ -25,13 +25,7 @@ namespace WorkoutGlobal.Api.Context
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            modelBuilder.Entity<User>()
-                .HasOne(user => user.UserCredentials)
-                .WithOne(credentials => credentials.User)
-                .HasForeignKey<UserCredentials>(credentials => credentials.UserId);
-
             modelBuilder.ApplyConfiguration(new RoleConfiguration());
-            modelBuilder.ApplyConfiguration(new UserConfiguration());
             modelBuilder.ApplyConfiguration(new UserCredentialsConfiguration());
             modelBuilder.ApplyConfiguration(new UserRolesConfiguration());
         }

@@ -1,9 +1,15 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using WorkoutGlobal.Api.Context;
+using WorkoutGlobal.Api.Contracts.AuthenticationManagerContracts;
 using WorkoutGlobal.Api.Contracts.RepositoryContracts;
 using WorkoutGlobal.Api.Contracts.RepositoryManagerContracts;
+using WorkoutGlobal.Api.Filters.ActionFilters;
+using WorkoutGlobal.Api.Models;
+using WorkoutGlobal.Api.Repositories.AuthorizationRepositories;
 using WorkoutGlobal.Api.Repositories.BaseRepositories;
 using WorkoutGlobal.Api.Repositories.HealthRepository;
+using WorkoutGlobal.Api.Repositories.ModelsRepositories;
 
 namespace WorkoutGlobal.Api.Extensions
 {
@@ -29,7 +35,39 @@ namespace WorkoutGlobal.Api.Extensions
         public static void ConfigureRepositories(this IServiceCollection services)
         {
             services.AddScoped<IHealthRepository, HealthRepository>();
+            services.AddScoped<IUserCredentialsRepository, UserCredentialsRepository>();
+            services.AddScoped<IAuthenticationRepository, AuthenticationRepository>();
+
             services.AddScoped<IRepositoryManager, RepositoryManager>();
+        }
+
+        /// <summary>
+        /// Configure instances of attributes.
+        /// </summary>
+        /// <param name="services">Project services.</param>
+        public static void ConfigureAttributes(this IServiceCollection services)
+        {
+            services.AddScoped<ModelValidationFilterAttribute>();
+        }
+
+        /// <summary>
+        /// Configure identity.
+        /// </summary>
+        /// <param name="services">Project services.</param>
+        public static void ConfigureIdentity(this IServiceCollection services)
+        {
+            var builder = services.AddIdentityCore<UserCredentials>(o =>
+            {
+                o.Password.RequireDigit = true;
+                o.Password.RequireLowercase = false;
+                o.Password.RequireUppercase = false;
+                o.Password.RequireNonAlphanumeric = false;
+                o.Password.RequiredLength = 10;
+                o.User.RequireUniqueEmail = true;
+            });
+            builder = new IdentityBuilder(builder.UserType, typeof(IdentityRole),
+                builder.Services);
+            builder.AddEntityFrameworkStores<WorkoutGlobalContext>().AddDefaultTokenProviders();
         }
     }
 }
