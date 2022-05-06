@@ -1,6 +1,4 @@
-﻿using WorkoutGlobal.Api.Models;
-
-namespace WorkoutGlobal.Api.Contracts.RepositoryContracts
+﻿namespace WorkoutGlobal.Api.Contracts.RepositoryContracts
 {
     /// <summary>
     /// Base interface for user credentials repository.

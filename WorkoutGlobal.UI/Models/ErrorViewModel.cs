@@ -8,7 +8,7 @@ namespace WorkoutGlobal.UI.Models
         /// <summary>
         /// Id of request.
         /// </summary>
-        public string? RequestId { get; set; }
+        public string RequestId { get; set; }
 
         /// <summary>
         /// Show if request id exists.

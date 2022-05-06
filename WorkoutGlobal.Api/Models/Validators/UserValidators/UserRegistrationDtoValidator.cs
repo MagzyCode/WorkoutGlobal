@@ -19,6 +19,10 @@ namespace WorkoutGlobal.Api.Models.Validators.UserValidators
                 .Length(3, 40)
                 .Matches(@"[^\sА-Яа-я@%?#<>%/]")
                     .WithMessage("Check your '{PropertyName}' for using forbidden сharacters (@%?#<>%/) and cyrillic.");
+
+            RuleFor(user => user.Email)
+                .NotNull()
+                .EmailAddress();
             
             RuleFor(user => user.Password)
                 .NotNull()

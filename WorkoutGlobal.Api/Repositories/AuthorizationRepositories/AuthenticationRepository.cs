@@ -74,7 +74,6 @@ namespace WorkoutGlobal.Api.Repositories.AuthorizationRepositories
         /// <param name="userCredentialsDto">User credentials.</param>
         public async Task<UserCredentials> GenerateUserCredentialsAsync(UserCredentialsDto userCredentialsDto)
         {
-            // only user name will map.
             var userCredentials = _mapper.Map<UserCredentials>(userCredentialsDto);
 
             var saltBytes = new byte[8];

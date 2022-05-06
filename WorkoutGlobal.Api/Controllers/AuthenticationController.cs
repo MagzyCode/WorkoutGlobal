@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using WorkoutGlobal.Api.Contracts.RepositoryManagerContracts;
 using WorkoutGlobal.Api.Filters.ActionFilters;
-using WorkoutGlobal.Api.Models;
 using WorkoutGlobal.Api.Models.DTOs.UserDTOs;
 using WorkoutGlobal.Api.Models.ErrorModels;
 

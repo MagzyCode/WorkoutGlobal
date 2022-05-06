@@ -1,6 +1,4 @@
-﻿
-
-using WorkoutGlobal.Api.Context;
+﻿using WorkoutGlobal.Api.Context;
 
 namespace WorkoutGlobal.Api.Contracts.RepositoryContracts
 {

@@ -1,10 +1,18 @@
+using FluentValidation.AspNetCore;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using WorkoutGlobal.UI.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews()
+    .AddFluentValidation(configuration =>
+    {
+        configuration.RegisterValidatorsFromAssemblyContaining<Program>();
+        configuration.DisableDataAnnotationsValidation = true;
+    });
+
 builder.Services.AddHealthChecks();
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
@@ -21,6 +29,7 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
+app.UseGlobalExceptionHandler();
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
