@@ -1,5 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using System.Security.Claims;
+using WorkoutGlobal.UI.ApiConnection.Contracts;
 using WorkoutGlobal.UI.Filters.ActionFilters;
 using WorkoutGlobal.UI.Models;
 using WorkoutGlobal.UI.ViewModels.Authentication;
@@ -11,13 +16,18 @@ namespace WorkoutGlobal.UI.Controllers
     /// </summary>
     public class HomeController : Controller
     {
-        
+        private readonly IMapper _mapper;
+        private readonly ApiConnection.Contracts.IAuthenticationService _authenticationService;
+
         /// <summary>
         /// Sets logger of controller.
         /// </summary>
-        public HomeController()
+        public HomeController(
+            IMapper mapper,
+            ApiConnection.Contracts.IAuthenticationService authenticationService)
         {
-
+            _mapper = mapper;
+            _authenticationService = authenticationService;
         }
 
         /// <summary>
@@ -26,6 +36,7 @@ namespace WorkoutGlobal.UI.Controllers
         /// <returns>Login view.</returns>
         public IActionResult Login()
         {
+            var i = HttpContext.Response;
             return View(new UserAuthorizationViewModel());
         }
 
@@ -34,21 +45,42 @@ namespace WorkoutGlobal.UI.Controllers
         /// </summary>
         /// <param name="userAuthorizationViewModel"></param>
         /// <returns></returns>
+        [HttpPost]
         [ModelValidationFilter]
-        public IActionResult Login(UserAuthorizationViewModel userAuthorizationViewModel)
+        public async Task<IActionResult> Login(UserAuthorizationViewModel userAuthorizationViewModel)
         {
+            var authenticationUser = _mapper.Map<AuthenticationUser>(userAuthorizationViewModel);
 
+            await Authenticate(authenticationUser);
 
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", "MainMenu");
         }
 
         /// <summary>
         /// Represents action-method for home page.
         /// </summary>
         /// <returns>Home page view.</returns>
-        public IActionResult Index() 
-        { 
+        public IActionResult Index()
+        {
             return View();
+        }
+
+        /// <summary>
+        /// Authenticate user by credentials.
+        /// </summary>
+        /// <param name="authenticationUser">User credentials.</param>
+        /// <returns>A task that represents asynchronous Authenticate operation.</returns>
+        private async Task Authenticate(AuthenticationUser authenticationUser)
+        {
+            var token = await _authenticationService.AuthenticateAsync(authenticationUser);
+
+            var claims = new List<Claim>
+            {
+                new Claim("Token", token)
+            };
+
+            ClaimsIdentity id = new(claims, "ApplicationCookie", ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);
+            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(id));
         }
     }
 }

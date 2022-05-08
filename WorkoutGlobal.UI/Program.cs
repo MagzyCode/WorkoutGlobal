@@ -17,9 +17,13 @@ builder.Services.AddHealthChecks();
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
-        options.LoginPath = "Home/Login";
+        options.LoginPath = "/Home/Login";
     });
 builder.Services.AddAuthorization();
+builder.Services.AddAutoMapper(typeof(Program));
+builder.Services.ConfigureAttributes();
+builder.Services.ConfigureApiConnection();
+builder.Services.AddHttpClient();
 
 var app = builder.Build();
 

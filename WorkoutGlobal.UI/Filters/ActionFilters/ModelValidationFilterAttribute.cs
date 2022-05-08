@@ -27,13 +27,13 @@ namespace WorkoutGlobal.UI.Filters.ActionFilters
         public override void OnActionExecuting(ActionExecutingContext context)
         {
             var dtoParam = context.ActionArguments
-                .SingleOrDefault(x => x.Value.ToString().Contains("Dto")).Value;
+                .SingleOrDefault(x => x.Value.ToString().Contains("ViewModel")).Value;
 
             if (dtoParam == null)
                 context.Result = new BadRequestObjectResult(new ErrorDetails()
                 {
                     StatusCode = StatusCodes.Status400BadRequest,
-                    Message = "Incoming DTO model in null.",
+                    Message = "Incoming view model in null.",
                     Details = new StackTrace().ToString()
                 });
 
@@ -50,7 +50,7 @@ namespace WorkoutGlobal.UI.Filters.ActionFilters
                 context.Result = new BadRequestObjectResult(new ErrorDetails()
                 {
                     StatusCode = StatusCodes.Status400BadRequest,
-                    Message = "Dto model isn't valid.",
+                    Message = "View model isn't valid.",
                     Details = errorMessage.ToString()
                 });
             }

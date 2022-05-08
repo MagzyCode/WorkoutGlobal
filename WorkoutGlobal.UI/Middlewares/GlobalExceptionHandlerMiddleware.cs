@@ -1,4 +1,7 @@
-﻿using System.Text;
+﻿using Microsoft.Extensions.Primitives;
+using Newtonsoft.Json;
+using System.Net;
+using System.Text;
 
 namespace WorkoutGlobal.UI.Middlewares
 {
@@ -32,7 +35,7 @@ namespace WorkoutGlobal.UI.Middlewares
             catch (Exception exception)
             {
                 // TODO: Update this method for existed exceptions.
-                var url = new StringBuilder();
+                //var url = new StringBuilder();
                 //url.Append($"/Home/Error?message={exception.Message}&");
 
                 //switch (exception)
@@ -47,8 +50,10 @@ namespace WorkoutGlobal.UI.Middlewares
                 //        url.Append($"statusCode={(HttpStatusCode)exception.HResult}");
                 //        break;
                 //}
-
-                httpContext.Response.Redirect(url.ToString());
+                ////httpContext.Response.
+                //httpContext.Request.HttpContext.Items.Add("exceptionInfo", url.ToString());
+                // httpContext.Response.Redirect(url.ToString());
+                httpContext.Response.Redirect("/Home/Login?exception=true");
             }
         }
     }

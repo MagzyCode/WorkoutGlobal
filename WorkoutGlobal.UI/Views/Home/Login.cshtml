@@ -1,1 +1,35 @@
 ﻿@model WorkoutGlobal.UI.ViewModels.Authentication.UserAuthorizationViewModel
+
+<h2>Login</h2>
+<br />
+<form method="post" asp-controller="Home" asp-action="Login">
+    @{
+        if (Context.Request.Query["exception"] == "true")
+        {
+            <div class="form-group row">
+                <h2>Try another user name or password</h2>
+            </div>
+        }
+    }
+
+    <div class="form-group row">
+        <label asp-for="UserName" class="col-xs-2 col-form-label">User name</label>
+        <br />
+        <input asp-for="UserName" class="form-control col-xs-2" type="text" id="example-text-input">
+        <span asp-validation-for="UserName"></span>
+    </div>
+    <div class="form-group row">
+        <label asp-for="Password" class="col-xs-2 col-form-label">Password</label>
+        <br />
+        <input asp-for="Password" class="form-control col-xs-5" type="password" id="example-text-input">
+        <span asp-validation-for="Password"></span>
+    </div>
+    <div class="form-group row">
+        <button type="submit" class="btn btn-primary mb-2">Войти</button>
+    </div>
+</form>
+
+@section scripts{
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+}
