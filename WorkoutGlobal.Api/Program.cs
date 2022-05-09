@@ -2,6 +2,7 @@ using FluentValidation.AspNetCore;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System.Reflection;
 using System.Text;
@@ -10,6 +11,10 @@ using WorkoutGlobal.Api.HealthChecks;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.Configure<ApiBehaviorOptions>(options =>
+{
+    options.SuppressModelStateInvalidFilter = true;
+});
 builder.Services.AddControllers();
 builder.Services.AddHealthChecks();
 builder.Services.AddEndpointsApiExplorer();
@@ -51,7 +56,6 @@ builder.Services.AddControllers()
         configuration.RegisterValidatorsFromAssemblyContaining<Program>();
         configuration.DisableDataAnnotationsValidation = true;
     });
-
 
 var app = builder.Build();
 

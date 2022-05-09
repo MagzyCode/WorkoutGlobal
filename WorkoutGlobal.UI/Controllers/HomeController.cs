@@ -36,7 +36,6 @@ namespace WorkoutGlobal.UI.Controllers
         /// <returns>Login view.</returns>
         public IActionResult Login()
         {
-            var i = HttpContext.Response;
             return View(new UserAuthorizationViewModel());
         }
 
