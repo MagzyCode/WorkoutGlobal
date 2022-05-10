@@ -12,7 +12,7 @@ namespace WorkoutGlobal.Api.Repositories.HealthRepository
     public class HealthRepository : BaseConnection, IHealthRepository
     {
         /// <summary>
-        /// Sets database context and project configuration.
+        /// Ctor for base health repository.
         /// </summary>
         /// <param name="workoutGlobalContext">Database context.</param>
         /// <param name="configurationManager">Project configuration.</param>

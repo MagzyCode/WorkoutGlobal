@@ -11,7 +11,7 @@ namespace WorkoutGlobal.Api.Controllers
     /// <summary>
     /// Represents controller for authorization and registration.
     /// </summary>
-    [Route("api")]
+    [Route("api/authentication")]
     [ApiController]
     [Produces("application/json")]
     public class AuthenticationController : ControllerBase
@@ -20,7 +20,7 @@ namespace WorkoutGlobal.Api.Controllers
         private readonly IRepositoryManager _repositoryManager;
 
         /// <summary>
-        /// Sets instance of authentication controller with AutoMapper instance.
+        /// Ctor for authentication controller.
         /// </summary>
         /// <param name="mapper">AutoMapper instance.</param>
         /// <param name="repositoryManager">Repository manager instance.</param>
@@ -38,7 +38,7 @@ namespace WorkoutGlobal.Api.Controllers
         /// <response code="200">User was successfully authenticate.</response>
         /// <response code="401">Incoming model credentials isn't valid.</response>
         /// <response code="500">Something going wrong on server.</response>
-        [HttpPost("authentication/login")]
+        [HttpPost("login")]
         [ModelValidationFilter]
         [ProducesResponseType(type: typeof(string), statusCode: StatusCodes.Status200OK)]
         [ProducesResponseType(type: typeof(ErrorDetails), statusCode: StatusCodes.Status401Unauthorized)]
@@ -68,7 +68,7 @@ namespace WorkoutGlobal.Api.Controllers
         /// <response code="200">User was successfully registered.</response>
         /// <response code="400">Incoming model already exists in system.</response>
         /// <response code="500">Something going wrong on server.</response>
-        [HttpPost("registrate")]
+        [HttpPost("registration")]
         [ModelValidationFilter]
         [ProducesResponseType(statusCode: StatusCodes.Status201Created)]
         [ProducesResponseType(type: typeof(ErrorDetails), statusCode: StatusCodes.Status400BadRequest)]

@@ -13,7 +13,7 @@ namespace WorkoutGlobal.UI.Middlewares
         private readonly RequestDelegate _next;
 
         /// <summary>
-        /// Sets request delegate.
+        /// Ctor for global exception middleware.
         /// </summary>
         /// <param name="next">Request delegate instance.</param>
         public GlobalExceptionHandlerMiddleware(RequestDelegate next)

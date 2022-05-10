@@ -14,25 +14,22 @@ namespace WorkoutGlobal.Api.Models.Validators.UserValidators
         public UserRegistrationDtoValidator()
         {
             RuleFor(user => user.UserName)
-                .NotNull()
                 .NotEmpty()
                 .Length(3, 40)
-                .Matches(@"[^\sА-Яа-я@%?#<>%/]")
+                .Matches(@"^([A-Za-z0-9_-=+])([A-Za-z0-9_-=+]){2,50}$")
                     .WithMessage("Check your '{PropertyName}' for using forbidden сharacters (@%?#<>%/) and cyrillic.");
 
             RuleFor(user => user.Email)
-                .NotNull()
+                .NotEmpty()
                 .EmailAddress();
             
             RuleFor(user => user.Password)
-                .NotNull()
                 .NotEmpty()
                 .Length(6, 50)
-                .Matches(@"[^\sА-Яа-я@%?#<>%/]")
+                .Matches(@"^([A-Za-z0-9_-=+])([A-Za-z0-9_-=+]){5,50}$")
                     .WithMessage("Check your '{PropertyName}' for using forbidden сharacters (@%?#<>%/) and cyrillic.");
 
             RuleFor(user => user.ConfirmPassword)
-                .NotNull()
                 .NotEmpty()
                 .Equal(user => user.Password);
         }

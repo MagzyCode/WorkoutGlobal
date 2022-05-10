@@ -20,7 +20,7 @@ namespace WorkoutGlobal.UI.Controllers
         private readonly ApiConnection.Contracts.IAuthenticationService _authenticationService;
 
         /// <summary>
-        /// Sets logger of controller.
+        /// Ctor for home controller.
         /// </summary>
         public HomeController(
             IMapper mapper,

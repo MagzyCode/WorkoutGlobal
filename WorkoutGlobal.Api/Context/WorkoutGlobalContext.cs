@@ -11,7 +11,7 @@ namespace WorkoutGlobal.Api.Context
     public class WorkoutGlobalContext : IdentityDbContext<UserCredentials>
     {
         /// <summary>
-        /// Sets context options for context.
+        /// Ctor for set context options.
         /// </summary>
         /// <param name="options">Context options.</param>
         public WorkoutGlobalContext(DbContextOptions options)

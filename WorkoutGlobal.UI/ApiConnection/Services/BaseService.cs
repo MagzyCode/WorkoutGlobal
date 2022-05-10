@@ -16,7 +16,7 @@ namespace WorkoutGlobal.UI.ApiConnection.Services
         private protected readonly T _service;
 
         /// <summary>
-        /// Sets base configuration.
+        /// Ctor for base api service.
         /// </summary>
         /// <param name="configuration">Project configuration.</param>
         public BaseService(IConfiguration configuration)

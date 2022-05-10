@@ -9,7 +9,7 @@ namespace WorkoutGlobal.UI.ApiConnection.Services
     public class AuthenticationService : BaseService<IAuthenticationService>, IAuthenticationService
     {
         /// <summary>
-        /// Sets base service configuration.
+        /// Ctor authentication service.
         /// </summary>
         /// <param name="configuration">Project configuration.</param>
         public AuthenticationService(IConfiguration configuration)

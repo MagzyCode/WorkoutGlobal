@@ -13,7 +13,7 @@ namespace WorkoutGlobal.Api.Middleware
         private readonly IHostEnvironment _environment;
 
         /// <summary>
-        /// Sets request delegate and host enviroment.
+        /// Ctor for global exception handler middleware.
         /// </summary>
         /// <param name="next">Request delegate for moving in request pipeline.</param>
         /// <param name="environment">Host enviroment.</param>

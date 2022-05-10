@@ -14,11 +14,9 @@ namespace WorkoutGlobal.UI.Models.Validators.UserValidators
         public UserAuthorizationViewModelValidator()
         {
             RuleFor(user => user.UserName)
-                .NotNull()
                 .NotEmpty();
 
             RuleFor(user => user.Password)
-                .NotNull()
                 .NotEmpty();
         }
     }

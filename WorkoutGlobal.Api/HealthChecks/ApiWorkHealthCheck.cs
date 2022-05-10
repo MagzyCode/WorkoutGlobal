@@ -14,7 +14,7 @@ namespace WorkoutGlobal.Api.HealthChecks
         private readonly IRepositoryManager _repositoryManager;
 
         /// <summary>
-        /// Sets repositoty manager instance.
+        /// Ctor for api health check.
         /// </summary>
         /// <param name="repositoryManager">Repository manager instance.</param>
         public ApiWorkHealthCheck(IRepositoryManager repositoryManager)

@@ -12,7 +12,7 @@ namespace WorkoutGlobal.UI.ApiConnection.HttpClientHandlers
         private readonly ITokenService _tokenService;
 
         /// <summary>
-        /// Sets http instances.
+        /// Ctor for authentication http handler.
         /// </summary>
         /// <param name="httpContextAccessor">Http context accessor instance.</param>
         /// <param name="tokenService">Token service instance.</param>

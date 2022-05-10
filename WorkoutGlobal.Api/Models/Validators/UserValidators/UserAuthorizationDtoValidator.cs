@@ -14,11 +14,9 @@ namespace WorkoutGlobal.Api.Models.Validators.UserValidators
         public UserAuthorizationDtoValidator()
         {
             RuleFor(user => user.UserName)
-                .NotNull()
                 .NotEmpty();
 
             RuleFor(user => user.Password)
-                .NotNull()
                 .NotEmpty();
         }
     }

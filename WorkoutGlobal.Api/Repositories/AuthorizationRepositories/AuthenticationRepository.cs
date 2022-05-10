@@ -23,7 +23,7 @@ namespace WorkoutGlobal.Api.Repositories.AuthorizationRepositories
         private readonly IMapper _mapper;
 
         /// <summary>
-        /// Sets instance of authentication manager.
+        /// Ctor for authentication repository.
         /// </summary>
         /// <param name="userManager">User manager class instance.</param>
         /// <param name="workoutGlobalContext">Project database context instance.</param>

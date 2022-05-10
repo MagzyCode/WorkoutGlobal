@@ -62,8 +62,7 @@ namespace WorkoutGlobal.Api.Extensions
                 o.Password.RequireLowercase = false;
                 o.Password.RequireUppercase = false;
                 o.Password.RequireNonAlphanumeric = false;
-                o.Password.RequiredLength = 10;
-                o.User.RequireUniqueEmail = true;
+                o.Password.RequiredLength = 10; 
             });
             builder = new IdentityBuilder(builder.UserType, typeof(IdentityRole),
                 builder.Services);

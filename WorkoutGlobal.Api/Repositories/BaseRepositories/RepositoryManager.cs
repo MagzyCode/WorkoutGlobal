@@ -14,7 +14,7 @@ namespace WorkoutGlobal.Api.Repositories.BaseRepositories
         private readonly IAuthenticationRepository _authenticationRepository;
 
         /// <summary>
-        /// Sets instances of model repositories.
+        /// Ctor for repository manager.
         /// </summary>
         /// <param name="healthRepository">Health repository instance.</param>
         /// <param name="userCredentialsRepository">User credentials repository instance.</param>
@@ -30,7 +30,7 @@ namespace WorkoutGlobal.Api.Repositories.BaseRepositories
         }
 
         /// <summary>
-        /// Health repositoty instance.
+        /// Health repository instance.
         /// </summary>
         public IHealthRepository HealthRepository => _healthRepository;
 
