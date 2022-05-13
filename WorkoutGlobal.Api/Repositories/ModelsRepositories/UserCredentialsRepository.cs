@@ -17,6 +17,12 @@ namespace WorkoutGlobal.Api.Repositories.ModelsRepositories
         /// <returns>Password hash.</returns>
         public async Task<string> GetHashPasswordAsync(string password, string salt)
         {
+            if (string.IsNullOrEmpty(password))
+                throw new ArgumentNullException(nameof(password));
+
+            if (string.IsNullOrEmpty(salt))
+                throw new ArgumentNullException(nameof(salt));
+
             using var sha256 = SHA256.Create();
             var hashedBytes = await sha256.ComputeHashAsync(
                 inputStream : new MemoryStream(Encoding.UTF8.GetBytes(password + salt)));

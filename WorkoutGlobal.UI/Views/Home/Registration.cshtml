@@ -1,0 +1,38 @@
+﻿@model WorkoutGlobal.UI.ViewModels.Authentication.UserRegistrationViewModel
+
+<h2>Registration form</h2>
+<br />
+<form method="post" asp-controller="Authentication" asp-action="Registration">
+    <div class="form-group row">
+        <label asp-for="UserName" class="col-xs-2 col-form-label">User name</label>
+        <br />
+        <input asp-for="UserName" class="form-control col-xs-2" type="text" id="example-text-input">
+        <span asp-validation-for="UserName"></span>
+    </div>
+    <div class="form-group row">
+        <label asp-for="Email" class="col-xs-2 col-form-label">Email</label>
+        <br />
+        <input asp-for="Email" class="form-control col-xs-2" type="email" id="example-text-input">
+        <span asp-validation-for="Email"></span>
+    </div>
+    <div class="form-group row">
+        <label asp-for="Password" class="col-xs-2 col-form-label">Password</label>
+        <br />
+        <input asp-for="Password" class="form-control col-xs-5" type="password" id="example-text-input">
+        <span asp-validation-for="Password"></span>
+    </div>
+    <div class="form-group row">
+        <label asp-for="ConfirmPassword" class="col-xs-2 col-form-label">Confirm password</label>
+        <br />
+        <input asp-for="ConfirmPassword" class="form-control col-xs-5" type="password" id="example-text-input">
+        <span asp-validation-for="ConfirmPassword"></span>
+    </div>
+    <div class="form-group row">
+        <button asp-controller="Home" asp-action="Registration" type="submit" class="btn btn-primary mb-2">Registration</button>
+    </div>
+</form>
+
+@section scripts{
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+}

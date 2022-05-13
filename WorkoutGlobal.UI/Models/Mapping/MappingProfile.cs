@@ -14,6 +14,7 @@ namespace WorkoutGlobal.UI.Models.Mapping
         public MappingProfile()
         {
             CreateMap<UserAuthorizationViewModel, AuthenticationUser>();
+            CreateMap<UserRegistrationViewModel, UserCredentials>();
         }
     }
 }

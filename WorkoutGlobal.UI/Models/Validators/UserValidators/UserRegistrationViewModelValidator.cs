@@ -1,20 +1,18 @@
 ﻿using FluentValidation;
-using WorkoutGlobal.Api.Models.DTOs.UserDTOs;
+using WorkoutGlobal.UI.ViewModels.Authentication;
 
-namespace WorkoutGlobal.Api.Models.Validators.UserValidators
+namespace WorkoutGlobal.UI.Models.Validators.UserValidators
 {
     /// <summary>
-    /// Fluent Validator for UserRegistrationDto.
+    /// Validator for RegistrationViewModel class.
     /// </summary>
-    public class UserRegistrationDtoValidator : AbstractValidator<UserRegistrationDto>
+    public class UserRegistrationViewModelValidator : AbstractValidator<UserRegistrationViewModel>
     {
         /// <summary>
-        /// Sets validation rules for registration user.
+        /// Ctor for registration view model validator.
         /// </summary>
-        public UserRegistrationDtoValidator()
+        public UserRegistrationViewModelValidator()
         {
-            RuleLevelCascadeMode = CascadeMode.Stop;
-
             RuleFor(user => user.UserName)
                 .NotEmpty()
                 .Length(3, 40)
@@ -24,7 +22,7 @@ namespace WorkoutGlobal.Api.Models.Validators.UserValidators
             RuleFor(user => user.Email)
                 .NotEmpty()
                 .EmailAddress();
-            
+
             RuleFor(user => user.Password)
                 .NotEmpty()
                 .Length(6, 50)

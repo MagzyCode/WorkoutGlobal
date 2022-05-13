@@ -56,6 +56,31 @@ namespace WorkoutGlobal.UI.Controllers
         }
 
         /// <summary>
+        /// Represents action method for registration page.
+        /// </summary>
+        /// <returns></returns>
+        public IActionResult Registration()
+        {
+            return View(new UserRegistrationViewModel());
+        }
+
+        /// <summary>
+        /// Represents POST action method for registration page.
+        /// </summary>
+        /// <param name="userRegistrationViewModel"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [ModelValidationFilter]
+        public async Task<IActionResult> Registration(UserRegistrationViewModel userRegistrationViewModel)
+        {
+            var registrationUser = _mapper.Map<UserCredentials>(userRegistrationViewModel);
+
+            await _authenticationService.RegistrateAsync(registrationUser);
+
+            return RedirectToAction("Index", "MainMenu");
+        }
+
+        /// <summary>
         /// Represents action-method for home page.
         /// </summary>
         /// <returns>Home page view.</returns>

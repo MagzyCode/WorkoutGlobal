@@ -50,9 +50,17 @@ namespace WorkoutGlobal.Api.Repositories.AuthorizationRepositories
         /// <returns>JWT-token in string format.</returns>
         public string CreateToken(UserAuthorizationDto userAuthorizationDto)
         {
+            if (userAuthorizationDto == null)
+                throw new ArgumentNullException(nameof(userAuthorizationDto));
+
             var tokenOptions = GenerateTokenOptions(userAuthorizationDto);
 
-            return new JwtSecurityTokenHandler().WriteToken(tokenOptions);
+            var jwtSecurityTokenHandler = new JwtSecurityTokenHandler();
+            var token = jwtSecurityTokenHandler.CanWriteToken
+                ? jwtSecurityTokenHandler.WriteToken(tokenOptions)
+                : string.Empty;
+
+            return token;
         }
 
         /// <summary>
@@ -62,6 +70,9 @@ namespace WorkoutGlobal.Api.Repositories.AuthorizationRepositories
         /// <returns>Existed user.</returns>
         public UserCredentials FindUserByCredentials(UserCredentialsDto userCredentialsDto)
         {
+            if (_userManager == null)
+                throw new ArgumentNullException(nameof(userCredentialsDto));
+
             var userCredentials = Context.UserCredentials
                 .SingleOrDefault(user => user.UserName == userCredentialsDto.UserName);
 
@@ -97,6 +108,9 @@ namespace WorkoutGlobal.Api.Repositories.AuthorizationRepositories
         /// <returns>If user existed in system, return true, otherwise return false.</returns>
         public bool IsUserExisted(UserRegistrationDto userRegistrationDto)
         {
+            if (userRegistrationDto == null)
+                throw new ArgumentNullException(nameof(userRegistrationDto));
+
             var userCredentialsDto = _mapper.Map<UserCredentialsDto>(userRegistrationDto);
             var existedUser = FindUserByCredentials(userCredentialsDto);
 
@@ -110,6 +124,9 @@ namespace WorkoutGlobal.Api.Repositories.AuthorizationRepositories
         /// <returns>A task that represents asynchronous Registrate action.</returns>
         public async Task RegistrateUserAsync(UserCredentials userCredentials)
         {
+            if (userCredentials == null)
+                throw new ArgumentNullException(nameof(userCredentials));
+
             await _userManager.CreateAsync(userCredentials);
             await _userManager.AddToRoleAsync(userCredentials, "User");
         }
