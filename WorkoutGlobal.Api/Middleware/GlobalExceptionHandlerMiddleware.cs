@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Diagnostics;
 using WorkoutGlobal.Api.Models.ErrorModels;
 
 namespace WorkoutGlobal.Api.Middleware
@@ -12,7 +13,7 @@ namespace WorkoutGlobal.Api.Middleware
         private readonly IHostEnvironment _environment;
 
         /// <summary>
-        /// Sets request delegate and host enviroment.
+        /// Ctor for global exception handler middleware.
         /// </summary>
         /// <param name="next">Request delegate for moving in request pipeline.</param>
         /// <param name="environment">Host enviroment.</param>
@@ -33,8 +34,24 @@ namespace WorkoutGlobal.Api.Middleware
             {
                 await _next(httpContext);
             }
-            catch
+            catch (Exception exception)
             {
+                var error = new ErrorDetails();
+                switch (exception)
+                {
+                    case ValidationException:
+                        error.StatusCode = StatusCodes.Status400BadRequest;
+                        error.Message = "Validation error on WorkoutGlobal API.";
+                        error.Details = exception.ToString();
+                        break;
+                    default:
+                        error.StatusCode = StatusCodes.Status500InternalServerError;
+                        error.Message = "Internal server error on WorkoutGlobal API.";
+                        error.Details = new StackTrace().ToString();
+                        break;
+
+
+                }
                 httpContext.Response.ContentType = "application/json";
 
                 var responce = new ErrorDetails()

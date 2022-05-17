@@ -1,5 +1,5 @@
-﻿using WorkoutGlobal.Api.Contracts.RepositoryContracts;
-using WorkoutGlobal.Api.DatabaseContext;
+﻿using WorkoutGlobal.Api.Context;
+using WorkoutGlobal.Api.Contracts.RepositoryContracts;
 
 namespace WorkoutGlobal.Api.Repositories.BaseRepositories
 {
@@ -11,7 +11,7 @@ namespace WorkoutGlobal.Api.Repositories.BaseRepositories
         where TModel : class
     {
         /// <summary>
-        /// Sets database context and project configuration.
+        /// Ctor for base repository.
         /// </summary>
         /// <param name="workoutGlobalContext">Database context.</param>
         /// <param name="configurationManager">Project configuration.</param>

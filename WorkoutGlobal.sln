@@ -9,7 +9,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WorkoutGlobal.Monitoring", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WorkoutGlobal.UI", "WorkoutGlobal.UI\WorkoutGlobal.UI.csproj", "{F66270B2-A98A-4639-89AD-0A294BB43A55}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WorkoutGlobal.Monitoring.Tests", "WorkoutGlobal.Monitoring.Tests\WorkoutGlobal.Monitoring.Tests.csproj", "{7B9E9896-8B11-4C18-BA0A-4E1CE822DACE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WorkoutGlobal.Monitoring.Tests", "WorkoutGlobal.Monitoring.Tests\WorkoutGlobal.Monitoring.Tests.csproj", "{7B9E9896-8B11-4C18-BA0A-4E1CE822DACE}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WorkoutGlobal.Api.Tests", "WorkoutGlobal.Api.Tests\WorkoutGlobal.Api.Tests.csproj", "{3E9EFA87-12BF-4D15-B82D-77310B650D7F}"
+	ProjectSection(ProjectDependencies) = postProject
+		{D11CB02E-3D38-4039-91CE-3499A91853FF} = {D11CB02E-3D38-4039-91CE-3499A91853FF}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +38,10 @@ Global
 		{7B9E9896-8B11-4C18-BA0A-4E1CE822DACE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7B9E9896-8B11-4C18-BA0A-4E1CE822DACE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7B9E9896-8B11-4C18-BA0A-4E1CE822DACE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3E9EFA87-12BF-4D15-B82D-77310B650D7F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3E9EFA87-12BF-4D15-B82D-77310B650D7F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3E9EFA87-12BF-4D15-B82D-77310B650D7F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3E9EFA87-12BF-4D15-B82D-77310B650D7F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

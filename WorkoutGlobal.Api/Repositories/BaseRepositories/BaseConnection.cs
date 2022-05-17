@@ -1,4 +1,4 @@
-﻿using WorkoutGlobal.Api.DatabaseContext;
+﻿using WorkoutGlobal.Api.Context;
 
 namespace WorkoutGlobal.Api.Repositories.BaseRepositories
 {
@@ -11,7 +11,7 @@ namespace WorkoutGlobal.Api.Repositories.BaseRepositories
         private protected IConfiguration _configuration;
 
         /// <summary>
-        /// Sets database context and project configuration.
+        /// Ctor for base connection class.
         /// </summary>
         /// <param name="workoutGlobalContext">Database context.</param>
         /// <param name="configurationManager">Project configuration.</param>

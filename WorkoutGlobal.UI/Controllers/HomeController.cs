@@ -1,6 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using System.Security.Claims;
+using WorkoutGlobal.UI.ApiConnection.Contracts;
+using WorkoutGlobal.UI.Filters.ActionFilters;
 using WorkoutGlobal.UI.Models;
+using WorkoutGlobal.UI.ViewModels.Authentication;
 
 namespace WorkoutGlobal.UI.Controllers
 {
@@ -9,43 +16,95 @@ namespace WorkoutGlobal.UI.Controllers
     /// </summary>
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly IMapper _mapper;
+        private readonly ApiConnection.Contracts.IAuthenticationService _authenticationService;
 
         /// <summary>
-        /// Sets logger of controller.
+        /// Ctor for home controller.
         /// </summary>
-        /// <param name="logger"></param>
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(
+            IMapper mapper,
+            ApiConnection.Contracts.IAuthenticationService authenticationService)
         {
-            _logger = logger;
+            _mapper = mapper;
+            _authenticationService = authenticationService;
         }
 
         /// <summary>
-        /// Index action-method.
+        /// Represents action-method for user log in.
         /// </summary>
-        /// <returns>Index view.</returns>
+        /// <returns>Login view.</returns>
+        public IActionResult Login()
+        {
+            return View(new UserAuthorizationViewModel());
+        }
+
+        /// <summary>
+        /// Represents POST action-method for user log in.
+        /// </summary>
+        /// <param name="userAuthorizationViewModel"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [ModelValidationFilter]
+        public async Task<IActionResult> Login(UserAuthorizationViewModel userAuthorizationViewModel)
+        {
+            var authenticationUser = _mapper.Map<AuthenticationUser>(userAuthorizationViewModel);
+
+            await Authenticate(authenticationUser);
+
+            return RedirectToAction("Index", "MainMenu");
+        }
+
+        /// <summary>
+        /// Represents action method for registration page.
+        /// </summary>
+        /// <returns></returns>
+        public IActionResult Registration()
+        {
+            return View(new UserRegistrationViewModel());
+        }
+
+        /// <summary>
+        /// Represents POST action method for registration page.
+        /// </summary>
+        /// <param name="userRegistrationViewModel"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [ModelValidationFilter]
+        public async Task<IActionResult> Registration(UserRegistrationViewModel userRegistrationViewModel)
+        {
+            var registrationUser = _mapper.Map<UserCredentials>(userRegistrationViewModel);
+
+            await _authenticationService.RegistrateAsync(registrationUser);
+
+            return RedirectToAction("Index", "MainMenu");
+        }
+
+        /// <summary>
+        /// Represents action-method for home page.
+        /// </summary>
+        /// <returns>Home page view.</returns>
         public IActionResult Index()
         {
             return View();
         }
-        
-        /// <summary>
-        /// Privacy action-method.
-        /// </summary>
-        /// <returns>Privacy view.</returns>
-        public IActionResult Privacy()
-        {
-            return View();
-        }
 
         /// <summary>
-        /// Error action-method.
+        /// Authenticate user by credentials.
         /// </summary>
-        /// <returns>View with errors.</returns>
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
+        /// <param name="authenticationUser">User credentials.</param>
+        /// <returns>A task that represents asynchronous Authenticate operation.</returns>
+        private async Task Authenticate(AuthenticationUser authenticationUser)
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            var token = await _authenticationService.AuthenticateAsync(authenticationUser);
+
+            var claims = new List<Claim>
+            {
+                new Claim("Token", token)
+            };
+
+            ClaimsIdentity id = new(claims, "ApplicationCookie", ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);
+            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(id));
         }
     }
 }

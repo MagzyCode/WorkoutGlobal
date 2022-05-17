@@ -18,7 +18,7 @@ namespace WorkoutGlobal.Api.Controllers
         private readonly IHealthRepository _healthRepository;
 
         /// <summary>
-        /// Sets health repository.
+        /// Ctor for health controller.
         /// </summary>
         /// <param name="healthRepository">Health repository instance.</param>
         public HealthController(IHealthRepository healthRepository)
