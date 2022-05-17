@@ -40,19 +40,18 @@ namespace WorkoutGlobal.Monitoring.Tests
             // assert
             actionResult.Should().NotBeNull();
 
-            model.Should().NotBeNull()
-                .And.NotBeEmpty()
-                .And.BeOfType<JObject>();
+            model.Should().NotBeNull();
+            model.Should().BeOfType<JObject>();
+            model.Should().NotBeEmpty();
 
-            model["StatusCode"].Value<int>()
-                .Should().BeOfType(typeof(int))
-                .And.Be(StatusCodes.Status200OK);
+            model["StatusCode"].Value<int>().Should().BeOfType(typeof(int));
+            model["StatusCode"].Value<int>().Should().Be(StatusCodes.Status200OK);
 
+            model["Errors"].ToObject(typeof(List<string>)).Should().NotBeNull();
+            model["Errors"].ToObject(typeof(List<string>)).Should().BeOfType<List<string>>();
             model["Errors"].ToObject(typeof(List<string>))
-                .Should().NotBeNull()
-                .And.BeOfType<List<string>>()
-                .And.BeAssignableTo<List<string>>().Which.Should()
-                    .HaveCount(2);
+                .Should().BeAssignableTo<List<string>>().Which
+                    .Should().HaveCount(2);
         }
     }
 }
