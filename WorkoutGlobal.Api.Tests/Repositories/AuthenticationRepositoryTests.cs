@@ -20,13 +20,31 @@ namespace WorkoutGlobal.Api.Tests.Repositories
         private readonly Mock<IConfiguration> _configuration;
         private readonly Mock<IMapper> _mapper;
         private readonly Mock<IUserCredentialsRepository> _userCredentialsRepository;
+        private readonly Mock<IConfigurationSection> _jwtSettings;
 
         public AuthenticationRepositoryTests()
         {
             _testConfiguration = ConfigurationAccessor.GetTestConfiguration();
+
+            _jwtSettings = new Mock<IConfigurationSection>();
             _configuration = new Mock<IConfiguration>();
+            _configuration
+                .Setup(x => x.GetSection("JwtSettings"))
+                .Returns(_jwtSettings.Object);
+
             _mapper = new Mock<IMapper>();
+            _mapper
+                .Setup(x => x.Map<UserCredentials>(It.IsAny<UserCredentialsDto>()))
+                .Returns(new UserCredentials());
+
             _userCredentialsRepository = new Mock<IUserCredentialsRepository>();
+            _userCredentialsRepository
+                .Setup(x => x.GetHashPasswordAsync(It.IsAny<string>(), It.IsAny<string>()))
+                .Returns(Task.FromResult(string.Empty));
+            _userCredentialsRepository
+                .Setup(x => x.GetHashPasswordAsync(null, It.IsAny<string>()))
+                .Throws(() => new ArgumentNullException());
+
             _authenticationRepository = new AuthenticationRepository(
                 null, 
                 null,
@@ -58,20 +76,16 @@ namespace WorkoutGlobal.Api.Tests.Repositories
                 Password = "qwerty123"
             };
 
-            var jwtSetting = new Mock<IConfigurationSection>();
-            _configuration
-                .Setup(x => x.GetSection("JwtSettings"))
-                .Returns(jwtSetting.Object);
-            jwtSetting
+            _jwtSettings
                 .Setup(x => x.GetSection("Key").Value)
                 .Returns(_testConfiguration["JwtSettingsValid:Key"]);
-            jwtSetting
+            _jwtSettings
                 .Setup(x => x.GetSection("ValidIssuer").Value)
                 .Returns(_testConfiguration["JwtSettingsValid:ValidIssuer"]);
-            jwtSetting
+            _jwtSettings
                 .Setup(x => x.GetSection("ValidAudience").Value)
-                .Returns(_testConfiguration["JwtSettingsValid:ValidAudience"]);    
-            jwtSetting
+                .Returns(_testConfiguration["JwtSettingsValid:ValidAudience"]);
+            _jwtSettings
                 .Setup(x => x.GetSection("Expires").Value)
                 .Returns(_testConfiguration["JwtSettingsValid:Expires"]);
 
@@ -79,9 +93,9 @@ namespace WorkoutGlobal.Api.Tests.Repositories
             var result = _authenticationRepository.CreateToken(userAuthorizationDto);
 
             // assert
-            result.Should().BeOfType<string>()
-                .Which.Should().NotBeNullOrWhiteSpace()
-                .And.MatchEquivalentOf("*.*.*");
+            result.Should().BeOfType<string>();
+            result.Should().NotBeNullOrWhiteSpace();
+            result.Should().MatchEquivalentOf("*.*.*");
         }
 
         [Fact]
@@ -94,20 +108,16 @@ namespace WorkoutGlobal.Api.Tests.Repositories
                 Password = "qwerty123"
             };
 
-            var jwtSetting = new Mock<IConfigurationSection>();
-            _configuration
-                .Setup(x => x.GetSection("JwtSettings"))
-                .Returns(jwtSetting.Object);
-            jwtSetting
+            _jwtSettings
                 .Setup(x => x.GetSection("Key").Value)
                 .Returns(_testConfiguration["JwtSettingsInvalidKeyLength:Key"]);
-            jwtSetting
+            _jwtSettings
                 .Setup(x => x.GetSection("ValidIssuer").Value)
                 .Returns(_testConfiguration["JwtSettingsInvalidKeyLength:ValidIssuer"]);
-            jwtSetting
+            _jwtSettings
                 .Setup(x => x.GetSection("ValidAudience").Value)
                 .Returns(_testConfiguration["JwtSettingsInvalidKeyLength:ValidAudience"]);
-            jwtSetting
+            _jwtSettings
                 .Setup(x => x.GetSection("Expires").Value)
                 .Returns(_testConfiguration["JwtSettingsInvalidKeyLength:Expires"]);
 
@@ -128,11 +138,7 @@ namespace WorkoutGlobal.Api.Tests.Repositories
                 Password = null
             };
 
-            var jwtSetting = new Mock<IConfigurationSection>();
-            _configuration
-                .Setup(x => x.GetSection("JwtSettings"))
-                .Returns(jwtSetting.Object);
-            jwtSetting
+            _jwtSettings
                 .Setup(x => x.GetSection("Key").Value)
                 .Returns(_testConfiguration["JwtSettingsValid:Key"]);
 
@@ -153,20 +159,16 @@ namespace WorkoutGlobal.Api.Tests.Repositories
                 Password = "qwerty123"
             };
 
-            var jwtSetting = new Mock<IConfigurationSection>();
-            _configuration
-                .Setup(x => x.GetSection("JwtSettings"))
-                .Returns(jwtSetting.Object);
-            jwtSetting
+            _jwtSettings
                 .Setup(x => x.GetSection("Key").Value)
                 .Returns(_testConfiguration["JwtSettingsInvalidExpires:Key"]);
-            jwtSetting
+            _jwtSettings
                 .Setup(x => x.GetSection("ValidIssuer").Value)
                 .Returns(_testConfiguration["JwtSettingsInvalidExpires:ValidIssuer"]);
-            jwtSetting
+            _jwtSettings
                 .Setup(x => x.GetSection("ValidAudience").Value)
                 .Returns(_testConfiguration["JwtSettingsInvalidExpires:ValidAudience"]);
-            jwtSetting
+            _jwtSettings
                 .Setup(x => x.GetSection("Expires").Value)
                 .Returns(_testConfiguration["JwtSettingsInvalidExpires:Expires"]);
 
@@ -187,20 +189,16 @@ namespace WorkoutGlobal.Api.Tests.Repositories
                 Password = null
             };
 
-            var jwtSetting = new Mock<IConfigurationSection>();
-            _configuration
-                .Setup(x => x.GetSection("JwtSettings"))
-                .Returns(jwtSetting.Object);
-            jwtSetting
+            _jwtSettings
                 .Setup(x => x.GetSection("Key").Value)
                 .Returns(_testConfiguration["JwtSettingsValid:Key"]);
-            jwtSetting
+            _jwtSettings
                 .Setup(x => x.GetSection("ValidIssuer").Value)
                 .Returns(_testConfiguration["JwtSettingsValid:ValidIssuer"]);
-            jwtSetting
+            _jwtSettings
                 .Setup(x => x.GetSection("ValidAudience").Value)
                 .Returns(_testConfiguration["JwtSettingsValid:ValidAudience"]);
-            jwtSetting
+            _jwtSettings
                 .Setup(x => x.GetSection("Expires").Value)
                 .Returns(_testConfiguration["JwtSettingsValid:Expires"]);
 
@@ -208,9 +206,9 @@ namespace WorkoutGlobal.Api.Tests.Repositories
             var result = _authenticationRepository.CreateToken(userAuthorizationDto);
 
             // assert
-            result.Should().BeOfType<string>()
-                .Which.Should().NotBeNullOrWhiteSpace()
-                .And.MatchEquivalentOf("*.*.*");
+            result.Should().BeOfType<string>();
+            result.Should().NotBeNullOrWhiteSpace();
+            result.Should().MatchEquivalentOf("*.*.*");
         }
 
         [Fact]
@@ -218,9 +216,6 @@ namespace WorkoutGlobal.Api.Tests.Repositories
         {
             // act
             UserCredentialsDto? userCredentialsDto = null;
-            _mapper
-                .Setup(x => x.Map<UserCredentials>(userCredentialsDto))
-                .Returns(new UserCredentials());
 
             // arrange
             var result = async () => await _authenticationRepository.GenerateUserCredentialsAsync(userCredentialsDto);
@@ -239,12 +234,6 @@ namespace WorkoutGlobal.Api.Tests.Repositories
                 Email = string.Empty,
                 Password = null
             };
-            _mapper
-                .Setup(x => x.Map<UserCredentials>(userCredentialsDto))
-                .Returns(new UserCredentials());
-            _userCredentialsRepository
-                .Setup(x => x.GetHashPasswordAsync(null, It.IsAny<string>()))
-                .Throws(() => new ArgumentNullException());
 
             // arrange
             var result = async () => await _authenticationRepository.GenerateUserCredentialsAsync(userCredentialsDto);
@@ -263,19 +252,12 @@ namespace WorkoutGlobal.Api.Tests.Repositories
                 Email = null,
                 Password = "qwerty123"
             };
-            _mapper
-                .Setup(x => x.Map<UserCredentials>(userCredentialsDto))
-                .Returns(new UserCredentials());
-            _userCredentialsRepository
-                .Setup(x => x.GetHashPasswordAsync("qwerty123", It.IsAny<string>()))
-                .Returns(Task.FromResult(string.Empty));
 
             // arrange
             var result = await _authenticationRepository.GenerateUserCredentialsAsync(userCredentialsDto);
-
-            // assert
-            result.Should().BeOfType<UserCredentials>()
-                .Which.PasswordHash.Should().NotBeNull();
+          
+            result.Should().BeOfType<UserCredentials>();
+            result.PasswordHash.Should().NotBeNull();
         }
 
         [Fact]
@@ -288,19 +270,13 @@ namespace WorkoutGlobal.Api.Tests.Repositories
                 Email = "",
                 Password = "qwerty123"
             };
-            _mapper
-                .Setup(x => x.Map<UserCredentials>(userCredentialsDto))
-                .Returns(new UserCredentials());
-            _userCredentialsRepository
-                .Setup(x => x.GetHashPasswordAsync("qwerty123", It.IsAny<string>()))
-                .Returns(Task.FromResult(string.Empty));
 
             // arrange
             var result = await _authenticationRepository.GenerateUserCredentialsAsync(userCredentialsDto);
 
             // assert
-            result.Should().BeOfType<UserCredentials>()
-                .Which.PasswordHash.Should().NotBeNull();
+            result.Should().BeOfType<UserCredentials>();
+            result.PasswordHash.Should().NotBeNull();
         }
 
         [Fact]

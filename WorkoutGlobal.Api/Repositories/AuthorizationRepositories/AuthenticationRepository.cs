@@ -74,7 +74,8 @@ namespace WorkoutGlobal.Api.Repositories.AuthorizationRepositories
                 throw new ArgumentNullException(nameof(userCredentialsDto));
 
             var userCredentials = Context.UserCredentials
-                .SingleOrDefault(user => user.UserName == userCredentialsDto.UserName);
+                .Where(user => user.UserName == userCredentialsDto.UserName)
+                .SingleOrDefault();
 
             return userCredentials;
         }
