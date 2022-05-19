@@ -25,11 +25,10 @@ namespace WorkoutGlobal.Api.Tests.Validators.UserValidators
             var validationResult = await validator.ValidateAsync(userAuthorizationDto);
 
             // assert
-            validationResult
-                .Should().BeOfType<ValidationResult>()
-                .Which.Errors.Should().HaveCount(2);
-            validationResult.IsValid
-                .Should().BeFalse();
+            validationResult.Should().BeOfType(typeof(ValidationResult));
+            validationResult.Should().NotBeNull();
+            validationResult.Errors.Should().HaveCount(2);
+            validationResult.IsValid.Should().BeFalse();
         }
 
         [Fact]
@@ -46,11 +45,10 @@ namespace WorkoutGlobal.Api.Tests.Validators.UserValidators
             var result = await validator.ValidateAsync(userAuthorizationDto);
 
             // assert
-            result
-                .Should().BeOfType<ValidationResult>()
-                .Which.Errors.Should().HaveCount(2);
-            result.IsValid
-                .Should().BeFalse();
+            result.Should().BeOfType(typeof(ValidationResult));
+            result.Should().NotBeNull();
+            result.Errors.Should().HaveCount(2);
+            result.IsValid.Should().BeFalse();
         }
     }
 }

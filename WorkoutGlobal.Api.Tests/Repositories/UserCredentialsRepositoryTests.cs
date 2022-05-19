@@ -25,9 +25,10 @@ namespace WorkoutGlobal.Api.Tests.Repositories
             var result = await _userCredentialsRepository.GetHashPasswordAsync(password, salt);
 
             // assert
-            result.Should().BeOfType<string>()
-                .And.NotBeNullOrWhiteSpace()
-                .And.MatchRegex("^([0-9a-z]{1})([0-9a-z]*)$");
+
+            result.Should().BeOfType(typeof(string));
+            result.Should().NotBeNullOrWhiteSpace();
+            result.Should().MatchRegex("^([0-9a-z]{1})([0-9a-z]*)$");
         }
 
         [Fact]

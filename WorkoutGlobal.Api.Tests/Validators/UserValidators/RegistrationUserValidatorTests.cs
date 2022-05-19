@@ -27,11 +27,10 @@ namespace WorkoutGlobal.Api.Tests.Validators.UserValidators
             var validationResult = await validator.ValidateAsync(userRegistrationUserDto);
 
             // assert
-            validationResult
-                .Should().BeOfType<ValidationResult>()
-                .Which.Errors.Should().HaveCount(4);
-            validationResult.IsValid
-                .Should().BeFalse();
+            validationResult.Should().BeOfType(typeof(ValidationResult));
+            validationResult.Should().NotBeNull();
+            validationResult.Errors.Should().HaveCount(4);
+            validationResult.IsValid.Should().BeFalse();
         }
 
         [Fact]
@@ -50,11 +49,10 @@ namespace WorkoutGlobal.Api.Tests.Validators.UserValidators
             var validationResult = await validator.ValidateAsync(userRegistrationUserDto);
 
             // assert
-            validationResult
-                .Should().BeOfType<ValidationResult>()
-                .Which.Errors.Should().HaveCount(4);
-            validationResult.IsValid
-                .Should().BeFalse();
+            validationResult.Should().BeOfType(typeof(ValidationResult));
+            validationResult.Should().NotBeNull();
+            validationResult.Errors.Should().HaveCount(4);
+            validationResult.IsValid.Should().BeFalse();
         }
 
         [Fact]
@@ -73,11 +71,10 @@ namespace WorkoutGlobal.Api.Tests.Validators.UserValidators
             var validationResult = await validator.ValidateAsync(userRegistrationUserDto);
 
             // assert
-            validationResult
-                .Should().BeOfType<ValidationResult>()
-                .Which.Errors.Should().HaveCount(2);
-            validationResult.IsValid
-                .Should().BeFalse();
+            validationResult.Should().BeOfType(typeof(ValidationResult));
+            validationResult.Should().NotBeNull();
+            validationResult.Errors.Should().HaveCount(2);
+            validationResult.IsValid.Should().BeFalse();
         }
 
         [Fact]
@@ -96,11 +93,10 @@ namespace WorkoutGlobal.Api.Tests.Validators.UserValidators
             var validationResult = await validator.ValidateAsync(userRegistrationUserDto);
 
             // assert
-            validationResult
-                .Should().BeOfType<ValidationResult>()
-                .Which.Errors.Should().HaveCount(2);
-            validationResult.IsValid
-                .Should().BeFalse();
+            validationResult.Should().BeOfType(typeof(ValidationResult));
+            validationResult.Should().NotBeNull();
+            validationResult.Errors.Should().HaveCount(2);
+            validationResult.IsValid.Should().BeFalse();
         }
 
         [Fact]
@@ -119,11 +115,10 @@ namespace WorkoutGlobal.Api.Tests.Validators.UserValidators
             var validationResult = await validator.ValidateAsync(userRegistrationUserDto);
 
             // assert
-            validationResult
-                .Should().BeOfType<ValidationResult>()
-                .Which.Errors.Should().HaveCount(1);
-            validationResult.IsValid
-                .Should().BeFalse();
+            validationResult.Should().BeOfType(typeof(ValidationResult));
+            validationResult.Should().NotBeNull();
+            validationResult.Errors.Should().HaveCount(1);
+            validationResult.IsValid.Should().BeFalse();
             validationResult.ToString().Should().BeEquivalentTo("'Email' is not a valid email address.");
         }
 
@@ -143,11 +138,11 @@ namespace WorkoutGlobal.Api.Tests.Validators.UserValidators
             var validationResult = await validator.ValidateAsync(userRegistrationUserDto);
 
             // assert
-            validationResult
-                .Should().BeOfType<ValidationResult>()
-                .Which.Errors.Should().HaveCount(1);
-            validationResult.IsValid
-                .Should().BeFalse();
+            validationResult.Should().BeOfType(typeof(ValidationResult));
+            validationResult.Should().NotBeNull();
+            validationResult.Errors.Should().HaveCount(1);
+            validationResult.IsValid.Should().BeFalse(); 
+            validationResult.ToString().Should().BeEquivalentTo("'Confirm Password' must be equal to 'zqwert123'.");
             validationResult.ToString().Should().BeEquivalentTo("'Confirm Password' must be equal to 'zqwert123'.");
         }
     }
