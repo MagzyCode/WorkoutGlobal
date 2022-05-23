@@ -21,6 +21,7 @@ namespace WorkoutGlobal.Api.Repositories.AuthorizationRepositories
         private readonly UserManager<UserCredentials> _userManager;
         private readonly IUserCredentialsRepository _userCredentialsRepository;
         private readonly IMapper _mapper;
+        private readonly IUserRepository _userRepository;
 
         /// <summary>
         /// Ctor for authentication repository.
@@ -35,12 +36,14 @@ namespace WorkoutGlobal.Api.Repositories.AuthorizationRepositories
             WorkoutGlobalContext workoutGlobalContext, 
             IConfiguration configuration,
             IUserCredentialsRepository userCredentialsRepository,
-            IMapper mapper) 
+            IMapper mapper,
+            IUserRepository userRepository) 
             : base(workoutGlobalContext, configuration)
         {
             _userManager = userManager;
             _userCredentialsRepository = userCredentialsRepository;
             _mapper = mapper;
+            _userRepository = userRepository;
         }
 
         /// <summary>
@@ -123,13 +126,19 @@ namespace WorkoutGlobal.Api.Repositories.AuthorizationRepositories
         /// </summary>
         /// <param name="userCredentials">Registration user credentials.</param>
         /// <returns>A task that represents asynchronous Registrate action.</returns>
-        public async Task RegistrateUserAsync(UserCredentials userCredentials)
+        public async Task RegistrateUserAsync(UserRegistrationDto userRegistrationDto)
         {
-            if (userCredentials == null)
-                throw new ArgumentNullException(nameof(userCredentials));
+            if (userRegistrationDto == null)
+                throw new ArgumentNullException(nameof(userRegistrationDto));
+
+            var userCredentialsDto = _mapper.Map<UserCredentialsDto>(userRegistrationDto);
+            var userCredentials = await GenerateUserCredentialsAsync(userCredentialsDto);
+            var user = _mapper.Map<User>(userRegistrationDto);
 
             await _userManager.CreateAsync(userCredentials);
+            user.UserCredentialsId = userCredentials.Id;
             await _userManager.AddToRoleAsync(userCredentials, "User");
+            await _userRepository.AddUserAsync(user);
         }
 
         /// <summary>

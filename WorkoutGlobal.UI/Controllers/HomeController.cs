@@ -73,7 +73,7 @@ namespace WorkoutGlobal.UI.Controllers
         [ModelValidationFilter]
         public async Task<IActionResult> Registration(UserRegistrationViewModel userRegistrationViewModel)
         {
-            var registrationUser = _mapper.Map<UserCredentials>(userRegistrationViewModel);
+            var registrationUser = _mapper.Map<RegistrationUser>(userRegistrationViewModel);
 
             await _authenticationService.RegistrateAsync(registrationUser);
 
@@ -89,6 +89,13 @@ namespace WorkoutGlobal.UI.Controllers
             return View();
         }
 
+        public async Task<IActionResult> LogOut()
+        {
+            await HttpContext.SignOutAsync();
+
+            return RedirectToAction("Login", "Home");
+        }
+
         /// <summary>
         /// Authenticate user by credentials.
         /// </summary>
@@ -100,7 +107,8 @@ namespace WorkoutGlobal.UI.Controllers
 
             var claims = new List<Claim>
             {
-                new Claim("Token", token)
+                new Claim("Token", token),
+                new Claim(ClaimsIdentity.DefaultNameClaimType, authenticationUser.UserName)
             };
 
             ClaimsIdentity id = new(claims, "ApplicationCookie", ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);

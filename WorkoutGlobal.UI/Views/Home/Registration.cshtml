@@ -4,31 +4,100 @@
 <br />
 <form method="post" asp-controller="Authentication" asp-action="Registration">
     <div class="form-group row">
-        <label asp-for="UserName" class="col-xs-2 col-form-label">User name</label>
+        <label asp-for="FirstName" class="col-xs-2 col-form-label">Name<sup style="color: red;">*</sup></label>
         <br />
-        <input asp-for="UserName" class="form-control col-xs-2" type="text" id="example-text-input">
-        <span asp-validation-for="UserName"></span>
+        <input asp-for="FirstName" type="text" class="form-control col-xs-2" id="example-text-input" placeholder="John">
+        <span style="color: red;" asp-validation-for="FirstName"></span>
     </div>
     <div class="form-group row">
-        <label asp-for="Email" class="col-xs-2 col-form-label">Email</label>
+        <label asp-for="LastName" class="col-xs-2 col-form-label">Surname<sup style="color: red;">*</sup></label>
         <br />
-        <input asp-for="Email" class="form-control col-xs-2" type="email" id="example-text-input">
-        <span asp-validation-for="Email"></span>
+        <input asp-for="LastName" type="text" class="form-control col-xs-2" id="example-text-input" placeholder="Sims">
+        <span style="color: red;" asp-validation-for="LastName"></span>
     </div>
     <div class="form-group row">
-        <label asp-for="Password" class="col-xs-2 col-form-label">Password</label>
+        <label asp-for="Patronymic" class="col-xs-2 col-form-label">Patronymic<sup style="color: red;">*</sup></label>
+        <br />
+        <input asp-for="Patronymic" type="text" class="form-control col-xs-2" id="example-text-input" placeholder="Andreevich">
+        <span style="color: red;" asp-validation-for="Patronymic"></span>
+    </div>
+    <div class="form-group row">
+        <label asp-for="DateOfBirth" class="col-xs-2 col-form-label">Date of birth<sup style="color: red;">*</sup></label>
+        <br />
+        <input asp-for="DateOfBirth" type="date" class="form-control col-xs-2" id="example-text-input">
+        <span style="color: red;" asp-validation-for="DateOfBirth"></span>
+    </div>
+    <div class="form-group row">
+        <label asp-for="Sex" class="col-xs-2 col-form-label">Sex<sup style="color: red;">*</sup></label>
+        <br />
+        <select asp-for="Sex" class="form-control form-control">
+            <option selected>Male</option>
+            <option>Female</option>
+        </select>
+        <span style="color: red;" asp-validation-for="Sex"></span>
+    </div>
+    <div class="form-group row">
+        <label asp-for="ResidencePlace" class="col-xs-2 col-form-label">Residance place<sup style="color: red;">*</sup></label>
+        <br />
+        <input asp-for="ResidencePlace" type="text" placeholder="Country,City,Street,House,Room" class="form-control form-control col-xs-2" id="example-text-input">
+        <span style="color: red;" asp-validation-for="ResidencePlace"></span>
+    </div>
+    <div class="form-group row">
+        <label asp-for="Height" class="col-xs-2 col-form-label">Height</label>
+        <br />
+        <input asp-for="Height" min="0" max="400" type="number" class="form-control form-control col-xs-2" id="example-text-input" placeholder="170">
+        <span style="color: red;" asp-validation-for="Height"></span>
+    </div>
+    <div class="form-group row">
+        <label asp-for="Weight" class="col-xs-2 col-form-label">Weight</label>
+        <br />
+        <input asp-for="Weight" min="0" max="400" type="number" class="form-control form-control col-xs-2" id="example-text-input" placeholder="95">
+        <span style="color: red;" asp-validation-for="Weight"></span>
+    </div>
+    <div class="form-group row">
+        <label asp-for="SportsActivity" class="col-xs-2 col-form-label">Sport activity<sup style="color: red;">*</sup></label>
+        <br />
+        <select asp-for="SportsActivity" class="form-control form-control">
+            <option>Athletic</option>
+            <option>Active</option>
+            <option selected>Moderate</option>
+            <option>Reduced</option>
+            <option>Inactive</option>
+        </select>
+        <span style="color: red;" asp-validation-for="SportsActivity"></span>
+    </div>
+    <div class="form-group row">
+        <label asp-for="UserName" class="col-xs-2 col-form-label">User name<sup style="color: red;">*</sup></label>
+        <br />
+        <input asp-for="UserName" class="form-control col-xs-2" type="text" id="example-text-input" placeholder="Froggy">
+        <span style="color: red;" asp-validation-for="UserName"></span>
+    </div>
+    <div class="form-group row">
+        <label asp-for="Email" class="col-xs-2 col-form-label">Email<sup style="color: red;">*</sup></label>
+        <br />
+        <input asp-for="Email" class="form-control col-xs-2" type="email" id="example-text-input" placeholder="your_account@gmail.ru">
+        <span style="color: red;" asp-validation-for="Email"></span>
+    </div>
+    <div class="form-group row">
+        <label asp-for="Password" class="col-xs-2 col-form-label">Password<sup style="color: red;">*</sup></label>
         <br />
         <input asp-for="Password" class="form-control col-xs-5" type="password" id="example-text-input">
-        <span asp-validation-for="Password"></span>
+        <span style="color: red;" asp-validation-for="Password"></span>
     </div>
     <div class="form-group row">
-        <label asp-for="ConfirmPassword" class="col-xs-2 col-form-label">Confirm password</label>
+        <label asp-for="ConfirmPassword" class="col-xs-2 col-form-label">Confirm password<sup style="color: red;">*</sup></label>
         <br />
         <input asp-for="ConfirmPassword" class="form-control col-xs-5" type="password" id="example-text-input">
-        <span asp-validation-for="ConfirmPassword"></span>
+        <span style="color: red;" asp-validation-for="ConfirmPassword"></span>
     </div>
     <div class="form-group row">
-         <br />
+        <label asp-for="ClassificationNumber" class="col-xs-2 col-form-label">Trainer classification number</label>
+        <br />
+        <input asp-for="ClassificationNumber" class="form-control col-xs-5" type="text" id="example-text-input" placeholder="UE18C123456789">
+        <span style="color: red;" asp-validation-for="ClassificationNumber"></span>
+        <br/>
+    </div>
+    <div class="form-group row">   
         <button asp-controller="Home" asp-action="Registration" type="submit" class="btn btn-primary mb-2">Registration</button>
     </div>
 </form>

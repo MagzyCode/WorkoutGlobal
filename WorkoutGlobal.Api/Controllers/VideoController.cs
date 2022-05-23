@@ -34,10 +34,14 @@ namespace WorkoutGlobal.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllVideos([FromQuery] VideoParameters parameters)
+        public async Task<IActionResult> GetAllVideos()
         {
-            var videos = parameters != null
-                ? await _repositoryManager.VideoRepository.GetPageVideosAsync(parameters, true)
+            var query = HttpContext.Request.Query;
+
+            var videos = query.Count != 0
+                ? await _repositoryManager.VideoRepository.GetPageVideosAsync(
+                   parameters: new VideoParameters(Convert.ToInt32(query["pageNumber"]), Convert.ToInt32(query["pageSize"])), 
+                   isPublic: true)
                 : await _repositoryManager.VideoRepository.GetAllVideosAsync(true);
 
             var videosDto = _mapper.Map<IEnumerable<VideoDto>>(videos);

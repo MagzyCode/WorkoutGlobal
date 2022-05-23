@@ -1,11 +1,8 @@
 ﻿using WorkoutGlobal.UI.Models.Enums;
 
-namespace WorkoutGlobal.UI.ViewModels.Authentication
+namespace WorkoutGlobal.UI.Models
 {
-    /// <summary>
-    /// View model of registration user.
-    /// </summary>
-    public class UserRegistrationViewModel
+    public class RegistrationUser
     {
         /// <summary>
         /// User name for registration.
@@ -67,7 +64,7 @@ namespace WorkoutGlobal.UI.ViewModels.Authentication
         /// <summary>
         /// User sex.
         /// </summary>
-        public Sex Sex { get; set; }
+        public int Sex { get; set; }
 
         /// <summary>
         /// User height.
@@ -82,7 +79,7 @@ namespace WorkoutGlobal.UI.ViewModels.Authentication
         /// <summary>
         /// User's attitude to sports.
         /// </summary>
-        public SportsActivity SportsActivity { get; set; }
+        public int SportsActivity { get; set; }
 
 
         /// <summary>

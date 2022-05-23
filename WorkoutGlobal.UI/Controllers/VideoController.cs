@@ -29,5 +29,17 @@ namespace WorkoutGlobal.UI.Controllers
 
             return View(videoViewModels);
         }
+
+        public async Task<IActionResult> ShowVideo(Guid videoId)
+        {
+            var video = await _videoService.GetVideoAsync(videoId);
+
+            if (video == null)
+                throw new ArgumentException();
+
+            var videoViewModel = _mapper.Map<VideoViewModel>(video);
+
+            return View(videoViewModel);
+        }
     }
 }

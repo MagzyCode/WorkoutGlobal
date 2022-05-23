@@ -29,7 +29,7 @@ namespace WorkoutGlobal.UI.ApiConnection.Services
         /// </summary>
         /// <param name="userCredentials">User credentials.</param>
         /// <returns>A task that represents asynchronous Registrate operation.</returns>
-        public async Task RegistrateAsync(UserCredentials userCredentials)
-            => await Service.RegistrateAsync(userCredentials);
+        public async Task RegistrateAsync(RegistrationUser registrationUser)
+            => await Service.RegistrateAsync(registrationUser);
     }
 }

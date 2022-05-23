@@ -20,6 +20,7 @@ namespace WorkoutGlobal.Api.Models.Mapping
             CreateMap<UserAuthorizationDto, UserCredentialsDto>();
 
             CreateMap<UserCredentialsDto, UserCredentials>();
+            CreateMap<UserRegistrationDto, User>();
 
             CreateMap<Video, VideoDto>().ReverseMap();
             CreateMap<Video, CreationVideoDto>().ReverseMap();

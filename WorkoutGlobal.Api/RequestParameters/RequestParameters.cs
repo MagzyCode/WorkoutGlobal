@@ -5,6 +5,9 @@
         private protected int _pageNumber;
         private protected int _pageSize;
 
+        public RequestParameters()
+        { }
+
         public RequestParameters(int pageNumber, int pageSize)
         { 
             PageNumber = pageNumber;

@@ -1,16 +1,37 @@
 ﻿@using WorkoutGlobal.UI.ViewModels
 @model IEnumerable<VideoViewModel>;
 
-<div class="container">
-  <div class="row">
-      @{
-          foreach(var video in Model)
-          {
-              
-            <iframe src="@video.Link"></iframe>
-          }
-        }
-  </div>
-</div>
+<h1>Videos</h1>
+<video src="youtube.com/embed/MLeIBFYY6UY"></video>
+<table id="videoTableId" class="table table-border">
+    <tbody>
+        @{
+            for (int i = 0; i < Model.Count() / 3 + 1; i++)
+            {
+                var videos = Model.Skip(i * 3).Take(3).ToList();
+                <tr>
+                    @foreach (var video in videos)
+                    {
+                        <td>
+                            <div>
+                                <a asp-controller="Video" asp-action="ShowVideo" asp-route-videoId="@video.Id">
+                                    <iframe src="@video.Link" ></iframe>
+                                    <br/>
+                                    <p>@video.Title</p>
+                                </a>
 
+                            </div>
+                        </td>
+                    }
+                </tr>
+                
+            }
+          }
+    </tbody>
+</table>
+
+@section scripts{
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+}
 

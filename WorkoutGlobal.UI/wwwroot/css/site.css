@@ -16,3 +16,32 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+#videoTableId {
+    border-color: transparent;
+}
+
+iframe {
+    width: 350px;
+    height: 200px;
+}
+
+#singleVideoId {
+    width: inherit;
+    height: 500px;
+}
+
+#singleVideoFrameId {
+    width: 80%;
+    height: 50%
+}
+
+.video-titles {
+    width: 50%;
+    font-size: 20px;
+    text-align: center;
+}
+
+.right-nav{
+    padding-left: 1000px;
+}

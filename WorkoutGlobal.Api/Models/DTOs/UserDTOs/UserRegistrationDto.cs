@@ -84,14 +84,15 @@ namespace WorkoutGlobal.Api.Models.DTOs.UserDTOs
         /// </summary>
         public SportsActivity SportsActivity { get; set; }
 
+
+        /// <summary>
+        /// Registration date for user in system. 
+        /// </summary>
+        public DateTime DateOfRegistration { get; set; } = DateTime.Now;
+
         /// <summary>
         /// Trainer official classification number.
         /// </summary>
         public string ClassificationNumber { get; set; }
-
-        /// <summary>
-        /// Identifies whether the trainer's status has been confirmed.
-        /// </summary>
-        public bool IsStatusVerify { get; set; }
     }
 }

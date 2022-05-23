@@ -24,5 +24,7 @@ namespace WorkoutGlobal.Api.Contracts.RepositoryManagerContracts
         public IAuthenticationRepository AuthenticationRepository { get; }
 
         public IVideoRepository VideoRepository { get; }
+
+        public IUserRepository UserRepository { get; }
     }
 }

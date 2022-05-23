@@ -17,6 +17,8 @@ namespace WorkoutGlobal.UI.Models.Mapping
             CreateMap<UserAuthorizationViewModel, AuthenticationUser>();
             CreateMap<UserRegistrationViewModel, UserCredentials>();
 
+            CreateMap<RegistrationUser, UserRegistrationViewModel>().ReverseMap();
+
             CreateMap<Video, VideoViewModel>().ReverseMap();
         }
     }

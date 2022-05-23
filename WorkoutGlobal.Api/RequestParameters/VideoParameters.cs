@@ -2,6 +2,9 @@
 {
     public class VideoParameters : RequestParameters
     {
+        public VideoParameters()
+        { }
+
         public VideoParameters(int pageNumber = 1, int pageSize = 10) 
             : base(pageNumber, pageSize)
         { }

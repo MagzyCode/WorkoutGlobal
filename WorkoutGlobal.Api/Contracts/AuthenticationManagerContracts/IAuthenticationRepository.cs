@@ -28,7 +28,7 @@ namespace WorkoutGlobal.Api.Contracts.AuthenticationManagerContracts
         /// </summary>
         /// <param name="userRegistrationDto">User registration credentials. </param>
         /// <returns></returns>
-        public Task RegistrateUserAsync(UserCredentials userRegistrationDto);
+        public Task RegistrateUserAsync(UserRegistrationDto userRegistrationDto);
 
         /// <summary>
         /// Checks is registration use credentials already exists in system.

@@ -38,6 +38,7 @@ namespace WorkoutGlobal.Api.Extensions
             services.AddScoped<IUserCredentialsRepository, UserCredentialsRepository>();
             services.AddScoped<IAuthenticationRepository, AuthenticationRepository>();
             services.AddScoped<IVideoRepository, VideoRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
 
             services.AddScoped<IRepositoryManager, RepositoryManager>();
         }
