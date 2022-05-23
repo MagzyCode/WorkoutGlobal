@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using WorkoutGlobal.UI.ViewModels;
 using WorkoutGlobal.UI.ViewModels.Authentication;
 
 namespace WorkoutGlobal.UI.Models.Mapping
@@ -15,6 +16,8 @@ namespace WorkoutGlobal.UI.Models.Mapping
         {
             CreateMap<UserAuthorizationViewModel, AuthenticationUser>();
             CreateMap<UserRegistrationViewModel, UserCredentials>();
+
+            CreateMap<Video, VideoViewModel>().ReverseMap();
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using WorkoutGlobal.Api.Models.DTOs.UserDTOs;
+using WorkoutGlobal.Api.Models.DTOs.VideoDTOs;
 
 namespace WorkoutGlobal.Api.Models.Mapping
 {
@@ -19,6 +20,9 @@ namespace WorkoutGlobal.Api.Models.Mapping
             CreateMap<UserAuthorizationDto, UserCredentialsDto>();
 
             CreateMap<UserCredentialsDto, UserCredentials>();
+
+            CreateMap<Video, VideoDto>().ReverseMap();
+            CreateMap<Video, CreationVideoDto>().ReverseMap();
         }
     }
 }

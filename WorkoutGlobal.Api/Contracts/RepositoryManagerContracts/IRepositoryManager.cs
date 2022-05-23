@@ -22,5 +22,7 @@ namespace WorkoutGlobal.Api.Contracts.RepositoryManagerContracts
         /// Authentication repository instance.
         /// </summary>
         public IAuthenticationRepository AuthenticationRepository { get; }
+
+        public IVideoRepository VideoRepository { get; }
     }
 }

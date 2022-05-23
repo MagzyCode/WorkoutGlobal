@@ -46,5 +46,9 @@ namespace WorkoutGlobal.UI.ApiConnection.Services
                     BaseAddress = new Uri(_configuration["ApiBaseUrl"])
                 });
         }
+
+        public T Service { get => _service; }
+
+        public IConfiguration Configuration { get => _configuration; }
     }
 }

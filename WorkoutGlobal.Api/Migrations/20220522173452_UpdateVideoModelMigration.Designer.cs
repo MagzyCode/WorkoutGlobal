@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WorkoutGlobal.Api.Context;
 
@@ -11,9 +12,10 @@ using WorkoutGlobal.Api.Context;
 namespace WorkoutGlobal.Api.Migrations
 {
     [DbContext(typeof(WorkoutGlobalContext))]
-    partial class WorkoutGlobalContextModelSnapshot : ModelSnapshot
+    [Migration("20220522173452_UpdateVideoModelMigration")]
+    partial class UpdateVideoModelMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -52,14 +54,14 @@ namespace WorkoutGlobal.Api.Migrations
                         new
                         {
                             Id = "f4a4ce79-c6b3-4e12-9c98-ff07b5030752",
-                            ConcurrencyStamp = "e27c4ebf-23ea-462b-b3cd-0249a5c5eb47",
+                            ConcurrencyStamp = "36f4f49b-6118-43b9-9746-fefadb99b9c8",
                             Name = "User",
                             NormalizedName = "USER"
                         },
                         new
                         {
                             Id = "6abe6f33-ae4b-4430-8f14-493dc9a5a9d1",
-                            ConcurrencyStamp = "4aa9d0f6-1837-460b-a835-e8d1da6d8097",
+                            ConcurrencyStamp = "4649d550-b6c0-4da0-9e11-bc5c8765292a",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         });
@@ -458,13 +460,13 @@ namespace WorkoutGlobal.Api.Migrations
                         {
                             Id = "b5b84fd7-5366-44eb-9d1b-408c6a4a8926",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "65d61e7a-0000-4020-80bc-5b1735e15c08",
+                            ConcurrencyStamp = "99c83e11-16fa-437a-8db9-2dc4624c9704",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             PasswordHash = "21c9b9e74e5071de6d6c872ccae5af4deb3b42563cd649a3179a5780163b6238",
                             PasswordSalt = "46da4fb783d806ab",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "1be95a6f-44bb-4c73-aac3-b7c63455f9cb",
+                            SecurityStamp = "0edee118-f9e2-45e5-909d-85b30f77ac14",
                             TwoFactorEnabled = false,
                             UserName = "MagzyCode"
                         });
@@ -476,16 +478,10 @@ namespace WorkoutGlobal.Api.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<bool>("IsPublic")
                         .HasColumnType("bit");
 
                     b.Property<string>("Link")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Title")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("UserId")

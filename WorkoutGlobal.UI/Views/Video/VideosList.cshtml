@@ -1,0 +1,16 @@
+﻿@using WorkoutGlobal.UI.ViewModels
+@model IEnumerable<VideoViewModel>;
+
+<div class="container">
+  <div class="row">
+      @{
+          foreach(var video in Model)
+          {
+              
+            <iframe src="@video.Link"></iframe>
+          }
+        }
+  </div>
+</div>
+
+

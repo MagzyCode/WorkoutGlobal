@@ -29,6 +29,8 @@ namespace WorkoutGlobal.UI.Extensions
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<IAuthenticationService, AuthenticationService>();
+            services.AddScoped<IVideoService, VideoService>();
+
             services.AddScoped<AuthenticationHttpClientHandler>();
         }
     }

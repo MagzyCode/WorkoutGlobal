@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WorkoutGlobal.Api.Context;
 
@@ -11,9 +12,10 @@ using WorkoutGlobal.Api.Context;
 namespace WorkoutGlobal.Api.Migrations
 {
     [DbContext(typeof(WorkoutGlobalContext))]
-    partial class WorkoutGlobalContextModelSnapshot : ModelSnapshot
+    [Migration("20220522173718_UpdateVideoModelAgainMigration")]
+    partial class UpdateVideoModelAgainMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
