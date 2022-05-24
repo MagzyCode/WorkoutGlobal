@@ -24,6 +24,8 @@
         /// </summary>
         public bool IsPublic { get; set; }
 
+        public CommentsBlock CommentsBlock { get; set; }
+
         /// <summary>
         /// Foreign key with user account.
         /// </summary>

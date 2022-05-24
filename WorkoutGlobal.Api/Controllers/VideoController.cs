@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using WorkoutGlobal.Api.Contracts.RepositoryManagerContracts;
 using WorkoutGlobal.Api.Filters.ActionFilters;
 using WorkoutGlobal.Api.Models;
+using WorkoutGlobal.Api.Models.DTOs.CommentsBlockDTOs;
 using WorkoutGlobal.Api.Models.DTOs.VideoDTOs;
 using WorkoutGlobal.Api.Models.ErrorModels;
 using WorkoutGlobal.Api.RequestParameters;
@@ -74,6 +75,7 @@ namespace WorkoutGlobal.Api.Controllers
             var creationVideo = _mapper.Map<Video>(creationVideoDto);
 
             await _repositoryManager.VideoRepository.AddVideoAsync(creationVideo);
+            await _repositoryManager.CommentsBlockRepository.CreateCommentBlockAsync(new CommentsBlock() { CommentedVideoId = creationVideo.Id });
 
             return Created($"api/videos/{creationVideo.Id}", creationVideo.Id);
         }

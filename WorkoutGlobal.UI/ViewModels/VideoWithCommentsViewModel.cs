@@ -1,6 +1,6 @@
 ﻿namespace WorkoutGlobal.UI.ViewModels
 {
-    public class VideoViewModel
+    public class VideoWithCommentsViewModel
     {
         /// <summary>
         /// Video unique identifier.
@@ -25,5 +25,7 @@
         /// Foreign key with user account.
         /// </summary>
         public Guid UserId { get; set; }
+
+        public List<CommentViewModel> Comments { get; set; }
     }
 }

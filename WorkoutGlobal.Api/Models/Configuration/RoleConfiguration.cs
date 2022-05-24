@@ -28,6 +28,12 @@ namespace WorkoutGlobal.Api.Models.Configuration
                     Id = "6abe6f33-ae4b-4430-8f14-493dc9a5a9d1",
                     Name = "Admin",
                     NormalizedName = "ADMIN"
+                },
+                new IdentityRole
+                {
+                    Id = "4f4d7080-beee-4a97-be65-2ffccde5eb72",
+                    Name = "Trainer",
+                    NormalizedName = "TRAINER"
                 }
            );
         }

@@ -85,9 +85,6 @@ namespace WorkoutGlobal.Api.Controllers
                     Details = new StackTrace().ToString()
                 });
 
-            //var userCredentialsDto = _mapper.Map<UserCredentialsDto>(userRegistrationDto);
-
-            //var user = await _repositoryManager.AuthenticationRepository.GenerateUserCredentialsAsync(userCredentialsDto);
             await _repositoryManager.AuthenticationRepository.RegistrateUserAsync(userRegistrationDto);
 
             return StatusCode(StatusCodes.Status201Created);

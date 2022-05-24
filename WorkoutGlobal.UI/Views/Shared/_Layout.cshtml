@@ -15,7 +15,7 @@
         }
     </style>
 </head>
-<body style="background-image: url(https://catherineasquithgallery.com/uploads/posts/2021-03/1614602226_23-p-belii-sportivnii-fon-32.jpg)">
+<body style="background-image: url(https://catherineasquithgallery.com/uploads/posts/2021-03/1614602226_23-p-belii-sportivnii-fon-32.jpg); background-repeat: no-repeat;">
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container-fluid">
@@ -44,14 +44,19 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Video" asp-action="VideosList">Videos</a>
                         </li>
-
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Course" asp-action="Index">Courses</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Product" asp-action="Index">Products</a>
+                        </li>
                         
                     </ul>
                     <ul style="margin-right: 10px;">
                         @if (User.Identity.IsAuthenticated)
                         {
                             <li class="li-style">
-                                @User.Identity.Name
+                                <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="Index">@User.Identity.Name</a>
                             </li>
                         }
                     </ul>

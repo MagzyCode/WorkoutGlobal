@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using WorkoutGlobal.Api.Models.DTOs.CommentDTOs;
+using WorkoutGlobal.Api.Models.DTOs.CommentsBlockDTOs;
 using WorkoutGlobal.Api.Models.DTOs.UserDTOs;
 using WorkoutGlobal.Api.Models.DTOs.VideoDTOs;
 
@@ -24,6 +26,10 @@ namespace WorkoutGlobal.Api.Models.Mapping
 
             CreateMap<Video, VideoDto>().ReverseMap();
             CreateMap<Video, CreationVideoDto>().ReverseMap();
+
+            CreateMap<Comment, CommentDto>().ReverseMap();
+
+            CreateMap<CommentsBlockDto, CommentsBlock>().ReverseMap();
         }
     }
 }

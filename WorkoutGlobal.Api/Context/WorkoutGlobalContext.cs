@@ -80,6 +80,29 @@ namespace WorkoutGlobal.Api.Context
                 .HasOne(post => post.Creator)
                 .WithMany(creator => creator.Posts)
                 .HasForeignKey(post => post.CreatorId);
+            
+            modelBuilder.Entity<Video>()
+                .HasOne(video => video.CommentsBlock)
+                .WithOne(block => block.CommentedVideo)
+                .HasForeignKey<CommentsBlock>(block => block.CommentedVideoId);
+
+            /*            modelBuilder.Entity<CourseVideos>()
+                .HasOne(courseVideos => courseVideos.Video)
+                .WithMany(course => course.VideoCourses)
+                .HasForeignKey(courseVideos => courseVideos.VideoId)
+                .OnDelete(DeleteBehavior.NoAction);*/
+
+            modelBuilder.Entity<Comment>()
+                .HasOne(comment => comment.CommentsBlock)
+                .WithMany(block => block.Comments)
+                .HasForeignKey(comment => comment.CommentsBlockId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<Comment>()
+                .HasOne(comment => comment.Commentator)
+                .WithMany(user => user.Comments)
+                .HasForeignKey(comment => comment.CommentatorId)
+                .OnDelete(DeleteBehavior.NoAction);
         }
 
         /// <summary>
@@ -131,5 +154,6 @@ namespace WorkoutGlobal.Api.Context
         /// Represents table of user posts.
         /// </summary>
         public DbSet<Post> Posts { get; set; }
+        public DbSet<CommentsBlock> CommentsBlocks { get; set; }
     }
 }

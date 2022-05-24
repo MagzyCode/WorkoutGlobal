@@ -10,22 +10,23 @@ namespace WorkoutGlobal.UI.Controllers
     {
         private readonly IMapper _mapper;
         private readonly IVideoService _videoService;
+        private readonly ICommentsBlockService _commentsBlockService;
 
         public VideoController(
             IMapper mapper,
-            IVideoService videoService)
+            IVideoService videoService,
+            ICommentsBlockService commentsBlockService)
         {
             _mapper = mapper;
             _videoService = videoService;
+            _commentsBlockService = commentsBlockService;
         }
 
         public async Task<IActionResult> VideosList()
         {
-            // var video = await _videoService.GetVideoAsync(new Guid());
-
             var videos = await _videoService.GetAllVideosAsync(new VideoParameters());
 
-            var videoViewModels = _mapper.Map<IEnumerable<VideoViewModel>>(videos);
+            var videoViewModels = _mapper.Map<IEnumerable<VideoWithCommentsViewModel>>(videos);
 
             return View(videoViewModels);
         }
@@ -34,10 +35,13 @@ namespace WorkoutGlobal.UI.Controllers
         {
             var video = await _videoService.GetVideoAsync(videoId);
 
-            if (video == null)
-                throw new ArgumentException();
+            var videoViewModel = _mapper.Map<VideoWithCommentsViewModel>(video);
 
-            var videoViewModel = _mapper.Map<VideoViewModel>(video);
+            var commentsBlock = await _commentsBlockService.GetCommentsBlockByVideoIdAsync(videoId);
+            var comments = await _commentsBlockService.GetBlockCommentsAsync(commentsBlock.Id);
+            var commentsViewModel = _mapper.Map<IEnumerable<CommentViewModel>>(comments);
+
+            videoViewModel.Comments = commentsViewModel.ToList();
 
             return View(videoViewModel);
         }

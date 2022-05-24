@@ -58,7 +58,7 @@ namespace WorkoutGlobal.Api.Repositories.BaseRepositories
         /// <returns>Dingle model.</returns>
         public async Task<TModel> GetModelAsync(Guid id)
         {
-            var model = await Context.Set<TModel>().FindAsync();
+            var model = await Context.Set<TModel>().FindAsync(id);
 
             return model;
         }

@@ -21,11 +21,12 @@ namespace WorkoutGlobal.Api.Tests.Repositories
         private readonly Mock<IMapper> _mapper;
         private readonly Mock<IUserCredentialsRepository> _userCredentialsRepository;
         private readonly Mock<IConfigurationSection> _jwtSettings;
+        private readonly Mock<IUserRepository> _userRepositoryMock;
 
         public AuthenticationRepositoryTests()
         {
             _testConfiguration = ConfigurationAccessor.GetTestConfiguration();
-
+            _userRepositoryMock = new Mock<IUserRepository>();
             _jwtSettings = new Mock<IConfigurationSection>();
             _configuration = new Mock<IConfiguration>();
             _configuration
@@ -46,11 +47,12 @@ namespace WorkoutGlobal.Api.Tests.Repositories
                 .Throws(() => new ArgumentNullException());
 
             _authenticationRepository = new AuthenticationRepository(
-                null, 
                 null,
-                _configuration.Object, 
-                _userCredentialsRepository.Object, 
-                _mapper.Object);
+                null,
+                _configuration.Object,
+                _userCredentialsRepository.Object,
+                _mapper.Object,
+                _userRepositoryMock.Object);
         }
 
         [Fact]

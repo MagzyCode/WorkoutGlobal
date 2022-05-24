@@ -1,8 +1,7 @@
 ﻿@using WorkoutGlobal.UI.ViewModels
-@model IEnumerable<VideoViewModel>;
+@model IEnumerable<VideoWithCommentsViewModel>;
 
 <h1>Videos</h1>
-<video src="youtube.com/embed/MLeIBFYY6UY"></video>
 <table id="videoTableId" class="table table-border">
     <tbody>
         @{
@@ -13,11 +12,11 @@
                     @foreach (var video in videos)
                     {
                         <td>
-                            <div>
-                                <a asp-controller="Video" asp-action="ShowVideo" asp-route-videoId="@video.Id">
+                            <div class="video-list-background">
+                                <a class="a-non-style" asp-controller="Video" asp-action="ShowVideo" asp-route-videoId="@video.Id">
                                     <iframe src="@video.Link" ></iframe>
                                     <br/>
-                                    <p>@video.Title</p>
+                                    <p class="p-youtube-font-family-lg">@video.Title</p>
                                 </a>
 
                             </div>

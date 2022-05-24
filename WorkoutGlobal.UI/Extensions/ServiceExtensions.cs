@@ -30,6 +30,7 @@ namespace WorkoutGlobal.UI.Extensions
             services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<IAuthenticationService, AuthenticationService>();
             services.AddScoped<IVideoService, VideoService>();
+            services.AddScoped<ICommentsBlockService, CommentsBlockService>();
 
             services.AddScoped<AuthenticationHttpClientHandler>();
         }

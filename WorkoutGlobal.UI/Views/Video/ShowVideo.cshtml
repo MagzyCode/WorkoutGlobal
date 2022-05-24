@@ -1,8 +1,23 @@
 ﻿@using WorkoutGlobal.UI.ViewModels
-@model VideoViewModel;
+@model VideoWithCommentsViewModel;
 
-<div id="singleVideoId">
-    <iframe id="singleVideoFrameId" src="@Model.Link"></iframe>
-    <p class="video-titles">@Model.Title</p>
-    <p class="video-titles"><@Model.Description</p>
+<div>
+    <div>
+        <iframe id="singleVideoFrameId" src="@Model.Link"></iframe>
+    </div>
+    <div class="video-list-background">
+        <p class="video-titles p-youtube-font-family-lg">@Model.Title</p>
+        <p class="video-titles p-youtube-font-family-sm">@Model.Description</p>
+    </div>
+    <div class="video-list-background">
+        <h2>Comments</h2>
+        @foreach(var comment in Model.Comments)
+        {
+            <div>
+                <p class="comment p-youtube-font-family-sm">
+                    @comment.CommentText
+                </p>
+            </div>
+        }
+    </div>
 </div>
