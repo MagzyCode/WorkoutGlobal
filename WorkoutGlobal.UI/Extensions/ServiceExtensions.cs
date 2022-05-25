@@ -31,6 +31,8 @@ namespace WorkoutGlobal.UI.Extensions
             services.AddScoped<IAuthenticationService, AuthenticationService>();
             services.AddScoped<IVideoService, VideoService>();
             services.AddScoped<ICommentsBlockService, CommentsBlockService>();
+            services.AddScoped<ICommentService, CommentService>();
+            services.AddScoped<ICourseService, CourseService>();
 
             services.AddScoped<AuthenticationHttpClientHandler>();
         }

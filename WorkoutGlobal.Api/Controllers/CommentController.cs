@@ -31,7 +31,7 @@ namespace WorkoutGlobal.Api.Controllers
 
             await _repositoryManager.CommentRepository.CreateCommentAsync(comment);
 
-            return Created($"api/comment/{comment.Id}", comment.Id);
+            return Ok(StatusCodes.Status201Created);
         }
     }
 }

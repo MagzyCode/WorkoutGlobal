@@ -16,7 +16,12 @@
                                 <a class="a-non-style" asp-controller="Video" asp-action="ShowVideo" asp-route-videoId="@video.Id">
                                     <iframe src="@video.Link" ></iframe>
                                     <br/>
-                                    <p class="p-youtube-font-family-lg">@video.Title</p>
+                                    @{
+                                        var shortTitle = video.Title.Count() > 40
+                                            ? video.Title.Take(40) + "..."
+                                            : video.Title;
+                                    }
+                                    <p class="p-youtube-font-family-lg">@shortTitle</p>
                                 </a>
 
                             </div>

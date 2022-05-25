@@ -16,6 +16,6 @@ namespace WorkoutGlobal.Api.Contracts.RepositoryContracts
 
         public Task<IEnumerable<Video>> GetPageVideosAsync(VideoParameters parameters, bool isPublic);
 
-        public Task AddVideoAsync(Video video);
+        public Task CreateVideoAsync(Video video);
     }
 }

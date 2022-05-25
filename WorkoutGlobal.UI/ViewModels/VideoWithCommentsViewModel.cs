@@ -27,5 +27,6 @@
         public Guid UserId { get; set; }
 
         public List<CommentViewModel> Comments { get; set; }
+        public string AdditionComment { get; set; }
     }
 }

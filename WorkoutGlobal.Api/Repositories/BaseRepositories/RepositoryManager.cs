@@ -16,6 +16,8 @@ namespace WorkoutGlobal.Api.Repositories.BaseRepositories
         private readonly IUserRepository _userRepository;
         private readonly ICommentsBlockRepository _commentsBlockRepository;
         private readonly ICommentRepository _commentRepository;
+        private readonly ICourseRepository _courseRepository;
+        private readonly ICourseVideosRepository _courseVideosRepository;
 
         /// <summary>
         /// Ctor for repository manager.
@@ -31,7 +33,9 @@ namespace WorkoutGlobal.Api.Repositories.BaseRepositories
             IVideoRepository videoRepository,
             IUserRepository userRepository,
             ICommentsBlockRepository commentsBlockRepository,
-            ICommentRepository commentRepository) 
+            ICommentRepository commentRepository,
+            ICourseRepository courseRepository,
+            ICourseVideosRepository courseVideosRepository) 
         {
             _healthRepository = healthRepository;
             _userCredentialsRepository = userCredentialsRepository;
@@ -40,6 +44,8 @@ namespace WorkoutGlobal.Api.Repositories.BaseRepositories
             _userRepository = userRepository;
             _commentsBlockRepository = commentsBlockRepository;
             _commentRepository = commentRepository;
+            _courseRepository = courseRepository;
+            _courseVideosRepository = courseVideosRepository;
         }
 
         /// <summary>
@@ -63,6 +69,8 @@ namespace WorkoutGlobal.Api.Repositories.BaseRepositories
 
         public ICommentsBlockRepository CommentsBlockRepository => _commentsBlockRepository;
         public ICommentRepository CommentRepository => _commentRepository;
+        public ICourseRepository CourseRepository => _courseRepository;
+        public ICourseVideosRepository CourseVideosRepository => _courseVideosRepository;
 
     }
 }

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using WorkoutGlobal.UI.ApiConnection.Contracts;
+using WorkoutGlobal.UI.Models;
 using WorkoutGlobal.UI.RequestParameters;
 using WorkoutGlobal.UI.ViewModels;
 
@@ -11,15 +12,18 @@ namespace WorkoutGlobal.UI.Controllers
         private readonly IMapper _mapper;
         private readonly IVideoService _videoService;
         private readonly ICommentsBlockService _commentsBlockService;
+        private readonly ICommentService _commentService;
 
         public VideoController(
             IMapper mapper,
             IVideoService videoService,
-            ICommentsBlockService commentsBlockService)
+            ICommentsBlockService commentsBlockService,
+            ICommentService commentService)
         {
             _mapper = mapper;
             _videoService = videoService;
             _commentsBlockService = commentsBlockService;
+            _commentService = commentService;
         }
 
         public async Task<IActionResult> VideosList()
@@ -44,6 +48,28 @@ namespace WorkoutGlobal.UI.Controllers
             videoViewModel.Comments = commentsViewModel.ToList();
 
             return View(videoViewModel);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> SaveComment(VideoWithCommentsViewModel videoWithCommentsViewModel)
+        {
+            var commentsBlock = await _commentsBlockService.GetCommentsBlockByVideoIdAsync(videoWithCommentsViewModel.Id);
+
+            var comment = new Comment()
+                {
+                    CommentText = videoWithCommentsViewModel.AdditionComment,
+                    CommentatorName = User.Identity.Name,
+                    CommentatorId = videoWithCommentsViewModel.UserId,
+                    CommentsBlockId = commentsBlock.Id
+                };
+
+            await _commentService.CreateCommentAsync(comment);
+            var comments = await _commentsBlockService.GetBlockCommentsAsync(commentsBlock.Id);
+            var commentsViewModel = _mapper.Map<IEnumerable<CommentViewModel>>(comments);
+
+            videoWithCommentsViewModel.Comments = commentsViewModel.ToList();
+
+            return View("ShowVideo", videoWithCommentsViewModel);
         }
     }
 }

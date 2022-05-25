@@ -24,6 +24,8 @@ namespace WorkoutGlobal.UI.Models.Mapping
             CreateMap<Comment, CommentViewModel>().ReverseMap();
 
             CreateMap<CommentsBlock, CommentsBlockViewModel>().ReverseMap();
+
+            CreateMap<Course, CourseViewModel>().ReverseMap();
         }
     }
 }

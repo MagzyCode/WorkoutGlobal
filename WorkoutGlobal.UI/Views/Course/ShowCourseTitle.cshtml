@@ -1,0 +1,19 @@
+﻿@model CourseViewModel
+
+<h1>
+    @Model.CourseName
+</h1>
+@{
+    if (Model.CourseImage?.Length == 0)
+    {
+        <img class="course-img" src="/images/no-photo.jpg"/>
+    }
+    else
+    {
+        <img class="course-img" src="@string.Format("data:image/png;base64,{0}", Convert.ToBase64String(Model.CourseImage))" height="500px" width="750px"/>
+    }
+}
+<p class="p-course-font-family-lg">
+    @Model.Description
+</p>
+<input type="submit" class="btn btn-primary mb-2" value="Start course"/>

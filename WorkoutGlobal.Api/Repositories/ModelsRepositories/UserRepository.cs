@@ -17,6 +17,7 @@ namespace WorkoutGlobal.Api.Repositories.ModelsRepositories
         public async Task AddUserAsync(User user)
         {
             await CreateAsync(user);
+            await SaveChangesAsync();
         }
     }
 }

@@ -22,7 +22,10 @@ namespace WorkoutGlobal.Api.Repositories.ModelsRepositories
         }
 
         public async Task CreateCommentAsync(Comment comment)
-            => await CreateAsync(comment);
+        {
+            await CreateAsync(comment);
+            await SaveChangesAsync();
+        }
 
         public async Task<IEnumerable<Comment>> GetBlockCommentsAsync(Guid commentsBlockId)
         {

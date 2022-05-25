@@ -74,7 +74,7 @@ namespace WorkoutGlobal.Api.Controllers
         {
             var creationVideo = _mapper.Map<Video>(creationVideoDto);
 
-            await _repositoryManager.VideoRepository.AddVideoAsync(creationVideo);
+            await _repositoryManager.VideoRepository.CreateVideoAsync(creationVideo);
             await _repositoryManager.CommentsBlockRepository.CreateCommentBlockAsync(new CommentsBlock() { CommentedVideoId = creationVideo.Id });
 
             return Created($"api/videos/{creationVideo.Id}", creationVideo.Id);

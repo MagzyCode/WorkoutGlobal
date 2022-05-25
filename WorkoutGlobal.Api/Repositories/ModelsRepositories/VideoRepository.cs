@@ -57,7 +57,7 @@ namespace WorkoutGlobal.Api.Repositories.ModelsRepositories
             return pageVideos;
         }
 
-        public async Task AddVideoAsync(Video video)
+        public async Task CreateVideoAsync(Video video)
         {
             await CreateAsync(video);
             await SaveChangesAsync();

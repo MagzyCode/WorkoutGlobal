@@ -28,5 +28,7 @@ namespace WorkoutGlobal.Api.Contracts.RepositoryManagerContracts
         public IUserRepository UserRepository { get; }
         public ICommentsBlockRepository CommentsBlockRepository { get; }
         public ICommentRepository CommentRepository { get; }
+        public ICourseRepository CourseRepository { get; }
+        public ICourseVideosRepository CourseVideosRepository { get; }
     }
 }

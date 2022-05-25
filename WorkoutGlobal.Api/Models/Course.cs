@@ -30,6 +30,8 @@
         /// </summary>
         public User Creator { get; set; }
 
+        public byte[] CourseImage { get; set; }
+
         /// <summary>
         /// Collection of video in course.
         /// </summary>

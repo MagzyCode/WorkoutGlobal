@@ -11,13 +11,36 @@
     </div>
     <div class="video-list-background">
         <h2>Comments</h2>
-        @foreach(var comment in Model.Comments)
+        <br>
+        @if (User.Identity.IsAuthenticated)
         {
-            <div>
-                <p class="comment p-youtube-font-family-sm">
+            <form method="post">
+                <input type="text" asp-for="AdditionComment" placeholder="Type comment..." class="form-control"/>
+                <input type="hidden" asp-for="Id" value="@Model.Id"/>
+                <input type="hidden" asp-for="Link" value="@Model.Link"/>
+                <input type="hidden" asp-for="Title" value="@Model.Title"/>
+                <input type="hidden" asp-for="Description" value="@Model.Description"/>
+                <input type="hidden" asp-for="IsPublic" value="@Model.IsPublic"/>
+                <input type="hidden" asp-for="UserId" value="@Model.UserId"/>
+                <br>
+                <button asp-controller="Video" asp-action="SaveComment" type="submit" class="btn btn-primary">Leave a comment</button>
+            </form>
+            <br>
+        }
+        @foreach(var comment in Model.Comments.OrderByDescending(x => x.PostTime))
+        {
+            <div class="comment">
+                <p>
+                    @{
+                        var userName = comment.CommentatorName ?? "Anonymous";
+                    }
+                    <b>@userName</b> <small>@comment.PostTime.ToLocalTime()</small>
+                </p>
+                <p class="p-youtube-font-family-sm">
                     @comment.CommentText
                 </p>
             </div>
+            <br>
         }
     </div>
 </div>

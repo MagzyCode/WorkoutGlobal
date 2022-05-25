@@ -21,6 +21,11 @@ body {
     border-color: transparent;
 }
 
+#courseTableId {
+    border-color: transparent;
+    width: 80%;
+}
+
 iframe {
     width: 350px;
     height: 200px;
@@ -58,9 +63,11 @@ iframe {
     margin-right: 0px;
 }
 
-.p-youtube-font-family-lg {
+.p-youtube-font-family-lg, .p-course-font-family-lg {
     font-family: Arial, sans-serif;
     font-size: 25px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .p-youtube-font-family-sm {
@@ -74,13 +81,32 @@ iframe {
     font-weight: bold;
 }
 
-.video-list-background{
+.video-list-background, .course-list-background{
     background-color: rgb(255, 255, 255, 0.5);
+
 }
 
 /*Comments*/
 
 .comment{
+    background-color: #C0C0C0;
+    border-color: black;
+    border-width: 2px;
     width: 90%;
     height: 70px;
+}
+
+/*Courses*/
+.course-img {
+    width: 350px;
+    height: 350px;
+    border-radius: 1000px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#common-background {
+    background-image: url(/images/background.jpg);
+    background-size: cover;
+    background-attachment: fixed;
 }

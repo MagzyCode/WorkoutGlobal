@@ -1,0 +1,49 @@
+﻿@using WorkoutGlobal.UI.ViewModels
+@model IEnumerable<CourseViewModel>;
+
+<h1>Courses</h1>
+<table id="courseTableId" class="table table-border">
+    <tbody>
+        @{
+            for (int i = 0; i < Model.Count() / 3 + 1; i++)
+            {
+                var courses = Model.Skip(i * 3).Take(3).ToList();
+                <tr>
+                    @foreach (var course in courses)
+                    {
+                        <td>
+                            <div class="course-list-background">
+                                    @{
+                                        if (course.CourseImage?.Length == 0)
+                                        {
+                                            <img class="course-img" src="/images/no-photo.jpg"/>
+                                        }
+                                        else
+                                        {
+                                            <img class="course-img" src="@string.Format("data:image/png;base64,{0}", Convert.ToBase64String(course.CourseImage))"/>
+                                        }
+                                    }
+                                    <br/>
+                                    @{
+                                        var shortTitle = course.CourseName.Count() > 20
+                                            ? course.CourseName.Take(20) + "..."
+                                            : course.CourseName;
+                                    }
+                                <a class="a-non-style" asp-controller="Course" asp-action="ShowCourseTitle" asp-route-courseId="@course.Id">
+                                    <p class="p-course-font-family-lg">@shortTitle</p>
+                                </a>
+
+                            </div>
+                        </td>
+                    }
+                </tr>
+                
+            }
+          }
+    </tbody>
+</table>
+
+@section scripts{
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+}
