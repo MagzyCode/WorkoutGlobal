@@ -17,7 +17,7 @@ body {
   margin-bottom: 60px;
 }
 
-#videoTableId {
+#videoTableId, .border-transparent {
     border-color: transparent;
 }
 

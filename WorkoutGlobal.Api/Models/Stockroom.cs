@@ -1,7 +1,7 @@
 ﻿namespace WorkoutGlobal.Api.Models
 {
     /// <summary>
-    /// Base model for products stockroom.
+    /// Base model for products store room.
     /// </summary>
     public class Stockroom
     {

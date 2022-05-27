@@ -76,8 +76,10 @@ namespace WorkoutGlobal.UI.Controllers
             var registrationUser = _mapper.Map<RegistrationUser>(userRegistrationViewModel);
 
             await _authenticationService.RegistrateAsync(registrationUser);
+            var authenticationUser = _mapper.Map<AuthenticationUser>(registrationUser);
+            await Authenticate(authenticationUser);
 
-            return RedirectToAction("Index", "MainMenu");
+            return RedirectToAction("Index", "Home");
         }
 
         /// <summary>

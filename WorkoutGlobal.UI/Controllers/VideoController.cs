@@ -71,5 +71,22 @@ namespace WorkoutGlobal.UI.Controllers
 
             return View("ShowVideo", videoWithCommentsViewModel);
         }
+
+        public IActionResult AddVideo()
+        {
+            return View(new CreationVideoViewModel());
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddVideo(CreationVideoViewModel creationVideoViewModel)
+        {
+            creationVideoViewModel.Link = creationVideoViewModel.Link.Replace("youtu.be/", "youtube.com/embed/");
+            creationVideoViewModel.UserId = Guid.Parse("4e14c6d2-cae1-43ba-bd32-0f2dc2225f5a");
+            var video = _mapper.Map<Video>(creationVideoViewModel);
+
+            await _videoService.AddVideoAsync(video);
+
+            return RedirectToAction("VideosList", "Video");
+        }
     }
 }

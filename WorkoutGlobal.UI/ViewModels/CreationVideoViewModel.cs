@@ -1,0 +1,15 @@
+﻿namespace WorkoutGlobal.UI.ViewModels
+{
+    public class CreationVideoViewModel
+    {
+        public string Link { get; set; }
+
+        public string Title { get; set; }
+
+        public string Description { get; set; }
+
+        public bool IsPublic { get; set; }
+
+        public Guid UserId { get; set; }
+    }
+}

@@ -27,9 +27,7 @@ namespace WorkoutGlobal.Api.Repositories.ModelsRepositories
 
         public async Task<IEnumerable<Video>> GetAllVideosAsync(bool isPublic = true)
         {
-            var videos = isPublic
-                ? await GetAll().ToListAsync()
-                : await GetAll().Where(video => video.IsPublic == false).ToListAsync();
+            var videos = await GetAll().Where(video => video.IsPublic == isPublic).ToListAsync();
 
             return videos;
         }

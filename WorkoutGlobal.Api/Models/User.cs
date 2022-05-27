@@ -91,7 +91,7 @@ namespace WorkoutGlobal.Api.Models
         /// <summary>
         /// Collection of trainer coursers.
         /// </summary>
-        public ICollection<Course> Courses { get; set; }
+        public ICollection<Course> CreatedCourses { get; set; }
 
         /// <summary>
         /// Collection of user orders.

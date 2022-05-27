@@ -41,7 +41,7 @@ namespace WorkoutGlobal.Api.Context
 
             modelBuilder.Entity<Course>()
                 .HasOne(course => course.Creator)
-                .WithMany(creator => creator.Courses)
+                .WithMany(creator => creator.CreatedCourses)
                 .HasForeignKey(course => course.CreatorId);
 
             modelBuilder.Entity<CourseVideos>()

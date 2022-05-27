@@ -1,0 +1,42 @@
+﻿@model CourseViewModel;
+
+<h2>Add new course</h2>
+<br />
+<form method="post" asp-controller="Course" asp-action="AddCourse">
+    <input type="hidden" asp-for="CreatorId" value="@Model.CreatorId"/>
+    @Html.HiddenFor(modelItem => Model.CourseImage)
+    @Html.HiddenFor(modelItem => Model.CourseImageForm)
+    <div class="form-group row">
+        <label asp-for="CourseName" class="col-xs-2 col-form-label">YouTube link</label>
+        <br/>
+        <input asp-for="CourseName" class="form-control col-xs-2" type="text" id="example-text-input" placeholder="Course #123">
+        <span asp-validation-for="CourseName"></span>
+    </div>    
+    <div class="form-group row">
+        <label asp-for="Description" class="col-xs-2 col-form-label">Video title</label>
+        <br/>
+        <input asp-for="Description" class="form-control col-xs-2" type="text" id="example-text-input" placeholder="Title">
+        <span asp-validation-for="Description"></span>
+    </div>    
+
+    <div class="form-group row">
+        <label asp-for="Description" class="col-xs-2 col-form-label">Video description</label>
+        <br/>
+        <input asp-for="Description" class="form-control col-xs-2" type="text" id="example-text-input" placeholder="A little description">
+        <span asp-validation-for="Description"></span>
+        <br/>
+    </div>    
+     <div class="form-group row">
+        <label asp-for="CourseImageForm" class="col-xs-2 col-form-label">Fridge image input</label>
+        <input asp-for="CourseImageForm" type="file" accept="image/jpg, image/jpeg, image/png" class="custom-file" id="example-text-input">
+        <span asp-validation-for="CourseImageForm"></span>
+    </div>
+    <div class="form-group row">
+        <button type="submit" class="btn btn-primary mb-2">Create video</button>
+    </div>
+</form>
+
+@section scripts{
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+}

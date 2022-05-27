@@ -10,6 +10,8 @@
 
         public Guid CreatorId { get; set; }
 
+        public IFormFile CourseImageForm { get; set; }
+
         public byte[] CourseImage { get; set; }
     }
 }
