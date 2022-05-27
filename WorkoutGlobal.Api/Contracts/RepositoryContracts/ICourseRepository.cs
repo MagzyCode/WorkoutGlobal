@@ -12,5 +12,13 @@ namespace WorkoutGlobal.Api.Contracts.RepositoryContracts
 
         public Task CreateCourseAsync(Course course);
 
+        public Task UpdateCourseAsync(Course course);
+
+        public Task DeleteCourseAsync(Course course);
+
+        public Task<IEnumerable<User>> GetCourseSubscribersAsync(Guid courseId);
+
+        public Task<IEnumerable<Course>> GetCreatorCoursesAsync(Guid creatorId);
+
     }
 }

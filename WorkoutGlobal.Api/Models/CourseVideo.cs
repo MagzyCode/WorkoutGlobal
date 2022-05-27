@@ -3,7 +3,7 @@
     /// <summary>
     /// Base model for course videos.
     /// </summary>
-    public class CourseVideos
+    public class CourseVideo
     {
         /// <summary>
         /// Unique identifier of video in course. 
@@ -29,5 +29,10 @@
         /// Foreign key of video.
         /// </summary>
         public Video Video { get; set; }
+
+        /// <summary>
+        /// Identify video position in course sequence of video. Starts with 1.  
+        /// </summary>
+        public int SequenceNumber { get; set; }
     }
 }

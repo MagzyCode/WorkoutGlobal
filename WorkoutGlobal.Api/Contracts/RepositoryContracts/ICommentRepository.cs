@@ -1,5 +1,4 @@
 ﻿using WorkoutGlobal.Api.Models;
-using WorkoutGlobal.Api.Models.DTOs.CommentDTOs;
 
 namespace WorkoutGlobal.Api.Contracts.RepositoryContracts
 {
@@ -8,5 +7,7 @@ namespace WorkoutGlobal.Api.Contracts.RepositoryContracts
         public Task<IEnumerable<Comment>> GetBlockCommentsAsync(Guid commentsBlockId);
 
         public Task CreateCommentAsync(Comment comment);
+
+        public Task<IEnumerable<Comment>> GetCreatorCommentsAsync(Guid creatorId);
     }
 }

@@ -33,5 +33,12 @@ namespace WorkoutGlobal.Api.Repositories.ModelsRepositories
 
             return comments;
         }
+
+        public async Task<IEnumerable<Comment>> GetCreatorCommentsAsync(Guid creatorId)
+        {
+            var comments = await GetAll().Where(model => model.CommentatorId == creatorId).ToListAsync();
+
+            return comments;
+        }
     }
 }

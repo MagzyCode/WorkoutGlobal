@@ -2,11 +2,10 @@
 using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
-#pragma warning disable 1591
 
 namespace WorkoutGlobal.Api.Migrations
 {
-    public partial class AddBaseModels : Migration
+    public partial class ReInit : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -48,6 +47,19 @@ namespace WorkoutGlobal.Api.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Categories",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CategoryName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CategoryDescription = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Categories", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -226,11 +238,18 @@ namespace WorkoutGlobal.Api.Migrations
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CourseName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CreatorId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    CreatorId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CourseImage = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
+                    CategoryId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Courses", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Courses_Categories_CategoryId",
+                        column: x => x.CategoryId,
+                        principalTable: "Categories",
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Courses_UserAccounts_CreatorId",
                         column: x => x.CreatorId,
@@ -260,17 +279,47 @@ namespace WorkoutGlobal.Api.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "SportEvents",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    EventName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    EventDescription = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    TrainerId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    EventCreatorId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    HostLinl = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    JoinLink = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SportEvents", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_SportEvents_UserAccounts_EventCreatorId",
+                        column: x => x.EventCreatorId,
+                        principalTable: "UserAccounts",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Videos",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Link = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Title = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IsPublic = table.Column<bool>(type: "bit", nullable: false),
-                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CategoryId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Videos", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Videos_Categories_CategoryId",
+                        column: x => x.CategoryId,
+                        principalTable: "Categories",
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Videos_UserAccounts_UserId",
                         column: x => x.UserId,
@@ -326,12 +375,79 @@ namespace WorkoutGlobal.Api.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "SubscribeCourses",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    SubscriberId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    SubscribeCourseId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CourseCompletionRate = table.Column<int>(type: "int", nullable: false),
+                    LastAvailableVideoId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SubscribeCourses", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_SubscribeCourses_Courses_SubscribeCourseId",
+                        column: x => x.SubscribeCourseId,
+                        principalTable: "Courses",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_SubscribeCourses_UserAccounts_SubscriberId",
+                        column: x => x.SubscriberId,
+                        principalTable: "UserAccounts",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "SubscribeEvents",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    EventId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SubscribeEvents", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_SubscribeEvents_SportEvents_EventId",
+                        column: x => x.EventId,
+                        principalTable: "SportEvents",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_SubscribeEvents_UserAccounts_UserId",
+                        column: x => x.UserId,
+                        principalTable: "UserAccounts",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CommentsBlocks",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CommentedVideoId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CommentsBlocks", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_CommentsBlocks_Videos_CommentedVideoId",
+                        column: x => x.CommentedVideoId,
+                        principalTable: "Videos",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "CourseVideos",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CourseId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    VideoId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    VideoId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    SequenceNumber = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -348,20 +464,69 @@ namespace WorkoutGlobal.Api.Migrations
                         principalColumn: "Id");
                 });
 
-            migrationBuilder.InsertData(
-                table: "AspNetRoles",
-                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "6abe6f33-ae4b-4430-8f14-493dc9a5a9d1", "5c14763c-430e-4b90-be26-30c6f09c4fc4", "Admin", "ADMIN" });
+            migrationBuilder.CreateTable(
+                name: "StoreVideos",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    SavedVideoId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_StoreVideos", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_StoreVideos_UserAccounts_UserId",
+                        column: x => x.UserId,
+                        principalTable: "UserAccounts",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_StoreVideos_Videos_SavedVideoId",
+                        column: x => x.SavedVideoId,
+                        principalTable: "Videos",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Comments",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CommentsBlockId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CommentatorName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CommentatorId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CommentText = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PostTime = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Comments", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Comments_CommentsBlocks_CommentsBlockId",
+                        column: x => x.CommentsBlockId,
+                        principalTable: "CommentsBlocks",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Comments_UserAccounts_CommentatorId",
+                        column: x => x.CommentatorId,
+                        principalTable: "UserAccounts",
+                        principalColumn: "Id");
+                });
 
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "f4a4ce79-c6b3-4e12-9c98-ff07b5030752", "7b8208be-53e3-480b-baf6-f86b789fdf11", "User", "USER" });
+                values: new object[,]
+                {
+                    { "4f4d7080-beee-4a97-be65-2ffccde5eb72", "0965c238-dcc8-4974-9c6b-24de10648d66", "Trainer", "TRAINER" },
+                    { "6abe6f33-ae4b-4430-8f14-493dc9a5a9d1", "22c32100-ec95-4118-abfe-93ff520081e6", "Admin", "ADMIN" },
+                    { "f4a4ce79-c6b3-4e12-9c98-ff07b5030752", "249d1dad-ddfb-4410-b644-ca7b4cfc253f", "User", "USER" }
+                });
 
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PasswordSalt", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
-                values: new object[] { "b5b84fd7-5366-44eb-9d1b-408c6a4a8926", 0, "65d10860-dc3b-4c9e-81d2-b3eae3481eb5", null, false, false, null, null, null, "21c9b9e74e5071de6d6c872ccae5af4deb3b42563cd649a3179a5780163b6238", "46da4fb783d806ab", null, false, "da573684-00da-46c9-b198-c6462ad15d9d", false, "MagzyCode" });
+                values: new object[] { "b5b84fd7-5366-44eb-9d1b-408c6a4a8926", 0, "dfaaf82e-1053-4fb9-9eac-a33b8e80d9d5", null, false, false, null, null, null, "21c9b9e74e5071de6d6c872ccae5af4deb3b42563cd649a3179a5780163b6238", "46da4fb783d806ab", null, false, "756984d1-51ce-4820-ab5d-5efbecf87ea9", false, "MagzyCode" });
 
             migrationBuilder.InsertData(
                 table: "AspNetUserRoles",
@@ -408,6 +573,27 @@ namespace WorkoutGlobal.Api.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Comments_CommentatorId",
+                table: "Comments",
+                column: "CommentatorId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Comments_CommentsBlockId",
+                table: "Comments",
+                column: "CommentsBlockId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CommentsBlocks_CommentedVideoId",
+                table: "CommentsBlocks",
+                column: "CommentedVideoId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Courses_CategoryId",
+                table: "Courses",
+                column: "CategoryId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Courses_CreatorId",
                 table: "Courses",
                 column: "CreatorId");
@@ -443,10 +629,45 @@ namespace WorkoutGlobal.Api.Migrations
                 column: "ProductSupplierId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_SportEvents_EventCreatorId",
+                table: "SportEvents",
+                column: "EventCreatorId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Stockrooms_ProductId",
                 table: "Stockrooms",
                 column: "ProductId",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_StoreVideos_SavedVideoId",
+                table: "StoreVideos",
+                column: "SavedVideoId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_StoreVideos_UserId",
+                table: "StoreVideos",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SubscribeCourses_SubscribeCourseId",
+                table: "SubscribeCourses",
+                column: "SubscribeCourseId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SubscribeCourses_SubscriberId",
+                table: "SubscribeCourses",
+                column: "SubscriberId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SubscribeEvents_EventId",
+                table: "SubscribeEvents",
+                column: "EventId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SubscribeEvents_UserId",
+                table: "SubscribeEvents",
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_UserAccounts_UserCredentialsId",
@@ -454,6 +675,11 @@ namespace WorkoutGlobal.Api.Migrations
                 column: "UserCredentialsId",
                 unique: true,
                 filter: "[UserCredentialsId] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Videos_CategoryId",
+                table: "Videos",
+                column: "CategoryId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Videos_UserId",
@@ -479,6 +705,9 @@ namespace WorkoutGlobal.Api.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "Comments");
+
+            migrationBuilder.DropTable(
                 name: "CourseVideos");
 
             migrationBuilder.DropTable(
@@ -491,22 +720,40 @@ namespace WorkoutGlobal.Api.Migrations
                 name: "Stockrooms");
 
             migrationBuilder.DropTable(
+                name: "StoreVideos");
+
+            migrationBuilder.DropTable(
+                name: "SubscribeCourses");
+
+            migrationBuilder.DropTable(
+                name: "SubscribeEvents");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "Courses");
-
-            migrationBuilder.DropTable(
-                name: "Videos");
+                name: "CommentsBlocks");
 
             migrationBuilder.DropTable(
                 name: "Products");
 
             migrationBuilder.DropTable(
-                name: "UserAccounts");
+                name: "Courses");
+
+            migrationBuilder.DropTable(
+                name: "SportEvents");
+
+            migrationBuilder.DropTable(
+                name: "Videos");
 
             migrationBuilder.DropTable(
                 name: "ProductSuppliers");
+
+            migrationBuilder.DropTable(
+                name: "Categories");
+
+            migrationBuilder.DropTable(
+                name: "UserAccounts");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

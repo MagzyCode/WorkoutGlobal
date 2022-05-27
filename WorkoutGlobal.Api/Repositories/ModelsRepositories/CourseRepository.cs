@@ -8,13 +8,13 @@ namespace WorkoutGlobal.Api.Repositories.ModelsRepositories
 {
     public class CourseRepository : BaseRepository<Course>, ICourseRepository
     {
-        private readonly ICourseVideosRepository _courseVideosRepository;
+        private readonly ICourseVideoRepository _courseVideosRepository;
         private readonly IVideoRepository _videoRepository;
 
         public CourseRepository(
             WorkoutGlobalContext workoutGlobalContext, 
             IConfiguration configurationManager,
-            ICourseVideosRepository courseVideosRepository,
+            ICourseVideoRepository courseVideosRepository,
             IVideoRepository videoRepository) 
             : base(workoutGlobalContext, configurationManager)
         {
@@ -25,6 +25,12 @@ namespace WorkoutGlobal.Api.Repositories.ModelsRepositories
         public async Task CreateCourseAsync(Course course)
         {
             await CreateAsync(course);
+            await SaveChangesAsync();
+        }
+
+        public async Task DeleteCourseAsync(Course course)
+        {
+            Delete(course);
             await SaveChangesAsync();
         }
 
@@ -42,6 +48,12 @@ namespace WorkoutGlobal.Api.Repositories.ModelsRepositories
             return model;
         }
 
+        public Task<IEnumerable<User>> GetCourseSubscribersAsync(Guid courseId)
+        {
+            // TODO: Создать когда будет репозиторий для SubscribeCourse
+            throw new NotImplementedException();
+        }
+
         public async Task<IEnumerable<Video>> GetCourseVideosAsync(Guid courseId)
         {
             var courseVideos = await _courseVideosRepository.GetCourseVideosByCourseIdAsync(courseId);
@@ -52,6 +64,19 @@ namespace WorkoutGlobal.Api.Repositories.ModelsRepositories
                 videos.Add(await _videoRepository.GetVideoAsync(courseVideo.VideoId));
 
             return videos;
+        }
+
+        public async Task<IEnumerable<Course>> GetCreatorCoursesAsync(Guid creatorId)
+        {
+            var courses = await GetAll().Where(x => x.CreatorId == creatorId).ToListAsync();
+
+            return courses;
+        }
+
+        public async Task UpdateCourseAsync(Course course)
+        {
+            Update(course);
+            await SaveChangesAsync();
         }
     }
 }

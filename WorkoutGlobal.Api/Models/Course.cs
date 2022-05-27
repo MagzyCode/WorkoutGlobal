@@ -35,6 +35,12 @@
         /// <summary>
         /// Collection of video in course.
         /// </summary>
-        public ICollection<CourseVideos> CourseVideos { get; set; }
+        public ICollection<CourseVideo> CourseVideos { get; set; }
+
+        public ICollection<SubscribeCourse> Subscriptions { get; set; }
+
+        public Guid CategoryId { get; set; }
+
+        public Category Category { get; set; }
     }
 }

@@ -29,32 +29,62 @@ namespace WorkoutGlobal.Api.Context
             modelBuilder.ApplyConfiguration(new UserCredentialsConfiguration());
             modelBuilder.ApplyConfiguration(new UserRolesConfiguration());
 
+            #region UserCredentials relations with User
+
             modelBuilder.Entity<UserCredentials>()
                 .HasOne(userCredentials => userCredentials.User)
                 .WithOne(user => user.UserCredentials)
                 .HasForeignKey<User>(userCredentials => userCredentials.UserCredentialsId);
 
+            #endregion
+
+            #region Video relations with User, Category
+
             modelBuilder.Entity<Video>()
                 .HasOne(video => video.User)
-                .WithMany(user => user.Videos)
+                .WithMany(user => user.CreatedVideos)
                 .HasForeignKey(user => user.UserId);
+
+            modelBuilder.Entity<Video>()
+                .HasOne(video => video.Category)
+                .WithMany(category => category.Videos)
+                .HasForeignKey(video => video.CategoryId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            #endregion
+
+            #region Course relations with User, Category
 
             modelBuilder.Entity<Course>()
                 .HasOne(course => course.Creator)
                 .WithMany(creator => creator.CreatedCourses)
                 .HasForeignKey(course => course.CreatorId);
 
-            modelBuilder.Entity<CourseVideos>()
+            modelBuilder.Entity<Course>()
+                .HasOne(course => course.Category)
+                .WithMany(category => category.Courses)
+                .HasForeignKey(course => course.CategoryId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            #endregion
+
+            #region CourseVideos relations with Course and Video
+
+            modelBuilder.Entity<CourseVideo>()
                 .HasOne(courseVideos => courseVideos.Course)
                 .WithMany(course => course.CourseVideos)
                 .HasForeignKey(courseVideos => courseVideos.CourseId)
                 .OnDelete(DeleteBehavior.NoAction);
 
-            modelBuilder.Entity<CourseVideos>()
+            modelBuilder.Entity<CourseVideo>()
                 .HasOne(courseVideos => courseVideos.Video)
                 .WithMany(course => course.VideoCourses)
                 .HasForeignKey(courseVideos => courseVideos.VideoId)
                 .OnDelete(DeleteBehavior.NoAction);
+
+            #endregion
+
+            #region Product relations with ProductSupplier and Stockroom
 
             modelBuilder.Entity<Product>()
                 .HasOne(product => product.Supplier)
@@ -66,6 +96,10 @@ namespace WorkoutGlobal.Api.Context
                 .WithOne(stockRoom => stockRoom.Product)
                 .HasForeignKey<Stockroom>(stockroom => stockroom.ProductId);
 
+            #endregion
+
+            #region Order relations with User and Product
+
             modelBuilder.Entity<Order>()
                 .HasOne(order => order.Customer)
                 .WithMany(customer => customer.Orders)
@@ -76,21 +110,27 @@ namespace WorkoutGlobal.Api.Context
                 .WithMany(product => product.Orders)
                 .HasForeignKey(order => order.OrderedProductId);
 
+            #endregion
+
+            #region Post relations with User
+
             modelBuilder.Entity<Post>()
                 .HasOne(post => post.Creator)
                 .WithMany(creator => creator.Posts)
                 .HasForeignKey(post => post.CreatorId);
-            
+
+            #endregion
+
+            #region Video relations with CommentsBlock
+
             modelBuilder.Entity<Video>()
                 .HasOne(video => video.CommentsBlock)
                 .WithOne(block => block.CommentedVideo)
                 .HasForeignKey<CommentsBlock>(block => block.CommentedVideoId);
 
-            /*            modelBuilder.Entity<CourseVideos>()
-                .HasOne(courseVideos => courseVideos.Video)
-                .WithMany(course => course.VideoCourses)
-                .HasForeignKey(courseVideos => courseVideos.VideoId)
-                .OnDelete(DeleteBehavior.NoAction);*/
+            #endregion
+
+            #region Comment relations with CommentsBlock and User
 
             modelBuilder.Entity<Comment>()
                 .HasOne(comment => comment.CommentsBlock)
@@ -103,6 +143,56 @@ namespace WorkoutGlobal.Api.Context
                 .WithMany(user => user.Comments)
                 .HasForeignKey(comment => comment.CommentatorId)
                 .OnDelete(DeleteBehavior.NoAction);
+
+            #endregion
+
+            #region SubscribeCourse relations with User and Courses
+
+            modelBuilder.Entity<SubscribeCourse>()
+                .HasOne(subscribeCourses => subscribeCourses.Subscriber)
+                .WithMany(user => user.SubscribeCourses)
+                .HasForeignKey(subscribeCourses => subscribeCourses.SubscriberId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<SubscribeCourse>()
+                .HasOne(subscribeCourses => subscribeCourses.Course)
+                .WithMany(user => user.Subscriptions)
+                .HasForeignKey(subscribeCourses => subscribeCourses.SubscribeCourseId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            #endregion
+
+            #region StoreVideos relations with User and Video
+
+            modelBuilder.Entity<StoreVideo>()
+                .HasOne(storeVideos => storeVideos.User)
+                .WithMany(user => user.SavedVideos)
+                .HasForeignKey(storeVideos => storeVideos.UserId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<StoreVideo>()
+                .HasOne(storeVideos => storeVideos.SavedVideo)
+                .WithMany(user => user.StoreVideos)
+                .HasForeignKey(storeVideos => storeVideos.SavedVideoId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            #endregion
+
+            #region SubscribeEvents relations with User, SportEvent
+
+            modelBuilder.Entity<SubscribeEvent>()
+                .HasOne(subscribeEvent => subscribeEvent.User)
+                .WithMany(user => user.SubscribeEvents)
+                .HasForeignKey(subscribeEvent => subscribeEvent.UserId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<SubscribeEvent>()
+                .HasOne(subscribeEvent => subscribeEvent.Event)
+                .WithMany(sportEvent => sportEvent.ParticipatingUsers)
+                .HasForeignKey(subscribeEvent => subscribeEvent.EventId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            #endregion
         }
 
         /// <summary>
@@ -128,12 +218,12 @@ namespace WorkoutGlobal.Api.Context
         /// <summary>
         /// Represents table of video in courses.
         /// </summary>
-        public DbSet<CourseVideos> CourseVideos { get; set; }
+        public DbSet<CourseVideo> CourseVideos { get; set; }
 
         /// <summary>
         /// Represents table of product suppliers.
         /// </summary>
-        public DbSet<ProductSuppliers> ProductSuppliers { get; set; }
+        public DbSet<ProductSupplier> ProductSuppliers { get; set; }
 
         /// <summary>
         /// Represents table of product.
@@ -155,5 +245,11 @@ namespace WorkoutGlobal.Api.Context
         /// </summary>
         public DbSet<Post> Posts { get; set; }
         public DbSet<CommentsBlock> CommentsBlocks { get; set; }
+        public DbSet<SubscribeCourse> SubscribeCourses { get; set; }
+        public DbSet<StoreVideo> StoreVideos { get; set; }
+        public DbSet<Category> Categories { get; set; }
+        public DbSet<SubscribeEvent> SubscribeEvents { get; set; }
+        public DbSet<SportEvent> SportEvents { get; set; }
+        public DbSet<Comment> Comments { get; set; }
     }
 }

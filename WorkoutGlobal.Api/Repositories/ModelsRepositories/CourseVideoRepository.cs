@@ -6,27 +6,36 @@ using WorkoutGlobal.Api.Repositories.BaseRepositories;
 
 namespace WorkoutGlobal.Api.Repositories.ModelsRepositories
 {
-    public class CourseVideosRepository : BaseRepository<CourseVideos>, ICourseVideosRepository
+    public class CourseVideoRepository : BaseRepository<CourseVideo>, ICourseVideoRepository
     {
-        public CourseVideosRepository(
+        public CourseVideoRepository(
             WorkoutGlobalContext workoutGlobalContext, 
             IConfiguration configurationManager) 
             : base(workoutGlobalContext, configurationManager)
         {
         }
 
-        public async Task<IEnumerable<CourseVideos>> GetAllCourseVideosAsync()
+        public async Task<IEnumerable<CourseVideo>> GetAllCourseVideosAsync()
         {
             var courseVideos = await GetAll().ToListAsync();
 
             return courseVideos;
         }
 
-        public async Task<IEnumerable<CourseVideos>> GetCourseVideosByCourseIdAsync(Guid courseId)
+        public async Task<IEnumerable<CourseVideo>> GetCourseVideosByCourseIdAsync(Guid courseId)
         {
             var courseVideos = await GetAll().Where(x => x.CourseId == courseId).ToListAsync();
 
             return courseVideos;
+        }
+
+        public async Task<IEnumerable<CourseVideo>> GetOrderedCourseVideosAsync(Guid courseId)
+        {
+            var orderedCourseVideos = await GetAll()
+                .OrderBy(courseVideo => courseVideo.SequenceNumber)
+                .ToListAsync();
+
+            return orderedCourseVideos;
         }
     }
 }

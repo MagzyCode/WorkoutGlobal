@@ -86,7 +86,7 @@ namespace WorkoutGlobal.Api.Models
         /// <summary>
         /// Collection of user videos.
         /// </summary>
-        public ICollection<Video> Videos { get; set; }
+        public ICollection<Video> CreatedVideos { get; set; }
 
         /// <summary>
         /// Collection of trainer coursers.
@@ -104,5 +104,9 @@ namespace WorkoutGlobal.Api.Models
         public ICollection<Post> Posts { get; set; }
 
         public ICollection<Comment> Comments { get; set; }
+
+        public ICollection<SubscribeCourse> SubscribeCourses { get; set; }
+        public ICollection<StoreVideo> SavedVideos { get; set; }
+        public ICollection<SubscribeEvent> SubscribeEvents { get; set; }
     }
 }

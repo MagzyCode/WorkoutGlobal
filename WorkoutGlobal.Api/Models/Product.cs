@@ -33,7 +33,7 @@
         /// <summary>
         /// Foreign model for product supplier.
         /// </summary>
-        public ProductSuppliers Supplier { get; set; }
+        public ProductSupplier Supplier { get; set; }
 
         /// <summary>
         /// Foreign model for stockroom.

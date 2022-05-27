@@ -1,4 +1,6 @@
-﻿namespace WorkoutGlobal.Api.Contracts.RepositoryContracts
+﻿using WorkoutGlobal.Api.Models;
+
+namespace WorkoutGlobal.Api.Contracts.RepositoryContracts
 {
     /// <summary>
     /// Base interface for user credentials repository.
@@ -12,5 +14,13 @@
         /// <param name="salt"></param>
         /// <returns></returns>
         public Task<string> GetHashPasswordAsync(string password, string salt);
+
+        public Task<UserCredentials> GetUserCredentialsAsync(string userCredentialsId);
+
+        public UserCredentials GetUserCredentialsByUserName(string username);
+
+        public Task UpdateUserCredentialsAsync(UserCredentials userCredentials);
+
+        public Task DeleteUserCredentialsAsync(UserCredentials userCredentials);
     }
 }

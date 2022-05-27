@@ -3,7 +3,7 @@
     /// <summary>
     /// Base model for product suppliers.
     /// </summary>
-    public class ProductSuppliers
+    public class ProductSupplier
     {
         /// <summary>
         /// Unique identifier of id.

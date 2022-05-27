@@ -52,21 +52,21 @@ namespace WorkoutGlobal.Api.Migrations
                         new
                         {
                             Id = "f4a4ce79-c6b3-4e12-9c98-ff07b5030752",
-                            ConcurrencyStamp = "303b73c3-9392-4b0f-9e5a-de1f0fee9394",
+                            ConcurrencyStamp = "249d1dad-ddfb-4410-b644-ca7b4cfc253f",
                             Name = "User",
                             NormalizedName = "USER"
                         },
                         new
                         {
                             Id = "6abe6f33-ae4b-4430-8f14-493dc9a5a9d1",
-                            ConcurrencyStamp = "1dd00070-bca7-4a6b-9526-8b3027f1fb23",
+                            ConcurrencyStamp = "22c32100-ec95-4118-abfe-93ff520081e6",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
                             Id = "4f4d7080-beee-4a97-be65-2ffccde5eb72",
-                            ConcurrencyStamp = "61b24f4f-3487-47b9-947c-08e6eb70ae5e",
+                            ConcurrencyStamp = "0965c238-dcc8-4974-9c6b-24de10648d66",
                             Name = "Trainer",
                             NormalizedName = "TRAINER"
                         });
@@ -185,6 +185,23 @@ namespace WorkoutGlobal.Api.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("WorkoutGlobal.Api.Models.Category", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("CategoryDescription")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CategoryName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Categories");
+                });
+
             modelBuilder.Entity("WorkoutGlobal.Api.Models.Comment", b =>
                 {
                     b.Property<Guid>("Id")
@@ -212,7 +229,7 @@ namespace WorkoutGlobal.Api.Migrations
 
                     b.HasIndex("CommentsBlockId");
 
-                    b.ToTable("Comment");
+                    b.ToTable("Comments");
                 });
 
             modelBuilder.Entity("WorkoutGlobal.Api.Models.CommentsBlock", b =>
@@ -238,6 +255,9 @@ namespace WorkoutGlobal.Api.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid>("CategoryId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<byte[]>("CourseImage")
                         .HasColumnType("varbinary(max)");
 
@@ -252,12 +272,14 @@ namespace WorkoutGlobal.Api.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CategoryId");
+
                     b.HasIndex("CreatorId");
 
                     b.ToTable("Courses");
                 });
 
-            modelBuilder.Entity("WorkoutGlobal.Api.Models.CourseVideos", b =>
+            modelBuilder.Entity("WorkoutGlobal.Api.Models.CourseVideo", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -265,6 +287,9 @@ namespace WorkoutGlobal.Api.Migrations
 
                     b.Property<Guid>("CourseId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("SequenceNumber")
+                        .HasColumnType("int");
 
                     b.Property<Guid>("VideoId")
                         .HasColumnType("uniqueidentifier");
@@ -352,7 +377,7 @@ namespace WorkoutGlobal.Api.Migrations
                     b.ToTable("Products");
                 });
 
-            modelBuilder.Entity("WorkoutGlobal.Api.Models.ProductSuppliers", b =>
+            modelBuilder.Entity("WorkoutGlobal.Api.Models.ProductSupplier", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -367,6 +392,37 @@ namespace WorkoutGlobal.Api.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("ProductSuppliers");
+                });
+
+            modelBuilder.Entity("WorkoutGlobal.Api.Models.SportEvent", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("EventCreatorId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("EventDescription")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("EventName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("HostLinl")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("JoinLink")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("TrainerId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EventCreatorId");
+
+                    b.ToTable("SportEvents");
                 });
 
             modelBuilder.Entity("WorkoutGlobal.Api.Models.Stockroom", b =>
@@ -387,6 +443,75 @@ namespace WorkoutGlobal.Api.Migrations
                         .IsUnique();
 
                     b.ToTable("Stockrooms");
+                });
+
+            modelBuilder.Entity("WorkoutGlobal.Api.Models.StoreVideo", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("SavedVideoId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SavedVideoId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("StoreVideos");
+                });
+
+            modelBuilder.Entity("WorkoutGlobal.Api.Models.SubscribeCourse", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("CourseCompletionRate")
+                        .HasColumnType("int");
+
+                    b.Property<Guid?>("LastAvailableVideoId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("SubscribeCourseId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("SubscriberId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SubscribeCourseId");
+
+                    b.HasIndex("SubscriberId");
+
+                    b.ToTable("SubscribeCourses");
+                });
+
+            modelBuilder.Entity("WorkoutGlobal.Api.Models.SubscribeEvent", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("EventId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EventId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("SubscribeEvents");
                 });
 
             modelBuilder.Entity("WorkoutGlobal.Api.Models.User", b =>
@@ -515,13 +640,13 @@ namespace WorkoutGlobal.Api.Migrations
                         {
                             Id = "b5b84fd7-5366-44eb-9d1b-408c6a4a8926",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "eb3e3902-4d97-432d-9127-c747f91c1bdc",
+                            ConcurrencyStamp = "dfaaf82e-1053-4fb9-9eac-a33b8e80d9d5",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             PasswordHash = "21c9b9e74e5071de6d6c872ccae5af4deb3b42563cd649a3179a5780163b6238",
                             PasswordSalt = "46da4fb783d806ab",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "41ba4bc4-cf5a-4b75-9d12-8d1089055fa6",
+                            SecurityStamp = "756984d1-51ce-4820-ab5d-5efbecf87ea9",
                             TwoFactorEnabled = false,
                             UserName = "MagzyCode"
                         });
@@ -531,6 +656,9 @@ namespace WorkoutGlobal.Api.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("CategoryId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Description")
@@ -549,6 +677,8 @@ namespace WorkoutGlobal.Api.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
 
                     b.HasIndex("UserId");
 
@@ -638,16 +768,24 @@ namespace WorkoutGlobal.Api.Migrations
 
             modelBuilder.Entity("WorkoutGlobal.Api.Models.Course", b =>
                 {
+                    b.HasOne("WorkoutGlobal.Api.Models.Category", "Category")
+                        .WithMany("Courses")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
                     b.HasOne("WorkoutGlobal.Api.Models.User", "Creator")
                         .WithMany("CreatedCourses")
                         .HasForeignKey("CreatorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.Navigation("Category");
+
                     b.Navigation("Creator");
                 });
 
-            modelBuilder.Entity("WorkoutGlobal.Api.Models.CourseVideos", b =>
+            modelBuilder.Entity("WorkoutGlobal.Api.Models.CourseVideo", b =>
                 {
                     b.HasOne("WorkoutGlobal.Api.Models.Course", "Course")
                         .WithMany("CourseVideos")
@@ -698,13 +836,22 @@ namespace WorkoutGlobal.Api.Migrations
 
             modelBuilder.Entity("WorkoutGlobal.Api.Models.Product", b =>
                 {
-                    b.HasOne("WorkoutGlobal.Api.Models.ProductSuppliers", "Supplier")
+                    b.HasOne("WorkoutGlobal.Api.Models.ProductSupplier", "Supplier")
                         .WithMany("Products")
                         .HasForeignKey("ProductSupplierId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Supplier");
+                });
+
+            modelBuilder.Entity("WorkoutGlobal.Api.Models.SportEvent", b =>
+                {
+                    b.HasOne("WorkoutGlobal.Api.Models.User", "EventCreator")
+                        .WithMany()
+                        .HasForeignKey("EventCreatorId");
+
+                    b.Navigation("EventCreator");
                 });
 
             modelBuilder.Entity("WorkoutGlobal.Api.Models.Stockroom", b =>
@@ -718,6 +865,63 @@ namespace WorkoutGlobal.Api.Migrations
                     b.Navigation("Product");
                 });
 
+            modelBuilder.Entity("WorkoutGlobal.Api.Models.StoreVideo", b =>
+                {
+                    b.HasOne("WorkoutGlobal.Api.Models.Video", "SavedVideo")
+                        .WithMany("StoreVideos")
+                        .HasForeignKey("SavedVideoId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("WorkoutGlobal.Api.Models.User", "User")
+                        .WithMany("SavedVideos")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("SavedVideo");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("WorkoutGlobal.Api.Models.SubscribeCourse", b =>
+                {
+                    b.HasOne("WorkoutGlobal.Api.Models.Course", "Course")
+                        .WithMany("Subscriptions")
+                        .HasForeignKey("SubscribeCourseId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("WorkoutGlobal.Api.Models.User", "Subscriber")
+                        .WithMany("SubscribeCourses")
+                        .HasForeignKey("SubscriberId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Course");
+
+                    b.Navigation("Subscriber");
+                });
+
+            modelBuilder.Entity("WorkoutGlobal.Api.Models.SubscribeEvent", b =>
+                {
+                    b.HasOne("WorkoutGlobal.Api.Models.SportEvent", "Event")
+                        .WithMany("ParticipatingUsers")
+                        .HasForeignKey("EventId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("WorkoutGlobal.Api.Models.User", "User")
+                        .WithMany("SubscribeEvents")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Event");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("WorkoutGlobal.Api.Models.User", b =>
                 {
                     b.HasOne("WorkoutGlobal.Api.Models.UserCredentials", "UserCredentials")
@@ -729,13 +933,28 @@ namespace WorkoutGlobal.Api.Migrations
 
             modelBuilder.Entity("WorkoutGlobal.Api.Models.Video", b =>
                 {
+                    b.HasOne("WorkoutGlobal.Api.Models.Category", "Category")
+                        .WithMany("Videos")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
                     b.HasOne("WorkoutGlobal.Api.Models.User", "User")
                         .WithMany("Videos")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.Navigation("Category");
+
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("WorkoutGlobal.Api.Models.Category", b =>
+                {
+                    b.Navigation("Courses");
+
+                    b.Navigation("Videos");
                 });
 
             modelBuilder.Entity("WorkoutGlobal.Api.Models.CommentsBlock", b =>
@@ -746,6 +965,8 @@ namespace WorkoutGlobal.Api.Migrations
             modelBuilder.Entity("WorkoutGlobal.Api.Models.Course", b =>
                 {
                     b.Navigation("CourseVideos");
+
+                    b.Navigation("Subscriptions");
                 });
 
             modelBuilder.Entity("WorkoutGlobal.Api.Models.Product", b =>
@@ -755,9 +976,14 @@ namespace WorkoutGlobal.Api.Migrations
                     b.Navigation("Stockroom");
                 });
 
-            modelBuilder.Entity("WorkoutGlobal.Api.Models.ProductSuppliers", b =>
+            modelBuilder.Entity("WorkoutGlobal.Api.Models.ProductSupplier", b =>
                 {
                     b.Navigation("Products");
+                });
+
+            modelBuilder.Entity("WorkoutGlobal.Api.Models.SportEvent", b =>
+                {
+                    b.Navigation("ParticipatingUsers");
                 });
 
             modelBuilder.Entity("WorkoutGlobal.Api.Models.User", b =>
@@ -770,6 +996,12 @@ namespace WorkoutGlobal.Api.Migrations
 
                     b.Navigation("Posts");
 
+                    b.Navigation("SavedVideos");
+
+                    b.Navigation("SubscribeCourses");
+
+                    b.Navigation("SubscribeEvents");
+
                     b.Navigation("Videos");
                 });
 
@@ -781,6 +1013,8 @@ namespace WorkoutGlobal.Api.Migrations
             modelBuilder.Entity("WorkoutGlobal.Api.Models.Video", b =>
                 {
                     b.Navigation("CommentsBlock");
+
+                    b.Navigation("StoreVideos");
 
                     b.Navigation("VideoCourses");
                 });

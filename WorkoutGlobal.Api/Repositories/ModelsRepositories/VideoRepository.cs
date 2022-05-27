@@ -25,9 +25,9 @@ namespace WorkoutGlobal.Api.Repositories.ModelsRepositories
 
         public int Count => Context.Videos.Count();
 
-        public async Task<IEnumerable<Video>> GetAllVideosAsync(bool isPublic = true)
+        public async Task<IEnumerable<Video>> GetAllVideosAsync(bool isVideoPublic = true)
         {
-            var videos = await GetAll().Where(video => video.IsPublic == isPublic).ToListAsync();
+            var videos = await GetAll().Where(video => video.IsPublic == isVideoPublic).ToListAsync();
 
             return videos;
         }
@@ -41,13 +41,8 @@ namespace WorkoutGlobal.Api.Repositories.ModelsRepositories
 
         public async Task<IEnumerable<Video>> GetPageVideosAsync(VideoParameters parameters, bool isPublic = true)
         {
-            var pageVideos = isPublic
-                ? await GetAll()
-                    .Skip((parameters.PageNumber - 1) * parameters.PageSize)
-                    .Take(parameters.PageSize)
-                    .ToListAsync()
-                : await GetAll()
-                    .Where(video => video.IsPublic == false)
+            var pageVideos = await GetAll()
+                    .Where(video => video.IsPublic == isPublic)
                     .Skip((parameters.PageNumber - 1) * parameters.PageSize)
                     .Take(parameters.PageSize)
                     .ToListAsync();
@@ -59,6 +54,25 @@ namespace WorkoutGlobal.Api.Repositories.ModelsRepositories
         {
             await CreateAsync(video);
             await SaveChangesAsync();
+        }
+
+        public async Task UpdateVideoAsync(Video video)
+        {
+            Update(video);
+            await SaveChangesAsync();
+        }
+
+        public async Task DeleteVideoAsync(Video video)
+        {
+            Delete(video);
+            await SaveChangesAsync();
+        }
+
+        public async Task<IEnumerable<Video>> GetCreatorVideosAsync(Guid creatorId)
+        {
+            var videos = await GetAll().Where(model => model.UserId == creatorId).ToListAsync();
+
+            return videos;
         }
     }
 }

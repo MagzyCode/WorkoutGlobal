@@ -138,7 +138,7 @@ namespace WorkoutGlobal.Api.Repositories.AuthorizationRepositories
             await _userManager.CreateAsync(userCredentials);
             user.UserCredentialsId = userCredentials.Id;
             await _userManager.AddToRoleAsync(userCredentials, "User");
-            await _userRepository.AddUserAsync(user);
+            await _userRepository.CreateUserAsync(user);
         }
 
         /// <summary>

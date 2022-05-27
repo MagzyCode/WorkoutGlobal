@@ -10,12 +10,18 @@ namespace WorkoutGlobal.Api.Contracts.RepositoryContracts
     {
         public int Count { get; } 
 
-        public Task<IEnumerable<Video>> GetAllVideosAsync(bool isPublic = true);
+        public Task<IEnumerable<Video>> GetAllVideosAsync(bool isVideoPublic = true);
 
         public Task<Video> GetVideoAsync(Guid id);
 
         public Task<IEnumerable<Video>> GetPageVideosAsync(VideoParameters parameters, bool isPublic);
 
         public Task CreateVideoAsync(Video video);
+
+        public Task UpdateVideoAsync(Video video);
+
+        public Task DeleteVideoAsync(Video video);
+
+        public Task<IEnumerable<Video>> GetCreatorVideosAsync(Guid creatorId);
     }
 }
