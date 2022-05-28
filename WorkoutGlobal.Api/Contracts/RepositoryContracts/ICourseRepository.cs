@@ -18,7 +18,7 @@ namespace WorkoutGlobal.Api.Contracts.RepositoryContracts
 
         public Task<IEnumerable<User>> GetCourseSubscribersAsync(Guid courseId);
 
-        public Task<IEnumerable<Course>> GetCreatorCoursesAsync(Guid creatorId);
+        // public Task<IEnumerable<Course>> GetCreatorCoursesAsync(Guid creatorId);
 
     }
 }

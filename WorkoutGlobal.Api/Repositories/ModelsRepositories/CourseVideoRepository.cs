@@ -22,6 +22,13 @@ namespace WorkoutGlobal.Api.Repositories.ModelsRepositories
             return courseVideos;
         }
 
+        public Task<CourseVideo> GetCourseVideoAsync(Guid courseVideoId)
+        {
+            var model = GetModelAsync(courseVideoId);
+
+            return model;
+        }
+
         public async Task<IEnumerable<CourseVideo>> GetCourseVideosByCourseIdAsync(Guid courseId)
         {
             var courseVideos = await GetAll().Where(x => x.CourseId == courseId).ToListAsync();

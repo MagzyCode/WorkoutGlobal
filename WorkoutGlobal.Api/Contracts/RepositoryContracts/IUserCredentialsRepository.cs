@@ -13,7 +13,7 @@ namespace WorkoutGlobal.Api.Contracts.RepositoryContracts
         /// <param name="password">User salt</param>
         /// <param name="salt"></param>
         /// <returns></returns>
-        public Task<string> GetHashPasswordAsync(string password, string salt);
+        // public Task<string> GetHashPasswordAsync(string password, string salt);
 
         public Task<UserCredentials> GetUserCredentialsAsync(string userCredentialsId);
 
@@ -22,5 +22,7 @@ namespace WorkoutGlobal.Api.Contracts.RepositoryContracts
         public Task UpdateUserCredentialsAsync(UserCredentials userCredentials);
 
         public Task DeleteUserCredentialsAsync(UserCredentials userCredentials);
+
+        public string GetUserCredentialsRole(string userCredentialsId);
     }
 }

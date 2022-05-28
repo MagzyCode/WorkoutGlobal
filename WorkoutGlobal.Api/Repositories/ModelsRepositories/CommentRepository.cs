@@ -10,15 +10,15 @@ namespace WorkoutGlobal.Api.Repositories.ModelsRepositories
 {
     public class CommentRepository : BaseRepository<Comment>, ICommentRepository
     {
-        private readonly IMapper _mapper;
+        // private readonly IMapper _mapper;
 
         public CommentRepository(
             WorkoutGlobalContext workoutGlobalContext, 
-            IConfiguration configurationManager,
-            IMapper mapper)
+            IConfiguration configurationManager)
+            // IMapper mapper)
             : base(workoutGlobalContext, configurationManager)
         {
-            _mapper = mapper;
+            // _mapper = mapper;
         }
 
         public async Task CreateCommentAsync(Comment comment)
@@ -27,18 +27,25 @@ namespace WorkoutGlobal.Api.Repositories.ModelsRepositories
             await SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<Comment>> GetBlockCommentsAsync(Guid commentsBlockId)
-        {
-            var comments = await GetAll().Where(comment => comment.CommentsBlockId == commentsBlockId).ToListAsync();
+        //public async Task<IEnumerable<Comment>> GetBlockCommentsAsync(Guid commentsBlockId)
+        //{
+        //    var comments = await GetAll().Where(comment => comment.CommentsBlockId == commentsBlockId).ToListAsync();
 
-            return comments;
+        //    return comments;
+        //}
+
+        public async Task<Comment> GetCommentAsync(Guid commentId)
+        {
+            var model = await GetModelAsync(commentId);
+
+            return model;
         }
 
-        public async Task<IEnumerable<Comment>> GetCreatorCommentsAsync(Guid creatorId)
-        {
-            var comments = await GetAll().Where(model => model.CommentatorId == creatorId).ToListAsync();
+        //public async Task<IEnumerable<Comment>> GetCreatorCommentsAsync(Guid creatorId)
+        //{
+        //    var comments = await GetAll().Where(model => model.CommentatorId == creatorId).ToListAsync();
 
-            return comments;
-        }
+        //    return comments;
+        //}
     }
 }

@@ -48,6 +48,6 @@ namespace WorkoutGlobal.Api.Contracts.AuthenticationManagerContracts
         /// </summary>
         /// <param name="userCredentialsDto">User credentials.</param>
         /// <returns>Existed user.</returns>
-        public UserCredentials FindUserByCredentials(UserCredentialsDto userCredentialsDto);
+        // public UserCredentials FindUserByCredentials(UserCredentialsDto userCredentialsDto);
     }
 }

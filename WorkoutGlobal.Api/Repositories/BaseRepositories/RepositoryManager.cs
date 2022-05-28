@@ -18,6 +18,11 @@ namespace WorkoutGlobal.Api.Repositories.BaseRepositories
         private readonly ICommentRepository _commentRepository;
         private readonly ICourseRepository _courseRepository;
         private readonly ICourseVideoRepository _courseVideosRepository;
+        private readonly ICategoryRepository _categoryRepository;
+        private readonly ISportEventRepository _sportEventRepository;
+        private readonly IStoreVideoRepository _storeVideoRepository;
+        private readonly ISubscribeCourseRepository _subscribeCourseRepository;
+        private readonly ISubscribeEventRepository _subscribeEventRepository;
 
         /// <summary>
         /// Ctor for repository manager.
@@ -35,7 +40,11 @@ namespace WorkoutGlobal.Api.Repositories.BaseRepositories
             ICommentsBlockRepository commentsBlockRepository,
             ICommentRepository commentRepository,
             ICourseRepository courseRepository,
-            ICourseVideoRepository courseVideosRepository) 
+            ICourseVideoRepository courseVideosRepository,
+            ISportEventRepository sportEventRepository,
+            IStoreVideoRepository storeVideoRepository,
+            ISubscribeCourseRepository subscribeCourseRepository,
+            ISubscribeEventRepository subscribeEventRepository) 
         {
             _healthRepository = healthRepository;
             _userCredentialsRepository = userCredentialsRepository;
@@ -46,6 +55,10 @@ namespace WorkoutGlobal.Api.Repositories.BaseRepositories
             _commentRepository = commentRepository;
             _courseRepository = courseRepository;
             _courseVideosRepository = courseVideosRepository;
+            _sportEventRepository = sportEventRepository;
+            _storeVideoRepository = storeVideoRepository;
+            _subscribeCourseRepository = subscribeCourseRepository;
+            _subscribeEventRepository = subscribeEventRepository;
         }
 
         /// <summary>
@@ -71,6 +84,11 @@ namespace WorkoutGlobal.Api.Repositories.BaseRepositories
         public ICommentRepository CommentRepository => _commentRepository;
         public ICourseRepository CourseRepository => _courseRepository;
         public ICourseVideoRepository CourseVideosRepository => _courseVideosRepository;
+        public ICategoryRepository CategoryRepository => _categoryRepository;
+        public ISportEventRepository SportEventRepository => _sportEventRepository;
+        public IStoreVideoRepository StoreVideoRepository => _storeVideoRepository;
+        public ISubscribeCourseRepository SubscribeCourseRepository => _subscribeCourseRepository;
+        public ISubscribeEventRepository SubscribeEventRepository => _subscribeEventRepository;
 
     }
 }

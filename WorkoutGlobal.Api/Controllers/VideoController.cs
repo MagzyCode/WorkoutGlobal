@@ -39,11 +39,11 @@ namespace WorkoutGlobal.Api.Controllers
         {
             var query = HttpContext.Request.Query;
 
-            var videos = query.Count != 0
-                ? await _repositoryManager.VideoRepository.GetPageVideosAsync(
-                   parameters: new VideoParameters(Convert.ToInt32(query["pageNumber"]), Convert.ToInt32(query["pageSize"])), 
-                   isPublic: true)
-                : await _repositoryManager.VideoRepository.GetAllVideosAsync(true);
+            var videos = query.Count == 0
+                ? await _repositoryManager.VideoRepository.GetAllVideosAsync(true)
+                : await _repositoryManager.VideoRepository.GetPageVideosAsync(
+                   parameters: new VideoParameters(Convert.ToInt32(query["pageNumber"]), Convert.ToInt32(query["pageSize"])),
+                   isPublic: true);
 
             var videosDto = _mapper.Map<IEnumerable<VideoDto>>(videos);
 
@@ -59,7 +59,7 @@ namespace WorkoutGlobal.Api.Controllers
                 return NotFound(new ErrorDetails()
                 {
                     StatusCode = 404,
-                    Message = "There is no fridge model with such fridgeModelId",
+                    Message = "There is no video with such id",
                     Details = "Wrong id."
                 });
 
@@ -70,14 +70,53 @@ namespace WorkoutGlobal.Api.Controllers
 
         [HttpPost]
         [ModelValidationFilter]
-        public async Task<IActionResult> AddVideo([FromBody] CreationVideoDto creationVideoDto)
+        public async Task<IActionResult> CreateVideo([FromBody] CreationVideoDto creationVideoDto)
         {
             var creationVideo = _mapper.Map<Video>(creationVideoDto);
 
             await _repositoryManager.VideoRepository.CreateVideoAsync(creationVideo);
-            await _repositoryManager.CommentsBlockRepository.CreateCommentBlockAsync(new CommentsBlock() { CommentedVideoId = creationVideo.Id });
 
             return Created($"api/videos/{creationVideo.Id}", creationVideo.Id);
         }
+
+        [HttpPut("{videoId}")]
+        [ModelValidationFilter]
+        public async Task<IActionResult> UpdateVideo(Guid videoId, [FromBody] VideoDto videoDto)
+        {
+            var video = await _repositoryManager.VideoRepository.GetVideoAsync(videoId);
+
+            if (video == null)
+                return NotFound(new ErrorDetails()
+                {
+                    StatusCode = 404,
+                    Message = "There is no video with such id",
+                    Details = "Wrong id."
+                });
+
+            var updateVideo = _mapper.Map<Video>(videoDto);
+
+            await _repositoryManager.VideoRepository.UpdateVideoAsync(updateVideo);
+
+            return NoContent();
+        }
+
+        [HttpDelete("{videoId}")]
+        public async Task<IActionResult> DeleteVideo(Guid videoId)
+        {
+            var video = await _repositoryManager.VideoRepository.GetVideoAsync(videoId);
+
+            if (video == null)
+                return NotFound(new ErrorDetails()
+                {
+                    StatusCode = 404,
+                    Message = "There is no video with such id",
+                    Details = "Wrong id."
+                });
+
+            await _repositoryManager.VideoRepository.DeleteVideoAsync(video);
+
+            return NoContent();
+        }
+
     }
 }

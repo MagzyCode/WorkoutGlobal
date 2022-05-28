@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
 using WorkoutGlobal.Api.Contracts.RepositoryManagerContracts;
 using WorkoutGlobal.Api.Filters.ActionFilters;
 using WorkoutGlobal.Api.Models;
 using WorkoutGlobal.Api.Models.DTOs.CommentDTOs;
+using WorkoutGlobal.Api.Models.ErrorModels;
 
 namespace WorkoutGlobal.Api.Controllers
 {
@@ -33,5 +35,24 @@ namespace WorkoutGlobal.Api.Controllers
 
             return Ok(StatusCodes.Status201Created);
         }
+
+        [HttpGet("{commentId}")]
+        public async Task<IActionResult> GetComment(Guid commentId)
+        {
+            var comment = await _repositoryManager.CommentRepository.GetCommentAsync(commentId);
+
+            if (comment == null)
+                return BadRequest(new ErrorDetails()
+                {
+                    StatusCode = StatusCodes.Status400BadRequest,
+                    Message = "There is no comment with such id.",
+                    Details = new StackTrace().ToString()
+                });
+
+            var commentDto = _mapper.Map<CommentDto>(comment);
+
+            return Ok(commentDto);
+        }
+
     }
 }

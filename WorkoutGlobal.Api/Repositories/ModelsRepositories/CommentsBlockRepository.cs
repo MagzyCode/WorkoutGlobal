@@ -10,26 +10,29 @@ namespace WorkoutGlobal.Api.Repositories.ModelsRepositories
 {
     public class CommentsBlockRepository : BaseRepository<CommentsBlock>, ICommentsBlockRepository
     {
-        private readonly ICommentRepository _commentRepository;
+        // private readonly ICommentRepository _commentRepository;
         private readonly IMapper _mapper;
 
         public CommentsBlockRepository(
             WorkoutGlobalContext workoutGlobalContext, 
             IConfiguration configurationManager,
-            ICommentRepository commentRepository,
+            // ICommentRepository commentRepository,
             IMapper mapper) 
             : base(workoutGlobalContext, configurationManager)
         {
-            _commentRepository = commentRepository;
+            // _commentRepository = commentRepository;
             _mapper = mapper;
         }
 
         public async Task CreateCommentBlockAsync(CommentsBlock commentsBlock)
             => await CreateAsync(commentsBlock);
 
-        public async Task<IEnumerable<Comment>> GetBlockCommentsAsync(Guid commentBlockId)
+        public async Task<IEnumerable<Comment>> GetCommentsBlockCommentsAsync(Guid commentBlockId)
         {
-            var comments = await _commentRepository.GetBlockCommentsAsync(commentBlockId);
+            var comments = await Context.Comments
+                .Where(model => model.CommentsBlockId == commentBlockId)
+                .ToListAsync();
+                // _commentRepository.GetBlockCommentsAsync(commentBlockId);
 
             return comments;
         }
@@ -41,11 +44,11 @@ namespace WorkoutGlobal.Api.Repositories.ModelsRepositories
             return model;
         }
 
-        public async Task<CommentsBlock> GetCommentsBlockByVideoIdAsync(Guid videoId)
-        {
-            var model = await GetAll().Where(x => x.CommentedVideoId == videoId).FirstOrDefaultAsync();
+        //public async Task<CommentsBlock> GetCommentsBlockByVideoIdAsync(Guid videoId)
+        //{
+        //    var model = await GetAll().Where(x => x.CommentedVideoId == videoId).FirstOrDefaultAsync();
 
-            return model;
-        }
+        //    return model;
+        //}
     }
 }

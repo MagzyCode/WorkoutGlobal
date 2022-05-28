@@ -22,11 +22,13 @@ namespace WorkoutGlobal.Api.Contracts.RepositoryContracts
 
         public Task<IEnumerable<Course>> GetTrainerCreatedCoursesAsync(Guid trainerId);
 
+        public Task<IEnumerable<SportEvent>> GetTrainerCreatedEventsAsync(Guid trainerId);
+
         public Task<IEnumerable<Order>> GetUserOrdersAsync(Guid userId);
 
         public Task<IEnumerable<Post>> GetUserPostsAsync(Guid userId);
 
-        public Task<IEnumerable<Comment>> GetUserComments(Guid userId);
+        public Task<IEnumerable<Comment>> GetUserCommentsAsync(Guid userId);
 
         public Task<IEnumerable<Course>> GetUserSubscribeCoursesAsync(Guid userId);
 

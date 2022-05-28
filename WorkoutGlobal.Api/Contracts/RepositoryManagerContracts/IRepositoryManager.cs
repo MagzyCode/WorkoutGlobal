@@ -30,5 +30,10 @@ namespace WorkoutGlobal.Api.Contracts.RepositoryManagerContracts
         public ICommentRepository CommentRepository { get; }
         public ICourseRepository CourseRepository { get; }
         public ICourseVideoRepository CourseVideosRepository { get; }
+        public ICategoryRepository CategoryRepository { get; }
+        public ISportEventRepository SportEventRepository { get; }
+        public IStoreVideoRepository StoreVideoRepository { get; }
+        public ISubscribeCourseRepository SubscribeCourseRepository { get; }
+        public ISubscribeEventRepository SubscribeEventRepository { get; }
     }
 }

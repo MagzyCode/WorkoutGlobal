@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 using WorkoutGlobal.Api.Context;
 using WorkoutGlobal.Api.Contracts.AuthenticationManagerContracts;
@@ -19,9 +20,9 @@ namespace WorkoutGlobal.Api.Repositories.AuthorizationRepositories
     public class AuthenticationRepository : BaseRepository<UserCredentials>, IAuthenticationRepository
     {
         private readonly UserManager<UserCredentials> _userManager;
-        private readonly IUserCredentialsRepository _userCredentialsRepository;
+        // private readonly IUserCredentialsRepository _userCredentialsRepository;
         private readonly IMapper _mapper;
-        private readonly IUserRepository _userRepository;
+        // private readonly IUserRepository _userRepository;
 
         /// <summary>
         /// Ctor for authentication repository.
@@ -35,15 +36,15 @@ namespace WorkoutGlobal.Api.Repositories.AuthorizationRepositories
             UserManager<UserCredentials> userManager, 
             WorkoutGlobalContext workoutGlobalContext, 
             IConfiguration configuration,
-            IUserCredentialsRepository userCredentialsRepository,
-            IMapper mapper,
-            IUserRepository userRepository) 
+            // IUserCredentialsRepository userCredentialsRepository,
+            IMapper mapper)
+            //  IUserRepository userRepository) 
             : base(workoutGlobalContext, configuration)
         {
             _userManager = userManager;
-            _userCredentialsRepository = userCredentialsRepository;
+            // _userCredentialsRepository = userCredentialsRepository;
             _mapper = mapper;
-            _userRepository = userRepository;
+            // _userRepository = userRepository;
         }
 
         /// <summary>
@@ -76,7 +77,7 @@ namespace WorkoutGlobal.Api.Repositories.AuthorizationRepositories
             if (_userManager == null)
                 throw new ArgumentNullException(nameof(userCredentialsDto));
 
-            var userCredentials = Context.UserCredentials
+            var userCredentials = Context.Users
                 .Where(user => user.UserName == userCredentialsDto.UserName)
                 .SingleOrDefault();
 
@@ -94,13 +95,12 @@ namespace WorkoutGlobal.Api.Repositories.AuthorizationRepositories
             var saltBytes = new byte[8];
             new Random().NextBytes(saltBytes);
 
-            var salt = BitConverter.ToString(saltBytes).ToLower().Replace("-", "");
+            userCredentials.PasswordSalt = BitConverter.ToString(saltBytes).ToLower().Replace("-", ""); ;
+            userCredentials.PasswordHash = await GenerateHashPasswordAsync(userCredentialsDto.Password, userCredentials.PasswordSalt);
 
-            userCredentials.PasswordSalt = salt;
-
-            userCredentials.PasswordHash = await _userCredentialsRepository.GetHashPasswordAsync(
-                password: userCredentialsDto.Password,
-                salt: userCredentials.PasswordSalt);
+            //await _userCredentialsRepository.GetHashPasswordAsync(
+            //password: userCredentialsDto.Password,
+            //salt: userCredentials.PasswordSalt);
 
             return userCredentials;
         }
@@ -138,7 +138,10 @@ namespace WorkoutGlobal.Api.Repositories.AuthorizationRepositories
             await _userManager.CreateAsync(userCredentials);
             user.UserCredentialsId = userCredentials.Id;
             await _userManager.AddToRoleAsync(userCredentials, "User");
-            await _userRepository.CreateUserAsync(user);
+
+            await Context.UserAccounts.AddAsync(user);
+            //await _userRepository.CreateUserAsync(user);
+
         }
 
         /// <summary>
@@ -158,7 +161,8 @@ namespace WorkoutGlobal.Api.Repositories.AuthorizationRepositories
             if (userCredentials == null)
                 return false;
 
-            var userPasswordHash = await _userCredentialsRepository.GetHashPasswordAsync(userAuthorizationDto.Password, userCredentials.PasswordSalt);
+            var userPasswordHash = await GenerateHashPasswordAsync(userAuthorizationDto.Password, userCredentials.PasswordSalt);
+            // await _userCredentialsRepository.GetHashPasswordAsync(userAuthorizationDto.Password, userCredentials.PasswordSalt);
 
             return userCredentials != null 
                 && userCredentials.PasswordHash == userPasswordHash;
@@ -193,6 +197,17 @@ namespace WorkoutGlobal.Api.Repositories.AuthorizationRepositories
             );
 
             return tokenOptions;
+        }
+
+        private async Task<string> GenerateHashPasswordAsync(string password, string salt)
+        {
+            using var sha256 = SHA256.Create();
+            var hashedBytes = await sha256.ComputeHashAsync(
+                inputStream: new MemoryStream(Encoding.UTF8.GetBytes(password + salt)));
+
+            var hashPassword = BitConverter.ToString(hashedBytes).ToString().ToLower().Replace("-", "");
+
+            return hashPassword;
         }
     }
 

@@ -22,6 +22,7 @@ namespace WorkoutGlobal.Api.Contracts.RepositoryContracts
 
         public Task DeleteVideoAsync(Video video);
 
-        public Task<IEnumerable<Video>> GetCreatorVideosAsync(Guid creatorId);
+        public Task<CommentsBlock> GetVideoCommentsBlockAsync(Guid videoId);
+        // public Task<IEnumerable<Video>> GetCreatorVideosAsync(Guid creatorId);
     }
 }

@@ -8,18 +8,21 @@ namespace WorkoutGlobal.Api.Repositories.ModelsRepositories
 {
     public class CourseRepository : BaseRepository<Course>, ICourseRepository
     {
-        private readonly ICourseVideoRepository _courseVideosRepository;
-        private readonly IVideoRepository _videoRepository;
+        //private readonly ICourseVideoRepository _courseVideosRepository;
+        //private readonly IVideoRepository _videoRepository;
+        //private readonly ISubscribeCourseRepository _subscribeCourseRepository;
 
         public CourseRepository(
             WorkoutGlobalContext workoutGlobalContext, 
-            IConfiguration configurationManager,
-            ICourseVideoRepository courseVideosRepository,
-            IVideoRepository videoRepository) 
+            IConfiguration configurationManager)
+            //ICourseVideoRepository courseVideosRepository,
+            //IVideoRepository videoRepository,
+            //ISubscribeCourseRepository subscribeCourseRepository) 
             : base(workoutGlobalContext, configurationManager)
         {
-            _courseVideosRepository = courseVideosRepository;
-            _videoRepository = videoRepository;
+            //_courseVideosRepository = courseVideosRepository;
+            //_videoRepository = videoRepository;
+            //_subscribeCourseRepository = subscribeCourseRepository;
         }
 
         public async Task CreateCourseAsync(Course course)
@@ -48,30 +51,50 @@ namespace WorkoutGlobal.Api.Repositories.ModelsRepositories
             return model;
         }
 
-        public Task<IEnumerable<User>> GetCourseSubscribersAsync(Guid courseId)
+        public async Task<IEnumerable<User>> GetCourseSubscribersAsync(Guid courseId)
         {
-            // TODO: Создать когда будет репозиторий для SubscribeCourse
-            throw new NotImplementedException();
+            var subscribersIds = await Context.SubscribeCourses
+                .Where(model => model.SubscribeCourseId == courseId)
+                .Select(model => model.SubscriberId)
+                .ToListAsync();
+
+            var users = new List<User>();
+
+            foreach (var subscriberId in subscribersIds)
+            {
+                var user = await Context.UserAccounts.FindAsync(subscriberId);
+                users.Add(user);
+            }
+
+            return users;
         }
 
         public async Task<IEnumerable<Video>> GetCourseVideosAsync(Guid courseId)
         {
-            var courseVideos = await _courseVideosRepository.GetCourseVideosByCourseIdAsync(courseId);
+            var videosIds = await Context.CourseVideos
+                .Where(model => model.CourseId == courseId)
+                .Select(model => model.VideoId)
+                .ToListAsync();
+                
+                // await _courseVideosRepository.GetCourseVideosByCourseIdAsync(courseId);
 
             var videos = new List<Video>();
 
-            foreach (var courseVideo in courseVideos)
-                videos.Add(await _videoRepository.GetVideoAsync(courseVideo.VideoId));
+            foreach (var videoId in videosIds)
+            {
+                var video = await Context.Videos.FindAsync(videoId);
+                videos.Add(video);
+            }
 
             return videos;
         }
 
-        public async Task<IEnumerable<Course>> GetCreatorCoursesAsync(Guid creatorId)
-        {
-            var courses = await GetAll().Where(x => x.CreatorId == creatorId).ToListAsync();
+        //public async Task<IEnumerable<Course>> GetCreatorCoursesAsync(Guid creatorId)
+        //{
+        //    var courses = await GetAll().Where(x => x.CreatorId == creatorId).ToListAsync();
 
-            return courses;
-        }
+        //    return courses;
+        //}
 
         public async Task UpdateCourseAsync(Course course)
         {

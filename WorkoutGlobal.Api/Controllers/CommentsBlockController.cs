@@ -56,7 +56,8 @@ namespace WorkoutGlobal.Api.Controllers
                     Details = new StackTrace().ToString()
                 });
 
-            var commentsBlock = await _repositoryManager.CommentsBlockRepository.GetCommentsBlockByVideoIdAsync(videoId);
+            var commentsBlock = await _repositoryManager.VideoRepository.GetVideoCommentsBlockAsync(videoId);
+                // await _repositoryManager.CommentsBlockRepository.GetCommentsBlockByVideoIdAsync(videoId);
 
             var commentsBlockDto = _mapper.Map<CommentsBlockDto>(commentsBlock);
 
@@ -67,7 +68,6 @@ namespace WorkoutGlobal.Api.Controllers
         public async Task<IActionResult> GetBlockComments(Guid commentsBlockId)
         {
             var blockComments = await _repositoryManager.CommentsBlockRepository.GetCommentsBlockAsync(commentsBlockId);
-            // var blockComments = await _repositoryManager.CommentsBlockRepository.GetBlockCommentsAsync(commentsBlockId);
 
             if (blockComments == null)
                 return BadRequest(new ErrorDetails()
@@ -77,7 +77,7 @@ namespace WorkoutGlobal.Api.Controllers
                     Details = new StackTrace().ToString()
                 });
 
-            var comments = await _repositoryManager.CommentsBlockRepository.GetBlockCommentsAsync(commentsBlockId);
+            var comments = await _repositoryManager.CommentsBlockRepository.GetCommentsBlockCommentsAsync(commentsBlockId);
 
             var commentsDto = _mapper.Map<IEnumerable<CommentDto>>(comments);
 

@@ -12,6 +12,8 @@ namespace WorkoutGlobal.Api.Contracts.RepositoryContracts
 
         public Task<IEnumerable<Category>> GetAllCategoriesAsync();
 
+        public Task<Category> GetCategoryAsync(Guid categoryId);
+
         public Task<IEnumerable<Video>> GetCategoryVideosAsync(Guid categoryId);
 
         public Task<IEnumerable<Course>> GetCategoryCoursesAsync(Guid categoryId);

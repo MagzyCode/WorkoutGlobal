@@ -11,5 +11,7 @@
         public Guid CreatorId { get; set; }
 
         public byte[] CourseImage { get; set; }
+
+        public Guid CategoryId { get; set; }
     }
 }

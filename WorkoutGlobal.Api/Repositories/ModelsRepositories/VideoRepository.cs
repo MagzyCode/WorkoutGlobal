@@ -12,6 +12,8 @@ namespace WorkoutGlobal.Api.Repositories.ModelsRepositories
     /// </summary>
     public class VideoRepository : BaseRepository<Video>, IVideoRepository
     {
+        private readonly ICommentsBlockRepository _commentsBlockRepository;
+
         /// <summary>
         /// Ctor for video repository.
         /// </summary>
@@ -19,9 +21,12 @@ namespace WorkoutGlobal.Api.Repositories.ModelsRepositories
         /// <param name="configurationManager"></param>
         public VideoRepository(
             WorkoutGlobalContext workoutGlobalContext, 
-            IConfiguration configurationManager) 
+            IConfiguration configurationManager,
+            ICommentsBlockRepository commentsBlockRepository) 
             : base(workoutGlobalContext, configurationManager)
-        { }
+        { 
+            _commentsBlockRepository = commentsBlockRepository;
+        }
 
         public int Count => Context.Videos.Count();
 
@@ -53,6 +58,9 @@ namespace WorkoutGlobal.Api.Repositories.ModelsRepositories
         public async Task CreateVideoAsync(Video video)
         {
             await CreateAsync(video);
+
+            await _commentsBlockRepository.CreateCommentBlockAsync(new CommentsBlock() { CommentedVideoId = video.Id });
+
             await SaveChangesAsync();
         }
 
@@ -68,11 +76,20 @@ namespace WorkoutGlobal.Api.Repositories.ModelsRepositories
             await SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<Video>> GetCreatorVideosAsync(Guid creatorId)
+        public async Task<CommentsBlock> GetVideoCommentsBlockAsync(Guid videoId)
         {
-            var videos = await GetAll().Where(model => model.UserId == creatorId).ToListAsync();
+            var commentBlock = await Context.CommentsBlocks
+                .Where(model => model.CommentedVideoId == videoId)
+                .FirstOrDefaultAsync();
 
-            return videos;
+            return commentBlock;
         }
+
+        //public async Task<IEnumerable<Video>> GetCreatorVideosAsync(Guid creatorId)
+        //{
+        //    var videos = await GetAll().Where(model => model.UserId == creatorId).ToListAsync();
+
+        //    return videos;
+        //}
     }
 }

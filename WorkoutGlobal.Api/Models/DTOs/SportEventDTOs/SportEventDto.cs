@@ -1,6 +1,6 @@
-﻿namespace WorkoutGlobal.Api.Models
+﻿namespace WorkoutGlobal.Api.Models.DTOs.SportEventDTOs
 {
-    public class SportEvent
+    public class SportEventDto
     {
         public Guid Id { get; set; }
         public string EventName { get; set; }
@@ -8,12 +8,8 @@
 
         public Guid TrainerId { get; set; }
 
-        public User EventCreator { get; set; }
-
         public string HostLink { get; set; }
 
         public string JoinLink { get; set; }
-        
-        public ICollection<SubscribeEvent> ParticipatingUsers { get; set; }
     }
 }

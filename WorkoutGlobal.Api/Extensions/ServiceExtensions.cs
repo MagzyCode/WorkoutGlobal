@@ -43,6 +43,11 @@ namespace WorkoutGlobal.Api.Extensions
             services.AddScoped<ICommentRepository, CommentRepository>();
             services.AddScoped<ICourseRepository, CourseRepository>();
             services.AddScoped<ICourseVideoRepository, CourseVideoRepository>();
+            services.AddScoped<ICategoryRepository, CategoryRepository>();
+            services.AddScoped<ISportEventRepository, SportEventRepository>();
+            services.AddScoped<IStoreVideoRepository, StoreVideoRepository>();
+            services.AddScoped<ISubscribeCourseRepository, SubscribeCourseRepository>();
+            services.AddScoped<ISubscribeEventRepository, SubscribeEventRepository>();
 
             services.AddScoped<IRepositoryManager, RepositoryManager>();
         }
