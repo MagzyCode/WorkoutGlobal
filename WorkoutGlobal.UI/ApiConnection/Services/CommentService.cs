@@ -10,5 +10,8 @@ namespace WorkoutGlobal.UI.ApiConnection.Services
 
         public async Task CreateCommentAsync(Comment comment)
             => await Service.CreateCommentAsync(comment);
+
+        public async Task<Comment> GetCommentAsync(Guid commentId)
+            => await Service.GetCommentAsync(commentId);
     }
 }

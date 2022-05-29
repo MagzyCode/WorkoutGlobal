@@ -25,5 +25,7 @@
         /// Foreign key with user account.
         /// </summary>
         public Guid UserId { get; set; }
+
+        public Guid CategoryId { get; set; }
     }
 }

@@ -33,6 +33,13 @@ namespace WorkoutGlobal.UI.Extensions
             services.AddScoped<ICommentsBlockService, CommentsBlockService>();
             services.AddScoped<ICommentService, CommentService>();
             services.AddScoped<ICourseService, CourseService>();
+            services.AddScoped<ICategoryService, CategoryService>();
+            services.AddScoped<ISportEventService, SportEventService>();
+            services.AddScoped<IStoreVideoService, StoreVideoService>();
+            services.AddScoped<ISubscribeCourseService, SubscribeCourseService>();
+            services.AddScoped<ISubscribeEventService, SubscribeEventService>();
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IUserCredentialsServive, UserCredentialsServive>();
 
             services.AddScoped<AuthenticationHttpClientHandler>();
         }

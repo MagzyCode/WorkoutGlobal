@@ -6,6 +6,7 @@ using WorkoutGlobal.Api.Contracts.RepositoryManagerContracts;
 using WorkoutGlobal.Api.Filters.ActionFilters;
 using WorkoutGlobal.Api.Models;
 using WorkoutGlobal.Api.Models.DTOs.SportEventDTOs;
+using WorkoutGlobal.Api.Models.DTOs.UserDTOs;
 using WorkoutGlobal.Api.Models.ErrorModels;
 
 namespace WorkoutGlobal.Api.Controllers
@@ -90,9 +91,37 @@ namespace WorkoutGlobal.Api.Controllers
         {
             var sportEvent = await _repositoryManager.SportEventRepository.GetEventAsync(sportEventId);
 
+            if (sportEvent == null)
+                return BadRequest(new ErrorDetails()
+                {
+                    StatusCode = StatusCodes.Status400BadRequest,
+                    Message = "There is no category with such id.",
+                    Details = new StackTrace().ToString()
+                });
+
             var sportEventDto = _mapper.Map<SportEventDto>(sportEvent);
 
             return Ok(sportEventDto);
+        }
+
+        [HttpGet("{sportEventId}/subscribers")]
+        public async Task<IActionResult> GetSportEventSubscribers(Guid sportEventId)
+        {
+            var sportEvent = await _repositoryManager.SportEventRepository.GetEventAsync(sportEventId);
+
+            if (sportEvent == null)
+                return BadRequest(new ErrorDetails()
+                {
+                    StatusCode = StatusCodes.Status400BadRequest,
+                    Message = "There is no category with such id.",
+                    Details = new StackTrace().ToString()
+                });
+
+            var users = await _repositoryManager.SportEventRepository.GetEventSubscribersAsync(sportEventId);
+
+            var usersDto = _mapper.Map<IEnumerable<UserDto>>(users);
+
+            return Ok(usersDto);
         }
 
 

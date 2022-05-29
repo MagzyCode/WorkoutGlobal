@@ -5,13 +5,13 @@ namespace WorkoutGlobal.UI.ApiConnection.Contracts
 {
     public interface ICommentsBlockService : IApiData
     {
-        [Get("/api/videoBlocks/{commentsBlockId}/comments")]
+        [Get("/api/commentsBlocks/{commentsBlockId}/comments")]
         public Task<IEnumerable<Comment>> GetBlockCommentsAsync(Guid commentsBlockId);
 
-        [Get("/api/videoBlocks/{commentsBlockId}")]
+        [Get("/api/commentsBlocks/{commentsBlockId}")]
         public Task<CommentsBlock> GetCommentsBlockAsync(Guid commentsBlockId);
 
-        [Get("/api/videoBlocks/videos/{videoId}")]
-        public Task<CommentsBlock> GetCommentsBlockByVideoIdAsync(Guid videoId);
+        [Post("/api/commentsBlocks")]
+        public Task CreateCommentsBlockAsync([Body] CommentsBlock commentsBlock);
     }
 }

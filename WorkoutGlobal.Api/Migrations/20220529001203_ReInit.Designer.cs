@@ -12,7 +12,7 @@ using WorkoutGlobal.Api.Context;
 namespace WorkoutGlobal.Api.Migrations
 {
     [DbContext(typeof(WorkoutGlobalContext))]
-    [Migration("20220527135819_ReInit")]
+    [Migration("20220529001203_ReInit")]
     partial class ReInit
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -54,21 +54,21 @@ namespace WorkoutGlobal.Api.Migrations
                         new
                         {
                             Id = "f4a4ce79-c6b3-4e12-9c98-ff07b5030752",
-                            ConcurrencyStamp = "249d1dad-ddfb-4410-b644-ca7b4cfc253f",
+                            ConcurrencyStamp = "9c6accec-e100-4a19-b3c4-7cbb0edeb3b8",
                             Name = "User",
                             NormalizedName = "USER"
                         },
                         new
                         {
                             Id = "6abe6f33-ae4b-4430-8f14-493dc9a5a9d1",
-                            ConcurrencyStamp = "22c32100-ec95-4118-abfe-93ff520081e6",
+                            ConcurrencyStamp = "65d59954-feb8-4bce-97ca-991f995c35d2",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
                             Id = "4f4d7080-beee-4a97-be65-2ffccde5eb72",
-                            ConcurrencyStamp = "0965c238-dcc8-4974-9c6b-24de10648d66",
+                            ConcurrencyStamp = "f8ac6a34-885e-4e85-95f3-7525fc949a5e",
                             Name = "Trainer",
                             NormalizedName = "TRAINER"
                         });
@@ -411,7 +411,7 @@ namespace WorkoutGlobal.Api.Migrations
                     b.Property<string>("EventName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("HostLinl")
+                    b.Property<string>("HostLink")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("JoinLink")
@@ -642,13 +642,13 @@ namespace WorkoutGlobal.Api.Migrations
                         {
                             Id = "b5b84fd7-5366-44eb-9d1b-408c6a4a8926",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "dfaaf82e-1053-4fb9-9eac-a33b8e80d9d5",
+                            ConcurrencyStamp = "9f44ea84-8914-4e75-be31-bbc5fc3128ea",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             PasswordHash = "21c9b9e74e5071de6d6c872ccae5af4deb3b42563cd649a3179a5780163b6238",
                             PasswordSalt = "46da4fb783d806ab",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "756984d1-51ce-4820-ab5d-5efbecf87ea9",
+                            SecurityStamp = "fdfde3c8-a995-4cfc-91b9-3882545a5d95",
                             TwoFactorEnabled = false,
                             UserName = "MagzyCode"
                         });
@@ -942,7 +942,7 @@ namespace WorkoutGlobal.Api.Migrations
                         .IsRequired();
 
                     b.HasOne("WorkoutGlobal.Api.Models.User", "User")
-                        .WithMany("Videos")
+                        .WithMany("CreatedVideos")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -994,6 +994,8 @@ namespace WorkoutGlobal.Api.Migrations
 
                     b.Navigation("CreatedCourses");
 
+                    b.Navigation("CreatedVideos");
+
                     b.Navigation("Orders");
 
                     b.Navigation("Posts");
@@ -1003,8 +1005,6 @@ namespace WorkoutGlobal.Api.Migrations
                     b.Navigation("SubscribeCourses");
 
                     b.Navigation("SubscribeEvents");
-
-                    b.Navigation("Videos");
                 });
 
             modelBuilder.Entity("WorkoutGlobal.Api.Models.UserCredentials", b =>

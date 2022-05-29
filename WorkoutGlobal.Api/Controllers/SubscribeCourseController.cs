@@ -38,7 +38,7 @@ namespace WorkoutGlobal.Api.Controllers
 
         [HttpPut("{subscribeCourseId}")]
         [ModelValidationFilter]
-        public async Task<IActionResult> CreateSubscribeCourse(Guid subscribeCourseId, [FromBody] SubscribeCourseDto subscribeCourseDto)
+        public async Task<IActionResult> UpdateSubscribeCourse(Guid subscribeCourseId, [FromBody] SubscribeCourseDto subscribeCourseDto)
         {
             var subscribeCourse = await _repositoryManager.SubscribeCourseRepository.GetSubscribeCourseAsync(subscribeCourseId);
 
@@ -58,7 +58,7 @@ namespace WorkoutGlobal.Api.Controllers
         }
 
         [HttpDelete("{subscribeCourseId}")]
-        public async Task<IActionResult> CreateSubscribeCourse(Guid subscribeCourseId)
+        public async Task<IActionResult> DeleteSubscribeCourse(Guid subscribeCourseId)
         {
             var subscribeCourse = await _repositoryManager.SubscribeCourseRepository.GetSubscribeCourseAsync(subscribeCourseId);
 

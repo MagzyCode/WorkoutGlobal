@@ -10,7 +10,7 @@ using WorkoutGlobal.Api.Models.ErrorModels;
 
 namespace WorkoutGlobal.Api.Controllers
 {
-    [Route("api/videoBlocks")]
+    [Route("api/commentsBlocks")]
     [ApiController]
     public class CommentsBlockController : ControllerBase
     {
@@ -37,27 +37,6 @@ namespace WorkoutGlobal.Api.Controllers
                     Message = "There is no comment block with such id.",
                     Details = new StackTrace().ToString()
                 });
-
-            var commentsBlockDto = _mapper.Map<CommentsBlockDto>(commentsBlock);
-
-            return Ok(commentsBlockDto);
-        }
-
-        [HttpGet("videos/{videoId}")]
-        public async Task<IActionResult> GetCommentsBlockByVideoId(Guid videoId)
-        {
-            var video = await _repositoryManager.VideoRepository.GetVideoAsync(videoId);
-
-            if (video == null)
-                return BadRequest(new ErrorDetails()
-                {
-                    StatusCode = StatusCodes.Status400BadRequest,
-                    Message = "There is no video with such id.",
-                    Details = new StackTrace().ToString()
-                });
-
-            var commentsBlock = await _repositoryManager.VideoRepository.GetVideoCommentsBlockAsync(videoId);
-                // await _repositoryManager.CommentsBlockRepository.GetCommentsBlockByVideoIdAsync(videoId);
 
             var commentsBlockDto = _mapper.Map<CommentsBlockDto>(commentsBlock);
 

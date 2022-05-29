@@ -44,7 +44,8 @@ namespace WorkoutGlobal.Api.Repositories.BaseRepositories
             ISportEventRepository sportEventRepository,
             IStoreVideoRepository storeVideoRepository,
             ISubscribeCourseRepository subscribeCourseRepository,
-            ISubscribeEventRepository subscribeEventRepository) 
+            ISubscribeEventRepository subscribeEventRepository,
+            ICategoryRepository categoryRepository) 
         {
             _healthRepository = healthRepository;
             _userCredentialsRepository = userCredentialsRepository;
@@ -59,6 +60,7 @@ namespace WorkoutGlobal.Api.Repositories.BaseRepositories
             _storeVideoRepository = storeVideoRepository;
             _subscribeCourseRepository = subscribeCourseRepository;
             _subscribeEventRepository = subscribeEventRepository;
+            _categoryRepository = categoryRepository;
         }
 
         /// <summary>

@@ -14,6 +14,7 @@ namespace WorkoutGlobal.Api.Contracts.RepositoryContracts
 
         public Task<SportEvent> GetEventAsync(Guid eventId); 
 
+        public Task<IEnumerable<User>> GetEventSubscribersAsync(Guid eventId);
         // public Task<IEnumerable<SportEvent>> GetCreatorEventsAsync(Guid creatorId);
     }
 }

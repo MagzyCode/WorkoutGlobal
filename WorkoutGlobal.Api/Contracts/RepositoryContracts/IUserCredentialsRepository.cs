@@ -24,5 +24,7 @@ namespace WorkoutGlobal.Api.Contracts.RepositoryContracts
         public Task DeleteUserCredentialsAsync(UserCredentials userCredentials);
 
         public string GetUserCredentialsRole(string userCredentialsId);
+
+        public Task UpdateUserToTrainerAsync(string userCredentialsId);
     }
 }

@@ -48,6 +48,24 @@ namespace WorkoutGlobal.Api.Repositories.ModelsRepositories
             return sportEvent;
         }
 
+        public async Task<IEnumerable<User>> GetEventSubscribersAsync(Guid eventId)
+        {
+            var usersIds = await Context.SubscribeEvents
+                .Where(model => model.UserId == eventId)
+                .Select(model => model.UserId)
+                .ToListAsync();
+
+            var users = new List<User>();
+
+            foreach (var userId in usersIds)
+            {
+                var user = await Context.UserAccounts.FindAsync(userId);
+                users.Add(user);
+            }
+
+            return users;
+        }
+
         public async Task UpdateEventAsync(SportEvent sportEvent)
         {
             Update(sportEvent);

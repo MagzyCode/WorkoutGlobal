@@ -14,7 +14,6 @@ namespace WorkoutGlobal.Api.Repositories.ModelsRepositories
     public class UserCredentialsRepository : BaseRepository<UserCredentials>, IUserCredentialsRepository
     {
         private readonly UserManager<UserCredentials> _userManager;
-        // private readonly RoleManager<IdentityRole> _roleManager;
 
         public UserCredentialsRepository(
             WorkoutGlobalContext workoutGlobalContext, 
@@ -83,6 +82,15 @@ namespace WorkoutGlobal.Api.Repositories.ModelsRepositories
         {
             // TODO: Проверить, работает ли без методы SaveChanges
             await _userManager.UpdateAsync(userCredentials);
+        }
+
+        public async Task UpdateUserToTrainerAsync(string userCredentialsId)
+        {
+            var userCredentials = await Context.Users.FindAsync(userCredentialsId);
+
+            await _userManager.RemoveFromRoleAsync(userCredentials, "User");
+
+            await _userManager.AddToRoleAsync(userCredentials, "Trainer");
         }
     }
 }

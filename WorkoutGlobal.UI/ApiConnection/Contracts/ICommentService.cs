@@ -7,5 +7,9 @@ namespace WorkoutGlobal.UI.ApiConnection.Contracts
     {
         [Post("/api/comments")]
         public Task CreateCommentAsync(Comment comment);
+
+        [Get("/api/comments/{commentId}")]
+        public Task<Comment> GetCommentAsync(Guid commentId);
     }
+
 }

@@ -118,5 +118,25 @@ namespace WorkoutGlobal.Api.Controllers
             return NoContent();
         }
 
+        [HttpGet("{videoId}/commentsBlock")]
+        public async Task<IActionResult> GetVideoCommentsBlock(Guid videoId)
+        {
+            var video = await _repositoryManager.VideoRepository.GetVideoAsync(videoId);
+
+            if (video == null)
+                return NotFound(new ErrorDetails()
+                {
+                    StatusCode = 404,
+                    Message = "There is no video with such id",
+                    Details = "Wrong id."
+                });
+
+            var commentsBlock = await _repositoryManager.VideoRepository.GetVideoCommentsBlockAsync(videoId);
+
+            var commentsBlockDto = _mapper.Map<CommentsBlockDto>(commentsBlock);
+
+            return Ok(commentsBlockDto);
+        }
+
     }
 }

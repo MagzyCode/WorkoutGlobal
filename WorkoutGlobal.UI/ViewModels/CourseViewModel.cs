@@ -13,5 +13,7 @@
         public IFormFile CourseImageForm { get; set; }
 
         public byte[] CourseImage { get; set; }
+
+        public Guid CategoryId { get; set; }
     }
 }

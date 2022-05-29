@@ -287,7 +287,7 @@ namespace WorkoutGlobal.Api.Migrations
                     EventDescription = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     TrainerId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     EventCreatorId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    HostLinl = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    HostLink = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     JoinLink = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
@@ -518,15 +518,15 @@ namespace WorkoutGlobal.Api.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "4f4d7080-beee-4a97-be65-2ffccde5eb72", "0965c238-dcc8-4974-9c6b-24de10648d66", "Trainer", "TRAINER" },
-                    { "6abe6f33-ae4b-4430-8f14-493dc9a5a9d1", "22c32100-ec95-4118-abfe-93ff520081e6", "Admin", "ADMIN" },
-                    { "f4a4ce79-c6b3-4e12-9c98-ff07b5030752", "249d1dad-ddfb-4410-b644-ca7b4cfc253f", "User", "USER" }
+                    { "4f4d7080-beee-4a97-be65-2ffccde5eb72", "f8ac6a34-885e-4e85-95f3-7525fc949a5e", "Trainer", "TRAINER" },
+                    { "6abe6f33-ae4b-4430-8f14-493dc9a5a9d1", "65d59954-feb8-4bce-97ca-991f995c35d2", "Admin", "ADMIN" },
+                    { "f4a4ce79-c6b3-4e12-9c98-ff07b5030752", "9c6accec-e100-4a19-b3c4-7cbb0edeb3b8", "User", "USER" }
                 });
 
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PasswordSalt", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
-                values: new object[] { "b5b84fd7-5366-44eb-9d1b-408c6a4a8926", 0, "dfaaf82e-1053-4fb9-9eac-a33b8e80d9d5", null, false, false, null, null, null, "21c9b9e74e5071de6d6c872ccae5af4deb3b42563cd649a3179a5780163b6238", "46da4fb783d806ab", null, false, "756984d1-51ce-4820-ab5d-5efbecf87ea9", false, "MagzyCode" });
+                values: new object[] { "b5b84fd7-5366-44eb-9d1b-408c6a4a8926", 0, "9f44ea84-8914-4e75-be31-bbc5fc3128ea", null, false, false, null, null, null, "21c9b9e74e5071de6d6c872ccae5af4deb3b42563cd649a3179a5780163b6238", "46da4fb783d806ab", null, false, "fdfde3c8-a995-4cfc-91b9-3882545a5d95", false, "MagzyCode" });
 
             migrationBuilder.InsertData(
                 table: "AspNetUserRoles",

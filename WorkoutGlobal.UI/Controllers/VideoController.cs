@@ -41,7 +41,8 @@ namespace WorkoutGlobal.UI.Controllers
 
             var videoViewModel = _mapper.Map<VideoWithCommentsViewModel>(video);
 
-            var commentsBlock = await _commentsBlockService.GetCommentsBlockByVideoIdAsync(videoId);
+            var commentsBlock = await _videoService.GetVideoCommentsBlockAsync(videoId);
+                //await _commentsBlockService.GetCommentsBlockByVideoIdAsync(videoId);
             var comments = await _commentsBlockService.GetBlockCommentsAsync(commentsBlock.Id);
             var commentsViewModel = _mapper.Map<IEnumerable<CommentViewModel>>(comments);
 
@@ -53,7 +54,8 @@ namespace WorkoutGlobal.UI.Controllers
         [HttpPost]
         public async Task<IActionResult> SaveComment(VideoWithCommentsViewModel videoWithCommentsViewModel)
         {
-            var commentsBlock = await _commentsBlockService.GetCommentsBlockByVideoIdAsync(videoWithCommentsViewModel.Id);
+            var commentsBlock = await _videoService.GetVideoCommentsBlockAsync(videoWithCommentsViewModel.Id);
+            //await _commentsBlockService.GetCommentsBlockByVideoIdAsync(videoWithCommentsViewModel.Id);
 
             var comment = new Comment()
                 {
@@ -84,7 +86,7 @@ namespace WorkoutGlobal.UI.Controllers
             creationVideoViewModel.UserId = Guid.Parse("4e14c6d2-cae1-43ba-bd32-0f2dc2225f5a");
             var video = _mapper.Map<Video>(creationVideoViewModel);
 
-            await _videoService.AddVideoAsync(video);
+            await _videoService.CreateVideoAsync(video);
 
             return RedirectToAction("VideosList", "Video");
         }

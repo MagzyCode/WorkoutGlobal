@@ -13,6 +13,15 @@ namespace WorkoutGlobal.UI.ApiConnection.Contracts
         public Task<Video> GetVideoAsync(Guid videoId);
 
         [Post("/api/videos")]
-        public Task AddVideoAsync(Video video);
+        public Task CreateVideoAsync([Body] Video video);
+
+        [Put("/api/videos/{videoId}")]
+        public Task UpdateVideoAsync(Guid videoId, [Body] Video video);
+
+        [Delete("/api/videos/{videoId}")]
+        public Task DeleteVideoAsync(Guid videoId);
+
+        [Get("/api/videos/{videoId}/commentsBlock")]
+        public Task<CommentsBlock> GetVideoCommentsBlockAsync(Guid videoId);
     }
 }

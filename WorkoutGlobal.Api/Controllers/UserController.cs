@@ -309,5 +309,15 @@ namespace WorkoutGlobal.Api.Controllers
             return Ok(subscribeEventsDto);
         }
 
+        [HttpPost]
+        public async Task<IActionResult> CreateUser([FromBody] UserDto userDto)
+        {
+            var user = _mapper.Map<User>(userDto);
+
+            await _repositoryManager.UserRepository.CreateUserAsync(user);
+
+            return StatusCode(StatusCodes.Status201Created);
+        }
+
     }
 }

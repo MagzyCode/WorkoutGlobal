@@ -100,5 +100,23 @@ namespace WorkoutGlobal.Api.Controllers
             return Ok(role);
         }
 
+        [HttpPut("{userCredentialId}/raising")]
+        public async Task<IActionResult> UpdateUserToTrainer(string userCredentialId)
+        {
+            var userCredential = await _repositoryManager.UserCredentialRepository.GetUserCredentialsAsync(userCredentialId);
+
+            if (userCredential == null)
+                return BadRequest(new ErrorDetails()
+                {
+                    StatusCode = StatusCodes.Status400BadRequest,
+                    Message = "There is no category with such id.",
+                    Details = new StackTrace().ToString()
+                });
+
+            await _repositoryManager.UserCredentialRepository.UpdateUserToTrainerAsync(userCredentialId);
+
+            return NoContent();
+        }
+
     }
 }
