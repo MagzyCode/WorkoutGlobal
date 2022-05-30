@@ -26,5 +26,7 @@ namespace WorkoutGlobal.Api.Contracts.RepositoryContracts
         public string GetUserCredentialsRole(string userCredentialsId);
 
         public Task UpdateUserToTrainerAsync(string userCredentialsId);
+
+        public Task<IEnumerable<UserCredentials>> GetAllUserCredentialsAsync();
     }
 }

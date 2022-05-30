@@ -27,7 +27,7 @@ namespace WorkoutGlobal.Api.Controllers
 
         [HttpPost]
         [ModelValidationFilter]
-        public async Task<IActionResult> CreateSubscribeEvent([FromBody] SubscribeEventDto subscribeEventDto)
+        public async Task<IActionResult> CreateSubscribeEvent([FromBody] CreationSubscribeEventDto subscribeEventDto)
         {
             var subscribeEvent = _mapper.Map<SubscribeEvent>(subscribeEventDto);
 

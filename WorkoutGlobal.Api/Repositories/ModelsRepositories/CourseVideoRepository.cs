@@ -44,5 +44,12 @@ namespace WorkoutGlobal.Api.Repositories.ModelsRepositories
 
             return orderedCourseVideos;
         }
+
+        public async Task<Guid> CreateCourseVideoAsync(CourseVideo courseVideo)
+        {
+            await CreateAsync(courseVideo);
+            await SaveChangesAsync();
+            return courseVideo.Id;
+        }
     }
 }

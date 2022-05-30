@@ -10,7 +10,7 @@ namespace WorkoutGlobal.Api.Contracts.RepositoryContracts
 
         public Task<IEnumerable<Video>> GetCourseVideosAsync(Guid courseId);
 
-        public Task CreateCourseAsync(Course course);
+        public Task<Guid> CreateCourseAsync(Course course);
 
         public Task UpdateCourseAsync(Course course);
 

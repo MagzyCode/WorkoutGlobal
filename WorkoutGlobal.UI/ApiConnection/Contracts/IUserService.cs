@@ -18,9 +18,9 @@ namespace WorkoutGlobal.UI.ApiConnection.Contracts
         public Task<IEnumerable<User>> GetAllUsersAsync();
 
         [Get("/api/users/{userId}/userCredential")]
-        public Task<UserCredentials> GetUserCredentialsAsync(Guid userId);
+        public Task<UserCredentialsModel> GetUserCredentialsAsync(Guid userId);
 
-        [Get("/api/users/{username}")]
+        [Get("/api/users/username/{username}")]
         public Task<User> GetUserByUsernameAsync(string username);
 
         [Get("/api/users/{userId}/createdVideos")]
@@ -42,15 +42,18 @@ namespace WorkoutGlobal.UI.ApiConnection.Contracts
         public Task<IEnumerable<Comment>> GetUserCommentsAsync(Guid userId);
 
         [Get("/api/users/{userId}/subscribeCourses")]
-        public Task<IEnumerable<SubscribeCourse>> GetUserSubscribeCoursesAsync(Guid userId);
+        public Task<IEnumerable<Course>> GetUserSubscribeCoursesAsync(Guid userId);
 
         [Get("/api/users/{userId}/savedVideos")]
         public Task<IEnumerable<Video>> GetUserSavedVideosAsync(Guid userId);
 
         [Get("/api/users/{userId}/subscribeEvents")]
-        public Task<IEnumerable<SubscribeEvent>> GetUserSubscribeEventsAsync(Guid userId);
+        public Task<IEnumerable<SportEvent>> GetUserSubscribeEventsAsync(Guid userId);
 
         [Post("/api/users")]
         public Task CreateUserAsync([Body] User user);
+
+        [Get("/api/users/{userId}/subscribe/subscriveCourses")]
+        public Task<IEnumerable<SubscribeCourse>> GetUserSubscribeCoursesByIdAsync(Guid userId);
     }
 }

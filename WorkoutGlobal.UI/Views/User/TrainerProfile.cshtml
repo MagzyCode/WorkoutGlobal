@@ -1,0 +1,45 @@
+﻿@model TrainerProfileViewModel
+
+ <h2>Созданные видео</h2>
+   <div id="videoListPage">
+
+        @foreach(var video in @Model.CreatedVideos)
+        {
+            <div class="videoList-video">
+                <a asp-controller="Video" asp-action="ShowVideo" asp-route-videoId="@video.Id" asp-route-username="@User.Identity.Name">
+                    <iframe src="@video.Link"></iframe>
+                    <br>
+                    @{
+                        var shortTitle = video.Title.Count() > 40
+                            ? video.Title.Substring(0, 40) + "..."
+                            : video.Title;
+                    }
+                    <p>@shortTitle</p>
+                </a>
+            </div>
+        }
+        <br>
+    
+    </div>
+    <br>
+    <br>
+    <br>
+    <br>
+    <h2>Созданные курсы</h2>
+        <div id="coursesListPage">
+        @foreach(var course in @Model.CreatedCourses)
+        {
+            <div class="coursesList-course">
+                <a asp-controller="Course" asp-action="ShowCourseTitle" asp-route-courseId="@course.Id">
+                    <img class="coursesList-courseLogo" src="/images/courseLogo.jpg"/>
+                    <br>
+                    @{
+                        var shortTitle = course.CourseName.Count() > 40
+                            ? course.CourseName.Substring(0, 40) + "..."
+                            : course.CourseName;
+                    }
+                    <p>@shortTitle</p>
+                </a>
+            </div>
+        }
+    </div>

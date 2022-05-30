@@ -1,54 +1,47 @@
 ﻿@using WorkoutGlobal.UI.ViewModels
-@model IEnumerable<VideoWithCommentsViewModel>;
+@model IEnumerable<VideoWithCommentsAndSubscriptionViewModel>;
 
-<h1>Videos</h1>
-<table id="videoTableId" class="table table-border">
-    @if (User.Identity.IsAuthenticated)
-    {
-        <thead class="border-transparent">
-            <tr class="border-transparent">
-                <td>
-                    <p>
-                        Add new video
-                    </p>
-                    <form method="get">
-                        <button asp-controller="Video" asp-action="AddVideo" type="submit" class="btn btn-primary mb-2">Add</button>
-                    </form>
-                    
-                </td>
-            </tr>
-        </thead>
-    }
-    <tbody>
+<div >
+    <h1>Видео</h1>
+    <div>
         @{
-            for (int i = 0; i < Model.Count() / 3 + 1; i++)
+            if (User.Identity.IsAuthenticated)
             {
-                var videos = Model.Skip(i * 3).Take(3).ToList();
-                <tr>
-                    @foreach (var video in videos)
-                    {
-                        <td>
-                            <div class="video-list-background">
-                                <a class="a-non-style" asp-controller="Video" asp-action="ShowVideo" asp-route-videoId="@video.Id">
-                                    <iframe src="@video.Link" ></iframe>
-                                    <br/>
-                                    @{
-                                        var shortTitle = video.Title.Count() > 40
-                                            ? video.Title.Substring(0, 40) + "..."
-                                            : video.Title;
-                                    }
-                                    <p class="p-youtube-font-family-lg">@shortTitle</p>
-                                </a>
+                var username = User.Identity.Name;
+                var user = await ServiceManager.UserService.GetUserByUsernameAsync(username);
+                var userCredential = await ServiceManager.UserService.GetUserCredentialsAsync(user.Id);
+                var role = await ServiceManager.UserCredentialsServive.GetUserCredentialRoleAsync(userCredential.Id);
 
-                            </div>
-                        </td>
-                    }
-                </tr>
-                
+                if (role == "Trainer")
+                {
+                    <form method="get">
+                        <button  asp-controller="Video" asp-action="AddVideo" type="submit" class="videoList-button-addVideo">Создать</button>
+                    </form>
+                <br>
+                }
             }
-          }
-    </tbody>
-</table>
+        }
+        
+    </div>
+    <div id="videoListPage">
+        @foreach(var video in @Model)
+        {
+            <div class="videoList-video">
+                <a asp-controller="Video" asp-action="ShowVideo" asp-route-videoId="@video.Id" asp-route-username="@User.Identity.Name">
+                    <iframe src="@video.Link"></iframe>
+                    <br>
+                    @{
+                        var shortTitle = video.Title.Count() > 40
+                            ? video.Title.Substring(0, 40) + "..."
+                            : video.Title;
+                    }
+                    <p>@shortTitle</p>
+                </a>
+            </div>
+        }
+    </div>
+</div>
+
 
 @section scripts{
     <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>

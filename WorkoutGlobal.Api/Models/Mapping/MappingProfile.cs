@@ -3,6 +3,7 @@ using WorkoutGlobal.Api.Models.DTOs.CategoryDTOs;
 using WorkoutGlobal.Api.Models.DTOs.CommentDTOs;
 using WorkoutGlobal.Api.Models.DTOs.CommentsBlockDTOs;
 using WorkoutGlobal.Api.Models.DTOs.CourseDTOs;
+using WorkoutGlobal.Api.Models.DTOs.CourseVideoDTOs;
 using WorkoutGlobal.Api.Models.DTOs.OrderDTOs;
 using WorkoutGlobal.Api.Models.DTOs.PostDTOs;
 using WorkoutGlobal.Api.Models.DTOs.SportEventDTOs;
@@ -37,24 +38,35 @@ namespace WorkoutGlobal.Api.Models.Mapping
             CreateMap<Video, CreationVideoDto>().ReverseMap();
 
             CreateMap<Comment, CommentDto>().ReverseMap();
+            CreateMap<Comment, CreationCommentDto>().ReverseMap();
 
             CreateMap<CommentsBlockDto, CommentsBlock>().ReverseMap();
+            CreateMap<CreationCommentsBlockDto, CommentsBlock>().ReverseMap();
 
             CreateMap<Course, CourseDto>().ReverseMap();
+            CreateMap<Course, CreationCourseDto>().ReverseMap();
 
             CreateMap<Category, CategoryDto>().ReverseMap();
+            CreateMap<Category, CreationCategoryDto>().ReverseMap();
 
             CreateMap<SportEvent, SportEventDto>().ReverseMap();
+            CreateMap<SportEvent, CreationSportEventDto>().ReverseMap();
+
+            CreateMap<CourseVideo, CreationCourseVideoDto>().ReverseMap();
+            CreateMap<CourseVideo, CourseVideoDto>().ReverseMap();
 
             CreateMap<Order, OrderDto>().ReverseMap();
 
             CreateMap<Post, PostDto>().ReverseMap();
 
             CreateMap<StoreVideo, StoreVideoDto>().ReverseMap();
+            CreateMap<StoreVideo, CreationStoreVideoDto>().ReverseMap();
 
             CreateMap<SubscribeCourse, SubscribeCourseDto>().ReverseMap();
+            CreateMap<SubscribeCourse, CreationSubscribeCourseDto>().ReverseMap();
 
             CreateMap<SubscribeEvent, SubscribeEventDto>().ReverseMap();
+            CreateMap<SubscribeEvent, CreationSubscribeEventDto>().ReverseMap();
         }
     }
 }

@@ -1,0 +1,24 @@
+﻿@model AdminProfileViewModel
+
+<div>
+    <h2>Проверить тренирские звания</h2>
+    <div>
+        @foreach(var waitingTrainer in Model.WaitingTrainers)
+        {
+            <div class="showVideo-div-comment">
+                <p class="showVideo-p-comment-commentator">
+                    @{
+                        var user = await ServiceManager.UserService.GetUserAsync(waitingTrainer.Id);
+                        var userCredentials = await ServiceManager.UserService.GetUserCredentialsAsync(user.Id);
+                        var userFullName = $"{user.FirstName} {user.LastName} {user.Patronymic} ({userCredentials.UserName})";
+                    }
+                    <p>@userFullName</p> <b>@waitingTrainer.ClassificationNumber</b>
+                </p>
+                <form method="post" asp-controller="User" asp-action="AdminProfile" asp-route-userId="@waitingTrainer.Id">
+                    <button class="addTrainer-button" type="submit">Повысить</button>
+                </form>
+            </div>
+            <br>
+        }
+    </div>
+</div>

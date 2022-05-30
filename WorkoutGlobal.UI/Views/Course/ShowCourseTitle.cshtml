@@ -1,19 +1,18 @@
 ﻿@model CourseViewModel
 
-<h1>
-    @Model.CourseName
-</h1>
-@{
-    if (Model.CourseImage?.Length == 0)
-    {
-        <img class="course-img" src="/images/no-photo.jpg"/>
-    }
-    else
-    {
-        <img class="course-img" src="@string.Format("data:image/png;base64,{0}", Convert.ToBase64String(Model.CourseImage))" height="500px" width="750px"/>
-    }
-}
-<p class="p-course-font-family-lg">
-    @Model.Description
-</p>
-<input type="submit" class="btn btn-primary mb-2" value="Start course"/>
+<div id="showCourseTitlePage">
+    <h1 class="showCourseTitle-h1">
+        @Model.CourseName
+    </h1>
+    <p class="showCourseTitle-p">
+        @Model.Description
+    </p>
+    <form method="get" asp-controller="Course" asp-action="ShowCourse">
+        <input type="hidden" asp-for="Id" value="@Model.Id"/>
+        <input type="hidden" asp-for="CourseName" value="@Model.CourseName"/>
+        <input type="hidden" asp-for="Description" value="@Model.Description"/>
+        <input type="hidden" asp-for="CreatorId" value="@Model.CreatorId"/>
+        <input type="hidden" asp-for="CategoryId" value="@Model.CategoryId"/>
+        <button class="showCourseTitle-button" type="submit">Начать курс</button>
+    </form>
+</div>

@@ -1,63 +1,48 @@
 ﻿@using WorkoutGlobal.UI.ViewModels
 @model IEnumerable<CourseViewModel>;
 
-<h1>Courses</h1>
-<table id="courseTableId" class="table table-border">
-    @if (User.Identity.IsAuthenticated)
-    {
-        <thead class="border-transparent">
-            <tr class="border-transparent">
-                <td>
-                    <p>
-                        Add new course
-                    </p>
-                    <form method="get">
-                        <button asp-controller="Course" asp-action="AddCourse" type="submit" class="btn btn-primary mb-2">Add</button>
-                    </form>
-                </td>
-            </tr>
-        </thead>
-    }
-    
-    <tbody>
+<div>
+    <h1 class="coursesList-h1">Курсы</h1>
+    <div>
         @{
-            for (int i = 0; i < Model.Count() / 3 + 1; i++)
+            if (User.Identity.IsAuthenticated)
             {
-                var courses = Model.Skip(i * 3).Take(3).ToList();
-                <tr>
-                    @foreach (var course in courses)
-                    {
-                        <td>
-                            <div class="course-list-background">
-                                    @{
-                                        if (course.CourseImage?.Length == 0)
-                                        {
-                                            <img class="course-img" src="/images/no-photo.jpg"/>
-                                        }
-                                        else
-                                        {
-                                            <img class="course-img" src="@string.Format("data:image/png;base64,{0}", Convert.ToBase64String(course.CourseImage))"/>
-                                        }
-                                    }
-                                    <br/>
-                                    @{
-                                        var shortTitle = course.CourseName.Count() > 20
-                                            ? course.CourseName.Substring(0, 20) + "..."
-                                            : course.CourseName;
-                                    }
-                                <a class="a-non-style" asp-controller="Course" asp-action="ShowCourseTitle" asp-route-courseId="@course.Id">
-                                    <p class="p-course-font-family-lg">@shortTitle</p>
-                                </a>
+                var username = User.Identity.Name;
+                var user = await ServiceManager.UserService.GetUserByUsernameAsync(username);
+                var userCredential = await ServiceManager.UserService.GetUserCredentialsAsync(user.Id);
+                var role = await ServiceManager.UserCredentialsServive.GetUserCredentialRoleAsync(userCredential.Id);
 
-                            </div>
-                        </td>
-                    }
-                </tr>
-                
+                if (role == "Trainer")
+                {
+                    <form method="get">
+                        <button asp-controller="Course" asp-action="AddCourse" asp-route-username="@User.Identity.Name" type="submit" class="coursesList-button-addVideo">Добавить</button>
+                    </form>
+                }
             }
-          }
-    </tbody>
-</table>
+        }
+        
+    </div>
+    <br>
+
+    <div id="coursesListPage">
+        @foreach(var course in @Model)
+        {
+            <div class="coursesList-course">
+                <a asp-controller="Course" asp-action="ShowCourseTitle" asp-route-courseId="@course.Id">
+                    <img class="coursesList-courseLogo" src="/images/courseLogo.jpg"/>
+                    <br>
+                    @{
+                        var shortTitle = course.CourseName.Count() > 40
+                            ? course.CourseName.Substring(0, 40) + "..."
+                            : course.CourseName;
+                    }
+                    <p>@shortTitle</p>
+                </a>
+            </div>
+        }
+    </div>
+
+</div>
 
 @section scripts{
     <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>

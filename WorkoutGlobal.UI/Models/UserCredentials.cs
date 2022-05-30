@@ -5,6 +5,8 @@
     /// </summary>
     public class UserCredentials
     {
+        public string Id { get; set; }
+
         /// <summary>
         /// User name for registration.
         /// </summary>

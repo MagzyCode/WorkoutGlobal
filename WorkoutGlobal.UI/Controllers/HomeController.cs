@@ -52,7 +52,7 @@ namespace WorkoutGlobal.UI.Controllers
 
             await Authenticate(authenticationUser);
 
-            return RedirectToAction("Index", "MainMenu");
+            return RedirectToAction("VideosList", "Video");
         }
 
         /// <summary>

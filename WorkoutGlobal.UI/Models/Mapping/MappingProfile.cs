@@ -21,7 +21,7 @@ namespace WorkoutGlobal.UI.Models.Mapping
 
             CreateMap<RegistrationUser, UserRegistrationViewModel>().ReverseMap();
 
-            CreateMap<Video, VideoWithCommentsViewModel>().ReverseMap();
+            CreateMap<Video, VideoWithCommentsAndSubscriptionViewModel>().ReverseMap();
             CreateMap<Video, CreationVideoViewModel>().ReverseMap();
             CreateMap<Video, VideoViewModel>().ReverseMap();
 
@@ -31,6 +31,7 @@ namespace WorkoutGlobal.UI.Models.Mapping
             CreateMap<CommentsBlock, CommentsBlockViewModel>().ReverseMap();
 
             CreateMap<Course, CourseViewModel>().ReverseMap();
+            CreateMap<Course, CreationCourseViewModel>().ReverseMap();
 
             CreateMap<Category, CategoryViewModel>().ReverseMap();
             

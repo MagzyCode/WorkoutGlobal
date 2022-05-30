@@ -36,7 +36,7 @@ namespace WorkoutGlobal.UI.ApiConnection.Services
         public async Task<IEnumerable<Comment>> GetUserCommentsAsync(Guid userId)
             => await Service.GetUserCommentsAsync(userId);
 
-        public async Task<UserCredentials> GetUserCredentialsAsync(Guid userId)
+        public async Task<UserCredentialsModel> GetUserCredentialsAsync(Guid userId)
             => await Service.GetUserCredentialsAsync(userId);
 
         public async Task<IEnumerable<Order>> GetUserOrdersAsync(Guid userId)
@@ -48,10 +48,13 @@ namespace WorkoutGlobal.UI.ApiConnection.Services
         public async Task<IEnumerable<Video>> GetUserSavedVideosAsync(Guid userId)
             => await Service.GetUserSavedVideosAsync(userId);
 
-        public async Task<IEnumerable<SubscribeCourse>> GetUserSubscribeCoursesAsync(Guid userId)
+        public async Task<IEnumerable<Course>> GetUserSubscribeCoursesAsync(Guid userId)
             => await Service.GetUserSubscribeCoursesAsync(userId);
 
-        public async Task<IEnumerable<SubscribeEvent>> GetUserSubscribeEventsAsync(Guid userId)
+        public async Task<IEnumerable<SubscribeCourse>> GetUserSubscribeCoursesByIdAsync(Guid userId)
+            => await Service.GetUserSubscribeCoursesByIdAsync(userId);
+
+        public async Task<IEnumerable<SportEvent>> GetUserSubscribeEventsAsync(Guid userId)
             => await Service.GetUserSubscribeEventsAsync(userId);
 
         public async Task UpdateUserAsync(Guid userId, User user)

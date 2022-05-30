@@ -40,6 +40,9 @@ namespace WorkoutGlobal.UI.Extensions
             services.AddScoped<ISubscribeEventService, SubscribeEventService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IUserCredentialsServive, UserCredentialsServive>();
+            services.AddScoped<ICourseVideoService, CourseVideoService>();
+
+            services.AddScoped<IServiceManager, ServiceManager>();
 
             services.AddScoped<AuthenticationHttpClientHandler>();
         }

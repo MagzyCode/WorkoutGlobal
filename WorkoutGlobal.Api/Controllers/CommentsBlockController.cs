@@ -65,7 +65,7 @@ namespace WorkoutGlobal.Api.Controllers
 
         [HttpPost]
         [ModelValidationFilter]
-        public async Task<IActionResult> CreateCommentsBlock([FromBody] CommentsBlockDto commentsBlockDto)
+        public async Task<IActionResult> CreateCommentsBlock([FromBody] CreationCommentsBlockDto commentsBlockDto)
         {
             var creationCommentsBlock = _mapper.Map<CommentsBlock>(commentsBlockDto);
 

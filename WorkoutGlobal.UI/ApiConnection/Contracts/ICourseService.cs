@@ -15,7 +15,7 @@ namespace WorkoutGlobal.UI.ApiConnection.Contracts
         public Task<IEnumerable<Video>> GetCourseVideosAsync(Guid courseId);
 
         [Post("/api/courses")]
-        public Task CreateCourseAsync(Course course);
+        public Task<Guid> CreateCourseAsync(Course course);
 
         [Put("/api/courses/{courseId}")]
         public Task UpdateCourseAsync(Guid courseId, [Body] Course course);

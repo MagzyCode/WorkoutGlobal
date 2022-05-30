@@ -17,7 +17,7 @@ namespace WorkoutGlobal.UI.ApiConnection.Contracts
         [Get("/api/userCredentials/{userCredentialId}/role")]
         public Task<string> GetUserCredentialRoleAsync(string userCredentialId);
 
-        [Put("/api/userCredentials{userCredentialId}/raising")]
+        [Put("/api/userCredentials/{userCredentialId}/raising")]
         public Task UpdateUserToTrainerAsync(string userCredentialId);
     }
 }

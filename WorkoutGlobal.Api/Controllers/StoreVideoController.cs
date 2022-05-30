@@ -27,8 +27,20 @@ namespace WorkoutGlobal.Api.Controllers
 
         [HttpPost]
         [ModelValidationFilter]
-        public async Task<IActionResult> CreateStoreVideo([FromBody] StoreVideoDto storeVideoDto)
+        public async Task<IActionResult> CreateStoreVideo([FromBody] CreationStoreVideoDto storeVideoDto)
         {
+            var storeVideos = await _repositoryManager.StoreVideoRepository.GetAllStoreVideosAsync();
+
+            var isExisted = storeVideos.Any(x => x.SavedVideoId == storeVideoDto.SavedVideoId && x.UserId == storeVideoDto.UserId);
+
+            if (isExisted)
+                return BadRequest(new ErrorDetails()
+                {
+                    StatusCode = StatusCodes.Status400BadRequest,
+                    Message = "There is exist store video with data.",
+                    Details = new StackTrace().ToString()
+                });
+
             var storeVideo = _mapper.Map<StoreVideo>(storeVideoDto);
 
             await _repositoryManager.StoreVideoRepository.CreateStoreVideoAsync(storeVideo);

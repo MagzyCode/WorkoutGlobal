@@ -35,5 +35,7 @@ namespace WorkoutGlobal.Api.Contracts.RepositoryContracts
         public Task<IEnumerable<Video>> GetUserSavedVideosAsync(Guid userId);
 
         public Task<IEnumerable<SportEvent>> GetUserSubscribeEventsAsync(Guid userId);
+
+        public Task<IEnumerable<SubscribeCourse>> GetUserSubscribeCoursesByIdAsync(Guid userId);
     }
 }

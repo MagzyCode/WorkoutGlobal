@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
@@ -29,7 +30,7 @@ namespace WorkoutGlobal.Api.Controllers
 
         [HttpPost]
         [ModelValidationFilter]
-        public async Task<IActionResult> CreateCategory([FromBody] CategoryDto categoryDto)
+        public async Task<IActionResult> CreateCategory([FromBody] CreationCategoryDto categoryDto)
         {
             var category = _mapper.Map<Category>(categoryDto);
 
@@ -145,6 +146,24 @@ namespace WorkoutGlobal.Api.Controllers
             var categoryCoursesDto = _mapper.Map<IEnumerable<CourseDto>>(categoryCourses);
 
             return Ok(categoryCoursesDto);
+        }
+
+        [HttpGet("name/{categoryName}")]
+        public async Task<IActionResult> GetCategoryByName(string categoryName)
+        {
+            var category = await _repositoryManager.CategoryRepository.GetCategoryByNameAsync(categoryName);
+            
+            if (category == null)
+                return BadRequest(new ErrorDetails()
+                {
+                    StatusCode = StatusCodes.Status400BadRequest,
+                    Message = "There is no category with name.",
+                    Details = new StackTrace().ToString()
+                });
+
+            var categoryDto = _mapper.Map<CategoryDto>(category);
+
+            return Ok(categoryDto);
         }
 
     }

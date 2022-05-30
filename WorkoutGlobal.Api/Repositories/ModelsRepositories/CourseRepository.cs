@@ -25,10 +25,11 @@ namespace WorkoutGlobal.Api.Repositories.ModelsRepositories
             //_subscribeCourseRepository = subscribeCourseRepository;
         }
 
-        public async Task CreateCourseAsync(Course course)
+        public async Task<Guid> CreateCourseAsync(Course course)
         {
             await CreateAsync(course);
             await SaveChangesAsync();
+            return course.Id;
         }
 
         public async Task DeleteCourseAsync(Course course)

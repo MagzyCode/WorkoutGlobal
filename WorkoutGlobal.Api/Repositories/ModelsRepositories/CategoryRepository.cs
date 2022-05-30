@@ -46,6 +46,13 @@ namespace WorkoutGlobal.Api.Repositories.ModelsRepositories
             return model;
         }
 
+        public async Task<Category> GetCategoryByNameAsync(string name)
+        {
+            var model = await GetAll().Where(x => x.CategoryName == name).FirstOrDefaultAsync();
+
+            return model;
+        }
+
         public async Task<IEnumerable<Course>> GetCategoryCoursesAsync(Guid categoryId)
         {
             var courses = await Context.Courses

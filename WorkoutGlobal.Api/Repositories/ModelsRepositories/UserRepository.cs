@@ -8,37 +8,11 @@ namespace WorkoutGlobal.Api.Repositories.ModelsRepositories
 {
     public class UserRepository : BaseRepository<User>, IUserRepository
     {
-        //private readonly IUserCredentialsRepository _userCredentialsRepository;
-        //private readonly ICourseRepository _courseRepository;
-        //private readonly IVideoRepository _videoRepository;
-        //private readonly ICommentRepository _commentRepository;
-        //private readonly ISportEventRepository _sportEventRepository;
-        //private readonly IStoreVideoRepository _storeVideoRepository;
-        //private readonly ISubscribeCourseRepository _subscribeCourseRepository;
-        //private readonly ISubscribeEventRepository _subscribeEventRepository;
-
         public UserRepository
             (WorkoutGlobalContext workoutGlobalContext, 
             IConfiguration configurationManager)
-            //IUserCredentialsRepository userCredentialsRepository,
-            //ICourseRepository courseRepository,
-            //IVideoRepository videoRepository,
-            //ICommentRepository commentRepository,
-            //ISportEventRepository sportEventRepository,
-            //IStoreVideoRepository storeVideoRepository,
-            //ISubscribeCourseRepository subscribeCourseRepository,
-            //ISubscribeEventRepository subscribeEventRepository) 
             : base(workoutGlobalContext, configurationManager)
-        {
-            //_userCredentialsRepository = userCredentialsRepository;
-            //_courseRepository = courseRepository;
-            //_videoRepository = videoRepository;
-            //_commentRepository = commentRepository;
-            //_sportEventRepository = sportEventRepository;
-            //_storeVideoRepository = storeVideoRepository;
-            //_subscribeCourseRepository = subscribeCourseRepository;
-            //_subscribeEventRepository = subscribeEventRepository;
-        }
+        { }
 
         public async Task CreateUserAsync(User user)
         {
@@ -64,7 +38,6 @@ namespace WorkoutGlobal.Api.Repositories.ModelsRepositories
             var courses = await Context.Courses
                 .Where(model => model.CreatorId == trainerId)
                 .ToListAsync();
-                //await _courseRepository.GetCreatorCoursesAsync(trainerId);
 
             return courses;
         }
@@ -74,7 +47,6 @@ namespace WorkoutGlobal.Api.Repositories.ModelsRepositories
             var events = await Context.SportEvents
                 .Where(model => model.TrainerId == trainerId)
                 .ToListAsync();
-                // await _sportEventRepository.GetCreatorEventsAsync(trainerId);
 
             return events;
         }
@@ -84,7 +56,7 @@ namespace WorkoutGlobal.Api.Repositories.ModelsRepositories
             var videos = await Context.Videos
                 .Where(model => model.UserId == trainerId)
                 .ToListAsync();
-                // await _videoRepository.GetCreatorVideosAsync(trainerId);
+
 
             return videos;
         }
@@ -101,7 +73,6 @@ namespace WorkoutGlobal.Api.Repositories.ModelsRepositories
             var userCredentials = await Context.Users
                 .Where(model => model.UserName == username)
                 .FirstOrDefaultAsync();
-                // _userCredentialsRepository.GetUserCredentialsByUserName(username);
 
             var user = await GetAll()
                 .Where(user => user.UserCredentialsId == userCredentials.Id)
@@ -115,7 +86,6 @@ namespace WorkoutGlobal.Api.Repositories.ModelsRepositories
             var comments = await Context.Comments
                 .Where(model => model.CommentatorId == userId)
                 .ToListAsync();
-                //await _commentRepository.GetCreatorCommentsAsync(userId);
 
             return comments;
         }
@@ -126,8 +96,6 @@ namespace WorkoutGlobal.Api.Repositories.ModelsRepositories
             var userCredentials = await Context.Users
                 .Where(model => model.Id == user.UserCredentialsId)
                 .FirstOrDefaultAsync();
-                
-                // await _userCredentialsRepository.GetUserCredentialsAsync(user.UserCredentialsId);
 
             return userCredentials;
         }
@@ -152,8 +120,6 @@ namespace WorkoutGlobal.Api.Repositories.ModelsRepositories
 
         public async Task<IEnumerable<Video>> GetUserSavedVideosAsync(Guid userId)
         {
-            // var videos = await _storeVideoRepository.GetUserVideosAsync(userId);
-
             var videosIds = await Context.StoreVideos
                 .Where(model => model.UserId == userId)
                 .Select(model => model.SavedVideoId)
@@ -172,8 +138,6 @@ namespace WorkoutGlobal.Api.Repositories.ModelsRepositories
 
         public async Task<IEnumerable<Course>> GetUserSubscribeCoursesAsync(Guid userId)
         {
-            // var courses = await _subscribeCourseRepository.GetUserSubscribeCoursesAsync(userId);
-
             var coursesIds = await Context.SubscribeCourses
                 .Where(model => model.SubscriberId == userId)
                 .Select(model => model.SubscribeCourseId)
@@ -190,9 +154,17 @@ namespace WorkoutGlobal.Api.Repositories.ModelsRepositories
             return courses;
         }
 
+        public async Task<IEnumerable<SubscribeCourse>> GetUserSubscribeCoursesByIdAsync(Guid userId)
+        {
+            var models = await Context.SubscribeCourses
+                .Where(x => x.SubscriberId == userId)
+                .ToListAsync();
+
+            return models;
+        }
+
         public async Task<IEnumerable<SportEvent>> GetUserSubscribeEventsAsync(Guid userId)
         {
-            // var events = await _subscribeEventRepository.GetUserSubscribeEventsAsync(userId);
             var sportEventsIds = await Context.SubscribeCourses
                 .Where(model => model.SubscriberId == userId)
                 .Select(model => model.SubscribeCourseId)

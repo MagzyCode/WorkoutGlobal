@@ -11,5 +11,9 @@
         public bool IsPublic { get; set; }
 
         public Guid UserId { get; set; }
+
+        public string CategoryName { get; set; }
+
+        public List<string> Categories { get; set; }
     }
 }

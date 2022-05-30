@@ -15,10 +15,11 @@ namespace WorkoutGlobal.UI.ApiConnection.Services
         public async Task DeleteSubscribeCourseAsync(Guid subscribeCourseId)
             => await Service.DeleteSubscribeCourseAsync(subscribeCourseId);
 
-        public async Task<SubscribeCourse> GetAllSubscribeCoursesAsync()
+        public async Task<IEnumerable<SubscribeCourse>> GetAllSubscribeCoursesAsync()
             => await Service.GetAllSubscribeCoursesAsync();
 
-        public async Task<IEnumerable<SubscribeCourse>> GetSubscribeCourseAsync(Guid subscribeCourseId)
+        
+        public async Task<SubscribeCourse> GetSubscribeCourseAsync(Guid subscribeCourseId)
             => await Service.GetSubscribeCourseAsync(subscribeCourseId);
 
         public async Task UpdateSubscribeCourseAsync(Guid subscribeCourseId, SubscribeCourse subscribeCourse)

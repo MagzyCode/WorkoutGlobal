@@ -9,7 +9,7 @@ namespace WorkoutGlobal.UI.ApiConnection.Services
         public CourseService(IConfiguration configuration) : base(configuration)
         { }
 
-        public async Task CreateCourseAsync(Course course)
+        public async Task<Guid> CreateCourseAsync(Course course)
             => await Service.CreateCourseAsync(course);
 
         public async Task DeleteCourseAsync(Guid courseId, Course course)

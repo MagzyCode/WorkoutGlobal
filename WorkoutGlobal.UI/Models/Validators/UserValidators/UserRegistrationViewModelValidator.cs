@@ -71,10 +71,14 @@ namespace WorkoutGlobal.UI.Models.Validators.UserValidators
                     .InclusiveBetween(10, 300);
             });
 
-            RuleFor(user => user.ClassificationNumber)
-                .NotEmpty()
-                .Length(10, 25)
-                .Matches(@"^([A-Za-z0-9])([[A-Za-z0-9]){10,25}$");
+            When(user => user.ClassificationNumber != null, () =>
+            {
+                RuleFor(user => user.ClassificationNumber)
+                    .NotEmpty()
+                    .Length(10, 25)
+                    .Matches(@"^([A-Za-z0-9])([[A-Za-z0-9]){10,25}$");
+            });
+            
         }
     }
 }

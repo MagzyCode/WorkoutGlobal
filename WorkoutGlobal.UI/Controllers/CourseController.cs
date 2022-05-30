@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using WorkoutGlobal.UI.ApiConnection.Contracts;
 using WorkoutGlobal.UI.Models;
+using WorkoutGlobal.UI.Models.Enums;
 using WorkoutGlobal.UI.ViewModels;
 
 namespace WorkoutGlobal.UI.Controllers
@@ -10,13 +11,16 @@ namespace WorkoutGlobal.UI.Controllers
     {
         private readonly ICourseService _courseService;
         private readonly IMapper _mapper;
+        private readonly IServiceManager _serviceManager;
 
         public CourseController(
             ICourseService courseService,
-            IMapper mapper)
+            IMapper mapper,
+            IServiceManager serviceManager)
         {
             _courseService = courseService;
             _mapper = mapper;
+            _serviceManager = serviceManager;
         }
 
         public IActionResult Index()
@@ -42,27 +46,79 @@ namespace WorkoutGlobal.UI.Controllers
             return View(courseViewModel);
         }
 
-        public IActionResult AddCourse()
+        public async Task<IActionResult> AddCourse(string username)
         {
-            return View(new CourseViewModel());
+            username = User.Identity.Name;
+            var categoties = await _serviceManager.CategoryService.GetAllCategoriesAsync();
+            var categotiesNames = categoties.Select(x => x.CategoryName).ToList();
+
+            var user = await _serviceManager.UserService.GetUserByUsernameAsync(username);
+
+            var videos = await _serviceManager.UserService.GetTrainerCreatedVideosAsync(user.Id);
+
+            var possibleCourseVideos = new List<(Guid videoId, string videoTitle)>();
+            foreach (var video in videos)
+                possibleCourseVideos.Add((video.Id, video.Title));
+
+            return View(new CreationCourseViewModel()
+            {
+                Categories = categotiesNames,
+                CourseVideos = possibleCourseVideos
+            });
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddCourse(CourseViewModel courseViewModel)
+        public async Task<IActionResult> AddCourse(string username, CreationCourseViewModel creationCourseViewModel)
         {
-            courseViewModel.CreatorId = Guid.Parse("4e14c6d2-cae1-43ba-bd32-0f2dc2225f5a");
-            
-            if (courseViewModel.CourseImageForm != null)
+            var user = await _serviceManager.UserService.GetUserByUsernameAsync(username);
+            creationCourseViewModel.CreatorId = user.Id;
+
+            var category = await _serviceManager.CategoryService.GetCategoryByNameAsync(creationCourseViewModel.CategoryName);
+
+            var course = _mapper.Map<Course>(creationCourseViewModel);
+            course.CategoryId = category.Id;
+
+            var id = await _serviceManager.CourseService.CreateCourseAsync(course);
+
+            for (int i = 0; i < creationCourseViewModel.SelectedVideos.Count; i++)
             {
-                using var binaryReader = new BinaryReader(courseViewModel.CourseImageForm?.OpenReadStream());
-                courseViewModel.CourseImage = binaryReader.ReadBytes((int)courseViewModel.CourseImageForm?.Length);
+                _ = Guid.TryParse(creationCourseViewModel.SelectedVideos[i], out Guid guid);
+                if (guid != Guid.Empty)
+                {
+                    await _serviceManager.CourseVideoService.CreateCourseVideoAsync(
+                        new CourseVideo()
+                        {
+                            VideoId = guid,
+                            CourseId = id,
+                            SequenceNumber = i
+                        });
+                }
             }
-           
-            var course = _mapper.Map<Course>(courseViewModel);
-
-            await _courseService.CreateCourseAsync(course);
-
+            
             return RedirectToAction("CoursesList", "Course");
+        }
+
+        public async Task<IActionResult> ShowCourse(CourseViewModel courseViewModel)
+        {
+            var user = await _serviceManager.UserService.GetUserByUsernameAsync(User.Identity.Name);
+
+            var userSubscribeCourses = await _serviceManager.UserService.GetUserSubscribeCoursesByIdAsync(user.Id);
+
+            var isCourseInSubscription = userSubscribeCourses.Any(x => x.SubscribeCourseId == courseViewModel.Id);
+
+            if (!isCourseInSubscription)
+                await _serviceManager.SubscribeCourseService.CreateSubscribeCourseAsync(new SubscribeCourse()
+                {
+                    SubscriberId = user.Id,
+                    SubscribeCourseId = courseViewModel.Id,
+                    CourseCompletionRate = (int)CourseCompletionRate.InProgress
+                });
+
+            var courseVideos = await _serviceManager.CourseService.GetCourseVideosAsync(courseViewModel.Id);
+
+            var coursesVideosViewModel = _mapper.Map<IEnumerable<VideoViewModel>>(courseVideos);
+
+            return View(coursesVideosViewModel.ToList());
         }
     }
 }

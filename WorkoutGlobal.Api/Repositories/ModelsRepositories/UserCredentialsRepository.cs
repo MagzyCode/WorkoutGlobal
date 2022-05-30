@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using System.Security.Cryptography;
 using System.Text;
 using WorkoutGlobal.Api.Context;
@@ -28,6 +29,13 @@ namespace WorkoutGlobal.Api.Repositories.ModelsRepositories
         {
             // TODO: Проверить, работает ли без метода SaveChanges
             await _userManager.DeleteAsync(userCredentials);
+        }
+
+        public async Task<IEnumerable<UserCredentials>> GetAllUserCredentialsAsync()
+        {
+            var users = await _userManager.Users.ToListAsync();
+
+            return users;
         }
 
         /// <summary>
@@ -91,6 +99,12 @@ namespace WorkoutGlobal.Api.Repositories.ModelsRepositories
             await _userManager.RemoveFromRoleAsync(userCredentials, "User");
 
             await _userManager.AddToRoleAsync(userCredentials, "Trainer");
+
+            var userAccount = Context.UserAccounts.Where(x => x.UserCredentialsId == userCredentialsId).FirstOrDefault();
+            userAccount.IsStatusVerify = true;
+
+            Context.UserAccounts.Update(userAccount);
+            await Context.SaveChangesAsync();
         }
     }
 }

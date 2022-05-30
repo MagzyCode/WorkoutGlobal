@@ -1,6 +1,6 @@
 ﻿namespace WorkoutGlobal.UI.ViewModels
 {
-    public class VideoWithCommentsViewModel
+    public class VideoWithCommentsAndSubscriptionViewModel
     {
         /// <summary>
         /// Video unique identifier.
@@ -28,5 +28,9 @@
 
         public List<CommentViewModel> Comments { get; set; }
         public string AdditionComment { get; set; }
+
+        public Guid SubscriberId { get; set; }
+
+        public bool IsSubscribe { get; set; }
     }
 }

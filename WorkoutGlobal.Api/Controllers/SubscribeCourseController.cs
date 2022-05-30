@@ -27,7 +27,7 @@ namespace WorkoutGlobal.Api.Controllers
 
         [HttpPost]
         [ModelValidationFilter]
-        public async Task<IActionResult> CreateSubscribeCourse([FromBody] SubscribeCourseDto subscribeCourseDto)
+        public async Task<IActionResult> CreateSubscribeCourse([FromBody] CreationSubscribeCourseDto subscribeCourseDto)
         {
             var subscribeCourse = _mapper.Map<SubscribeCourse>(subscribeCourseDto);
 

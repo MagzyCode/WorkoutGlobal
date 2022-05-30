@@ -7,7 +7,7 @@ namespace WorkoutGlobal.UI.Models
         public Guid Id { get; set; }
         public Guid SubscriberId { get; set; }
         public Guid SubscribeCourseId { get; set; }
-        public CourseCompletionRate CourseCompletionRate { get; set; }
+        public int CourseCompletionRate { get; set; }
         public Guid? LastAvailableVideoId { get; set; }
     }
 }

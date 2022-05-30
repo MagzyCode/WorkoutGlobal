@@ -15,9 +15,9 @@ namespace WorkoutGlobal.UI.ApiConnection.Contracts
         public Task DeleteSubscribeCourseAsync(Guid subscribeCourseId);
 
         [Get("/api/subscribeCourses")]
-        public Task<SubscribeCourse> GetAllSubscribeCoursesAsync();
-
+        public Task<IEnumerable<SubscribeCourse>> GetAllSubscribeCoursesAsync();
+        
         [Get("/api/subscribeCourses/{subscribeCourseId}")]
-        public Task<IEnumerable<SubscribeCourse>> GetSubscribeCourseAsync(Guid subscribeCourseId);
+        public Task<SubscribeCourse> GetSubscribeCourseAsync(Guid subscribeCourseId);
     }
 }

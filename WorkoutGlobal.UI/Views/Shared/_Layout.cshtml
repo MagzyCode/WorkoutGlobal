@@ -4,64 +4,39 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Workout Global</title>
+    <link rel="stylesheet" href="~/css/workout-global-styles.css" asp-append-version="true" />
     @*<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />*@
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/WorkoutGlobal.UI.styles.css" asp-append-version="true" />
-    <style type="text/css">
-        .li-style{
-            list-style-type: none;
-            margin-top: 10px;
-            font-size: 20px;
-        }
-    </style>
+@*    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/WorkoutGlobal.UI.styles.css" asp-append-version="true" />*@
 </head>
-<body id="common-background">
+<body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
-                    <img src="/images/logo.png" alt="" width="42" height="36" class="d-inline-block align-text-top">
-                    Workout Global
-                </a>
-                <div class="navbar-collapse collapse justify-content-between d-sm-inline-block">
-                    <ul class="navbar-nav flex-grow-1">
-                        @if (!User.Identity.IsAuthenticated)
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Login">Login</a>
-                            </li>           
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Registration">Registration</a>
-                            </li>
-                        }
-                        else
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark right-nav" asp-area="" asp-controller="Home" asp-action="LogOut">Log out</a>
-                            </li>
-                        }
+        <nav>
+            <div>
+                <ul class="main-ul">
+                    <li><img class="main-img-logo" src="/images/logo.png" alt="Workout Global"></li>
+                    <li class="main-li-references"><a class="main-li-a main-a-text" asp-controller="Home" asp-action="Index">Workout Global</a></li>
+                    <li class="main-li-references"><a class="main-li-a main-a-text" asp-controller="Video" asp-action="VideosList">Видео</a></li>
+                    <li class="main-li-references"><a class="main-li-a main-a-text" asp-controller="Course" asp-action="CoursesList">Курсы</a></li>
+                    <li class="main-li-references"><a class="main-li-a main-a-text" asp-controller="Category" asp-action="SelectCategory">Категории</a></li>
 
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Video" asp-action="VideosList">Videos</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Course" asp-action="CoursesList">Courses</a>
-                        </li>                       
-                    </ul>
-                    <ul style="margin-right: 10px;">
-                        @if (User.Identity.IsAuthenticated)
-                        {
-                            <li class="li-style">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="Index">@User.Identity.Name</a>
-                            </li>
-                        }
-                    </ul>
-                </div>
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <li class="main-li-authentication"><a class="main-li-a main-a-text" asp-controller="User" asp-action="SelectProfile">@User.Identity.Name</a></li>
+                        <li class="main-li-authentication"><a class="main-li-a main-a-text" asp-area="" asp-controller="Home" asp-action="LogOut">Выйти</a></li>
+                    }
+                    else
+                    {
+                        <li class="main-li-authentication"><a class="main-li-a main-a-text" asp-area="" asp-controller="Home" asp-action="Login">Войти</a></li>           
+                        <li class="main-li-authentication"><a class="main-li-a main-a-text" asp-area="" asp-controller="Home" asp-action="Registration">Зарегистрироваться</a></li>
+                    }
+                </ul>
             </div>
         </nav>
+                
     </header>
-    <div  class="container">
-        <main role="main" class="pb-3">
+    <div>
+        <main role="main">
             @RenderBody()
         </main>
     </div>

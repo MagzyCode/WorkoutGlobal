@@ -21,6 +21,9 @@ namespace WorkoutGlobal.UI.ApiConnection.Services
         public async Task<Category> GetCategoryAsync(Guid categoryId)
             => await Service.GetCategoryAsync(categoryId);
 
+        public async Task<Category> GetCategoryByNameAsync(string categoryName)
+            => await Service.GetCategoryByNameAsync(categoryName);
+
         public async Task<IEnumerable<Course>> GetCategoryCoursesAsync(Guid categoryId)
             => await Service.GetCategoryCoursesAsync(categoryId);
 

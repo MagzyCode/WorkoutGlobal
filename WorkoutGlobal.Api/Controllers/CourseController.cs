@@ -77,18 +77,18 @@ namespace WorkoutGlobal.Api.Controllers
 
         [HttpPost]
         [ModelValidationFilter]
-        public async Task<IActionResult> CreateCourse([FromBody] CourseDto courseDto)
+        public async Task<IActionResult> CreateCourse([FromBody] CreationCourseDto courseDto)
         {
             var course = _mapper.Map<Course>(courseDto);
 
-            await _repositoryManager.CourseRepository.CreateCourseAsync(course);
+            var id = await _repositoryManager.CourseRepository.CreateCourseAsync(course);
 
-            return Created($"api/courses/{course.Id}", course.Id);
+            return Ok(id);
         }
 
         [HttpPut("{courseId}")]
         [ModelValidationFilter]
-        public async Task<IActionResult> UpdateCourse(Guid courseId, [FromBody] CourseDto courseDto)
+        public async Task<IActionResult> UpdateCourse(Guid courseId, [FromBody] CreationCourseDto courseDto)
         {
             var course = await _repositoryManager.CourseRepository.GetCourseAsync(courseId);
 

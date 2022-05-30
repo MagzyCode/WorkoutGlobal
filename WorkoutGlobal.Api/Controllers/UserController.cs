@@ -9,6 +9,7 @@ using WorkoutGlobal.Api.Models.DTOs.CourseDTOs;
 using WorkoutGlobal.Api.Models.DTOs.OrderDTOs;
 using WorkoutGlobal.Api.Models.DTOs.PostDTOs;
 using WorkoutGlobal.Api.Models.DTOs.SportEventDTOs;
+using WorkoutGlobal.Api.Models.DTOs.SubscribeCourseDTOs;
 using WorkoutGlobal.Api.Models.DTOs.UserCredentialDTOs;
 using WorkoutGlobal.Api.Models.DTOs.UserDTOs;
 using WorkoutGlobal.Api.Models.DTOs.VideoDTOs;
@@ -110,7 +111,7 @@ namespace WorkoutGlobal.Api.Controllers
             return Ok(userCredentialDto);
         }
 
-        [HttpGet("{username}")]
+        [HttpGet("username/{username}")]
         public async Task<IActionResult> GetUserByUsername(string username)
         {
             var user = await _repositoryManager.UserRepository.GetUserByUsernameAsync(username);
@@ -141,7 +142,7 @@ namespace WorkoutGlobal.Api.Controllers
                     Details = new StackTrace().ToString()
                 });
 
-            var createdVideos = _repositoryManager.UserRepository.GetTrainerCreatedVideosAsync(userId);
+            var createdVideos = await _repositoryManager.UserRepository.GetTrainerCreatedVideosAsync(userId);
 
             var videosDto = _mapper.Map<IEnumerable<VideoDto>>(createdVideos);
 
@@ -162,7 +163,7 @@ namespace WorkoutGlobal.Api.Controllers
                     Details = new StackTrace().ToString()
                 });
 
-            var createdCourses = _repositoryManager.UserRepository.GetTrainerCreatedCoursesAsync(userId);
+            var createdCourses = await _repositoryManager.UserRepository.GetTrainerCreatedCoursesAsync(userId);
 
             var coursesDto = _mapper.Map<IEnumerable<CourseDto>>(createdCourses);
 
@@ -263,7 +264,7 @@ namespace WorkoutGlobal.Api.Controllers
                 });
 
             var subscribeCourses = await _repositoryManager.UserRepository.GetUserSubscribeCoursesAsync(userId);
-            
+
             var subscribeCoursesDto = _mapper.Map<IEnumerable<CourseDto>>(subscribeCourses);
 
             return Ok(subscribeCoursesDto);
@@ -304,7 +305,7 @@ namespace WorkoutGlobal.Api.Controllers
 
             var subscribeEvents = await _repositoryManager.UserRepository.GetUserSubscribeEventsAsync(userId);
 
-            var subscribeEventsDto = _mapper.Map<IEnumerable<VideoDto>>(subscribeEvents);
+            var subscribeEventsDto = _mapper.Map<IEnumerable<SportEventDto>>(subscribeEvents);
 
             return Ok(subscribeEventsDto);
         }
@@ -317,6 +318,27 @@ namespace WorkoutGlobal.Api.Controllers
             await _repositoryManager.UserRepository.CreateUserAsync(user);
 
             return StatusCode(StatusCodes.Status201Created);
+        }
+
+        [HttpGet("{userId}/subscribe/subscriveCourses")]
+        public async Task<IActionResult> GetUserSubscribeCoursesById(Guid userId)
+        {
+            var user = await _repositoryManager.UserRepository.GetUserAsync(userId);
+
+            if (user == null)
+                return BadRequest(new ErrorDetails()
+                {
+                    StatusCode = StatusCodes.Status400BadRequest,
+                    Message = "There is no user with such id.",
+                    Details = new StackTrace().ToString()
+                });
+
+            var subscribeCourses = await _repositoryManager.UserRepository.GetUserSubscribeCoursesByIdAsync(userId);
+
+            var subscribeCoursesDto = _mapper.Map<IEnumerable<SubscribeCourseDto>>(subscribeCourses);
+
+            return Ok(subscribeCoursesDto);
+
         }
 
     }
