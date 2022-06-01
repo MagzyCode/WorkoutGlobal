@@ -1,29 +1,17 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using WorkoutGlobal.Api.Context;
-using WorkoutGlobal.Api.Contracts.RepositoryContracts;
+using WorkoutGlobal.Api.Contracts;
 using WorkoutGlobal.Api.Models;
-using WorkoutGlobal.Api.Repositories.BaseRepositories;
 
-namespace WorkoutGlobal.Api.Repositories.ModelsRepositories
+namespace WorkoutGlobal.Api.Repositories
 {
     public class CourseRepository : BaseRepository<Course>, ICourseRepository
     {
-        //private readonly ICourseVideoRepository _courseVideosRepository;
-        //private readonly IVideoRepository _videoRepository;
-        //private readonly ISubscribeCourseRepository _subscribeCourseRepository;
-
         public CourseRepository(
             WorkoutGlobalContext workoutGlobalContext, 
             IConfiguration configurationManager)
-            //ICourseVideoRepository courseVideosRepository,
-            //IVideoRepository videoRepository,
-            //ISubscribeCourseRepository subscribeCourseRepository) 
             : base(workoutGlobalContext, configurationManager)
-        {
-            //_courseVideosRepository = courseVideosRepository;
-            //_videoRepository = videoRepository;
-            //_subscribeCourseRepository = subscribeCourseRepository;
-        }
+        { }
 
         public async Task<Guid> CreateCourseAsync(Course course)
         {
@@ -76,8 +64,6 @@ namespace WorkoutGlobal.Api.Repositories.ModelsRepositories
                 .Where(model => model.CourseId == courseId)
                 .Select(model => model.VideoId)
                 .ToListAsync();
-                
-                // await _courseVideosRepository.GetCourseVideosByCourseIdAsync(courseId);
 
             var videos = new List<Video>();
 
@@ -89,13 +75,6 @@ namespace WorkoutGlobal.Api.Repositories.ModelsRepositories
 
             return videos;
         }
-
-        //public async Task<IEnumerable<Course>> GetCreatorCoursesAsync(Guid creatorId)
-        //{
-        //    var courses = await GetAll().Where(x => x.CreatorId == creatorId).ToListAsync();
-
-        //    return courses;
-        //}
 
         public async Task UpdateCourseAsync(Course course)
         {

@@ -1,7 +1,4 @@
-﻿using WorkoutGlobal.Api.Contracts.AuthenticationManagerContracts;
-using WorkoutGlobal.Api.Contracts.RepositoryContracts;
-
-namespace WorkoutGlobal.Api.Contracts.RepositoryManagerContracts
+﻿namespace WorkoutGlobal.Api.Contracts
 {
     /// <summary>
     /// Represents structure of model repositories manager.

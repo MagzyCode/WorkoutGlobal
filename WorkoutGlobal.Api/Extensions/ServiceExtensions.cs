@@ -1,15 +1,10 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using WorkoutGlobal.Api.Context;
-using WorkoutGlobal.Api.Contracts.AuthenticationManagerContracts;
-using WorkoutGlobal.Api.Contracts.RepositoryContracts;
-using WorkoutGlobal.Api.Contracts.RepositoryManagerContracts;
+using WorkoutGlobal.Api.Contracts;
 using WorkoutGlobal.Api.Filters.ActionFilters;
 using WorkoutGlobal.Api.Models;
-using WorkoutGlobal.Api.Repositories.AuthorizationRepositories;
-using WorkoutGlobal.Api.Repositories.BaseRepositories;
-using WorkoutGlobal.Api.Repositories.HealthRepository;
-using WorkoutGlobal.Api.Repositories.ModelsRepositories;
+using WorkoutGlobal.Api.Repositories;
 
 namespace WorkoutGlobal.Api.Extensions
 {

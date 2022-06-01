@@ -1,11 +1,10 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
-using WorkoutGlobal.Api.Contracts.RepositoryManagerContracts;
+using WorkoutGlobal.Api.Contracts;
 using WorkoutGlobal.Api.Filters.ActionFilters;
 using WorkoutGlobal.Api.Models;
-using WorkoutGlobal.Api.Models.DTOs.SubscribeCourseDTOs;
+using WorkoutGlobal.Api.Models.Dto;
 using WorkoutGlobal.Api.Models.ErrorModels;
 
 namespace WorkoutGlobal.Api.Controllers
@@ -29,6 +28,18 @@ namespace WorkoutGlobal.Api.Controllers
         [ModelValidationFilter]
         public async Task<IActionResult> CreateSubscribeCourse([FromBody] CreationSubscribeCourseDto subscribeCourseDto)
         {
+            var isExisted = await _repositoryManager.SubscribeCourseRepository.IsCourseSubscriptionExists(
+                userId: subscribeCourseDto.SubscriberId,
+                courseId: subscribeCourseDto.SubscribeCourseId);
+
+            if (isExisted)
+                return Conflict(new ErrorDetails()
+                {
+                    StatusCode = StatusCodes.Status409Conflict,
+                    Message = "There is course subscription with such data.",
+                    Details = new StackTrace().ToString()
+                });
+
             var subscribeCourse = _mapper.Map<SubscribeCourse>(subscribeCourseDto);
 
             await _repositoryManager.SubscribeCourseRepository.CreateSubscribeCourseAsync(subscribeCourse);
@@ -43,9 +54,9 @@ namespace WorkoutGlobal.Api.Controllers
             var subscribeCourse = await _repositoryManager.SubscribeCourseRepository.GetSubscribeCourseAsync(subscribeCourseId);
 
             if (subscribeCourse == null)
-                return BadRequest(new ErrorDetails()
+                return NotFound(new ErrorDetails()
                 {
-                    StatusCode = StatusCodes.Status400BadRequest,
+                    StatusCode = StatusCodes.Status404NotFound,
                     Message = "There is no category with such id.",
                     Details = new StackTrace().ToString()
                 });
@@ -63,10 +74,10 @@ namespace WorkoutGlobal.Api.Controllers
             var subscribeCourse = await _repositoryManager.SubscribeCourseRepository.GetSubscribeCourseAsync(subscribeCourseId);
 
             if (subscribeCourse == null)
-                return BadRequest(new ErrorDetails()
+                return NotFound(new ErrorDetails()
                 {
-                    StatusCode = StatusCodes.Status400BadRequest,
-                    Message = "There is no category with such id.",
+                    StatusCode = StatusCodes.Status404NotFound,
+                    Message = "There is no course subscription with such id.",
                     Details = new StackTrace().ToString()
                 });
 
@@ -91,9 +102,9 @@ namespace WorkoutGlobal.Api.Controllers
             var subscribeCourse = await _repositoryManager.SubscribeCourseRepository.GetSubscribeCourseAsync(subscribeCourseId);
 
             if (subscribeCourse == null)
-                return BadRequest(new ErrorDetails()
+                return NotFound(new ErrorDetails()
                 {
-                    StatusCode = StatusCodes.Status400BadRequest,
+                    StatusCode = StatusCodes.Status404NotFound,
                     Message = "There is no category with such id.",
                     Details = new StackTrace().ToString()
                 });

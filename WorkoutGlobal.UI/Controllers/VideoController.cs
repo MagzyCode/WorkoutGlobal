@@ -9,30 +9,20 @@ namespace WorkoutGlobal.UI.Controllers
 {
     public class VideoController : Controller
     {
-        // TODO: Убрать сервисы и заменить на _serviceManager
         private readonly IMapper _mapper;
-        private readonly IVideoService _videoService;
-        private readonly ICommentsBlockService _commentsBlockService;
-        private readonly ICommentService _commentService;
         private readonly IServiceManager _serviceManager;
 
         public VideoController(
             IMapper mapper,
-            IVideoService videoService,
-            ICommentsBlockService commentsBlockService,
-            ICommentService commentService,
             IServiceManager serviceManager)
         {
             _mapper = mapper;
-            _videoService = videoService;
-            _commentsBlockService = commentsBlockService;
-            _commentService = commentService;
             _serviceManager = serviceManager;
         }
 
         public async Task<IActionResult> VideosList()
         {
-            var videos = await _videoService.GetAllVideosAsync(new VideoParameters());
+            var videos = await _serviceManager.VideoService.GetAllVideosAsync(new VideoParameters());
 
             var videoViewModels = _mapper.Map<IEnumerable<VideoWithCommentsAndSubscriptionViewModel>>(videos);
 
@@ -41,13 +31,13 @@ namespace WorkoutGlobal.UI.Controllers
 
         public async Task<IActionResult> ShowVideo(Guid videoId, string username)
         {
-            var video = await _videoService.GetVideoAsync(videoId);
+            var video = await _serviceManager.VideoService.GetVideoAsync(videoId);
 
             var videoViewModel = _mapper.Map<VideoWithCommentsAndSubscriptionViewModel>(video);
 
-            var commentsBlock = await _videoService.GetVideoCommentsBlockAsync(videoId);
-                //await _commentsBlockService.GetCommentsBlockByVideoIdAsync(videoId);
-            var comments = await _commentsBlockService.GetBlockCommentsAsync(commentsBlock.Id);
+            var commentsBlock = await _serviceManager.VideoService.GetVideoCommentsBlockAsync(videoId);
+ 
+            var comments = await _serviceManager.CommentsBlockService.GetBlockCommentsAsync(commentsBlock.Id);
             var commentsViewModel = _mapper.Map<IEnumerable<CommentViewModel>>(comments);
 
             var user = await _serviceManager.UserService.GetUserByUsernameAsync(username);
@@ -65,8 +55,7 @@ namespace WorkoutGlobal.UI.Controllers
         [HttpPost]
         public async Task<IActionResult> SaveComment(VideoWithCommentsAndSubscriptionViewModel videoWithCommentsViewModel)
         {
-            var commentsBlock = await _videoService.GetVideoCommentsBlockAsync(videoWithCommentsViewModel.Id);
-            //await _commentsBlockService.GetCommentsBlockByVideoIdAsync(videoWithCommentsViewModel.Id);
+            var commentsBlock = await _serviceManager.VideoService.GetVideoCommentsBlockAsync(videoWithCommentsViewModel.Id);
 
             var comment = new Comment()
                 {
@@ -76,8 +65,8 @@ namespace WorkoutGlobal.UI.Controllers
                     CommentsBlockId = commentsBlock.Id
                 };
 
-            await _commentService.CreateCommentAsync(comment);
-            var comments = await _commentsBlockService.GetBlockCommentsAsync(commentsBlock.Id);
+            await _serviceManager.CommentService.CreateCommentAsync(comment);
+            var comments = await _serviceManager.CommentsBlockService.GetBlockCommentsAsync(commentsBlock.Id);
             var commentsViewModel = _mapper.Map<IEnumerable<CommentViewModel>>(comments);
 
             videoWithCommentsViewModel.Comments = commentsViewModel.ToList();
@@ -104,13 +93,13 @@ namespace WorkoutGlobal.UI.Controllers
             var user = await _serviceManager.UserService.GetUserByUsernameAsync(username);
 
             creationVideoViewModel.UserId = user.Id;
-                // Guid.Parse("4e14c6d2-cae1-43ba-bd32-0f2dc2225f5a");
+
             var category = await _serviceManager.CategoryService.GetCategoryByNameAsync(creationVideoViewModel.CategoryName);
 
             var video = _mapper.Map<Video>(creationVideoViewModel);
             video.CategoryId = category.Id;
 
-            await _videoService.CreateVideoAsync(video);
+            await _serviceManager.VideoService.CreateVideoAsync(video);
 
             return RedirectToAction("VideosList", "Video");
         }
@@ -126,8 +115,8 @@ namespace WorkoutGlobal.UI.Controllers
 
             await _serviceManager.StoreVideoService.CreateStoreVideoAsync(storeVideo);
 
-            var commentsBlock = await _videoService.GetVideoCommentsBlockAsync(videoWithCommentsViewModel.Id);
-            var comments = await _commentsBlockService.GetBlockCommentsAsync(commentsBlock.Id);
+            var commentsBlock = await _serviceManager.VideoService.GetVideoCommentsBlockAsync(videoWithCommentsViewModel.Id);
+            var comments = await _serviceManager.CommentsBlockService.GetBlockCommentsAsync(commentsBlock.Id);
             var commentsViewModel = _mapper.Map<IEnumerable<CommentViewModel>>(comments);
 
             videoWithCommentsViewModel.Comments = commentsViewModel.ToList();
@@ -144,8 +133,8 @@ namespace WorkoutGlobal.UI.Controllers
 
             await _serviceManager.StoreVideoService.DeleteStoreVideoAsync(storeVideo.Id);
 
-            var commentsBlock = await _videoService.GetVideoCommentsBlockAsync(videoWithCommentsViewModel.Id);
-            var comments = await _commentsBlockService.GetBlockCommentsAsync(commentsBlock.Id);
+            var commentsBlock = await _serviceManager.VideoService.GetVideoCommentsBlockAsync(videoWithCommentsViewModel.Id);
+            var comments = await _serviceManager.CommentsBlockService.GetBlockCommentsAsync(commentsBlock.Id);
             var commentsViewModel = _mapper.Map<IEnumerable<CommentViewModel>>(comments);
 
             videoWithCommentsViewModel.Comments = commentsViewModel.ToList();

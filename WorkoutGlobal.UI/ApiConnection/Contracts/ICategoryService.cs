@@ -26,7 +26,7 @@ namespace WorkoutGlobal.UI.ApiConnection.Contracts
         [Get("/api/categories/{categoryId}/courses")]
         public Task<IEnumerable<Course>> GetCategoryCoursesAsync(Guid categoryId);
 
-        [Get("/api/categories/name/{categoryName}")]
+        [Get("/api/categories/category/{categoryName}")]
         public Task<Category> GetCategoryByNameAsync(string categoryName);
     }
 }

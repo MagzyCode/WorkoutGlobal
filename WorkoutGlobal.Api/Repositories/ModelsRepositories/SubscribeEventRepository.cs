@@ -1,23 +1,17 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using WorkoutGlobal.Api.Context;
-using WorkoutGlobal.Api.Contracts.RepositoryContracts;
+using WorkoutGlobal.Api.Contracts;
 using WorkoutGlobal.Api.Models;
-using WorkoutGlobal.Api.Repositories.BaseRepositories;
 
-namespace WorkoutGlobal.Api.Repositories.ModelsRepositories
+namespace WorkoutGlobal.Api.Repositories
 {
     public class SubscribeEventRepository : BaseRepository<SubscribeEvent>, ISubscribeEventRepository
     {
-        // private readonly ISportEventRepository _sportEventRepository;
-
         public SubscribeEventRepository(
             WorkoutGlobalContext workoutGlobalContext, 
             IConfiguration configurationManager)
-            // ISportEventRepository sportEventRepository) 
             : base(workoutGlobalContext, configurationManager)
-        {
-            // _sportEventRepository = sportEventRepository;
-        }
+        { }
 
         public async Task CreateSubscribeEventAsync(SubscribeEvent subscribeEvent)
         {
@@ -45,20 +39,12 @@ namespace WorkoutGlobal.Api.Repositories.ModelsRepositories
             return model;
         }
 
-        //public async Task<IEnumerable<SportEvent>> GetUserSubscribeEventsAsync(Guid userId)
-        //{
-        //    var sportEventsIds = await GetAll()
-        //        .Where(x => x.UserId == userId)
-        //        .Select(x => x.EventId)
-        //        .ToListAsync();
+        public async Task<bool> IsSportEventSubscriptionExists(Guid userId, Guid eventId)
+        {
+            var isExisted = await Context.SubscribeEvents.AnyAsync(model => model.UserId == userId && model.EventId == eventId);
 
-        //    var sportEvents = new List<SportEvent>();
-
-        //    foreach (var sportEventId in sportEventsIds)
-        //        sportEvents.Add(await _sportEventRepository.GetEventAsync(sportEventId));
-
-        //    return sportEvents;      
-        //}
+            return isExisted;
+        }
 
         public async Task UpdateSubscribeEventAsync(SubscribeEvent subscribeEvent)
         {

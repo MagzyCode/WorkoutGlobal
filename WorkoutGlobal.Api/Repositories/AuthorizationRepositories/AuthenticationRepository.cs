@@ -6,13 +6,11 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 using WorkoutGlobal.Api.Context;
-using WorkoutGlobal.Api.Contracts.AuthenticationManagerContracts;
-using WorkoutGlobal.Api.Contracts.RepositoryContracts;
+using WorkoutGlobal.Api.Contracts;
 using WorkoutGlobal.Api.Models;
-using WorkoutGlobal.Api.Models.DTOs.UserDTOs;
-using WorkoutGlobal.Api.Repositories.BaseRepositories;
+using WorkoutGlobal.Api.Models.Dto;
 
-namespace WorkoutGlobal.Api.Repositories.AuthorizationRepositories
+namespace WorkoutGlobal.Api.Repositories
 {
     /// <summary>
     /// Represents authorization manager for log in.
@@ -20,9 +18,7 @@ namespace WorkoutGlobal.Api.Repositories.AuthorizationRepositories
     public class AuthenticationRepository : BaseRepository<UserCredentials>, IAuthenticationRepository
     {
         private readonly UserManager<UserCredentials> _userManager;
-        // private readonly IUserCredentialsRepository _userCredentialsRepository;
         private readonly IMapper _mapper;
-        // private readonly IUserRepository _userRepository;
 
         /// <summary>
         /// Ctor for authentication repository.
@@ -36,15 +32,11 @@ namespace WorkoutGlobal.Api.Repositories.AuthorizationRepositories
             UserManager<UserCredentials> userManager, 
             WorkoutGlobalContext workoutGlobalContext, 
             IConfiguration configuration,
-            // IUserCredentialsRepository userCredentialsRepository,
-            IMapper mapper)
-            //  IUserRepository userRepository) 
+            IMapper mapper) 
             : base(workoutGlobalContext, configuration)
         {
             _userManager = userManager;
-            // _userCredentialsRepository = userCredentialsRepository;
             _mapper = mapper;
-            // _userRepository = userRepository;
         }
 
         /// <summary>
@@ -72,7 +64,7 @@ namespace WorkoutGlobal.Api.Repositories.AuthorizationRepositories
         /// </summary>
         /// <param name="userCredentialsDto">User credentials.</param>
         /// <returns>Existed user.</returns>
-        public UserCredentials FindUserByCredentials(UserCredentialsDto userCredentialsDto)
+        public UserCredentials FindUserByCredentials(UserWithCredentialsDto userCredentialsDto)
         {
             if (_userManager == null)
                 throw new ArgumentNullException(nameof(userCredentialsDto));
@@ -88,7 +80,7 @@ namespace WorkoutGlobal.Api.Repositories.AuthorizationRepositories
         /// Generate valid user credentials on registration info.
         /// </summary>
         /// <param name="userCredentialsDto">User credentials.</param>
-        public async Task<UserCredentials> GenerateUserCredentialsAsync(UserCredentialsDto userCredentialsDto)
+        public async Task<UserCredentials> GenerateUserCredentialsAsync(UserWithCredentialsDto userCredentialsDto)
         {
             var userCredentials = _mapper.Map<UserCredentials>(userCredentialsDto);
 
@@ -97,10 +89,6 @@ namespace WorkoutGlobal.Api.Repositories.AuthorizationRepositories
 
             userCredentials.PasswordSalt = BitConverter.ToString(saltBytes).ToLower().Replace("-", ""); ;
             userCredentials.PasswordHash = await GenerateHashPasswordAsync(userCredentialsDto.Password, userCredentials.PasswordSalt);
-
-            //await _userCredentialsRepository.GetHashPasswordAsync(
-            //password: userCredentialsDto.Password,
-            //salt: userCredentials.PasswordSalt);
 
             return userCredentials;
         }
@@ -115,7 +103,7 @@ namespace WorkoutGlobal.Api.Repositories.AuthorizationRepositories
             if (userRegistrationDto == null)
                 throw new ArgumentNullException(nameof(userRegistrationDto));
 
-            var userCredentialsDto = _mapper.Map<UserCredentialsDto>(userRegistrationDto);
+            var userCredentialsDto = _mapper.Map<UserWithCredentialsDto>(userRegistrationDto);
             var existedUser = FindUserByCredentials(userCredentialsDto);
 
             return existedUser != null;
@@ -131,7 +119,7 @@ namespace WorkoutGlobal.Api.Repositories.AuthorizationRepositories
             if (userRegistrationDto == null)
                 throw new ArgumentNullException(nameof(userRegistrationDto));
 
-            var userCredentialsDto = _mapper.Map<UserCredentialsDto>(userRegistrationDto);
+            var userCredentialsDto = _mapper.Map<UserWithCredentialsDto>(userRegistrationDto);
             var userCredentials = await GenerateUserCredentialsAsync(userCredentialsDto);
             var user = _mapper.Map<User>(userRegistrationDto);
 
@@ -141,8 +129,6 @@ namespace WorkoutGlobal.Api.Repositories.AuthorizationRepositories
 
             await Context.UserAccounts.AddAsync(user);
             await Context.SaveChangesAsync();
-            //await _userRepository.CreateUserAsync(user);
-
         }
 
         /// <summary>
@@ -156,14 +142,13 @@ namespace WorkoutGlobal.Api.Repositories.AuthorizationRepositories
             if (userAuthorizationDto == null)
                 return false;
 
-            var userCredentialsDto = _mapper.Map<UserCredentialsDto>(userAuthorizationDto);
+            var userCredentialsDto = _mapper.Map<UserWithCredentialsDto>(userAuthorizationDto);
             var userCredentials = FindUserByCredentials(userCredentialsDto);
 
             if (userCredentials == null)
                 return false;
 
             var userPasswordHash = await GenerateHashPasswordAsync(userAuthorizationDto.Password, userCredentials.PasswordSalt);
-            // await _userCredentialsRepository.GetHashPasswordAsync(userAuthorizationDto.Password, userCredentials.PasswordSalt);
 
             return userCredentials != null 
                 && userCredentials.PasswordHash == userPasswordHash;

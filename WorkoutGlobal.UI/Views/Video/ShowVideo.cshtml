@@ -8,6 +8,11 @@
     <div class="video-list-background">
         <p class="showVideo-p-title">@Model.Title</p>
         <p class="showVideo-p-description">@Model.Description</p>
+        @{
+            var subscribers = await ServiceManager.StoreVideoService.GetAllStoreVideosAsync();
+            var count = subscribers.Where(x => x.SavedVideoId == Model.Id).Count();
+        }
+        <p>Сохранило @count пользователей</p>
     </div>
     <div>
         @{

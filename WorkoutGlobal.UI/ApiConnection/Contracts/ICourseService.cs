@@ -23,7 +23,7 @@ namespace WorkoutGlobal.UI.ApiConnection.Contracts
         [Delete("/api/courses/{courseId}")]
         public Task DeleteCourseAsync(Guid courseId, [Body] Course course);
 
-        [Get("/api/courses/{courseId}/users")]
+        [Get("/api/courses/{courseId}/subscribers")]
         public Task<IEnumerable<User>> GetCourseSubscribersAsync(Guid courseId);
     }
 }

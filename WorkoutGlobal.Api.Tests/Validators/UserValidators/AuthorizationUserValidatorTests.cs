@@ -2,7 +2,7 @@
 using WorkoutGlobal.Api.Models.Validators.UserValidators;
 using FluentAssertions;
 using Xunit;
-using WorkoutGlobal.Api.Models.DTOs.UserDTOs;
+using WorkoutGlobal.Api.Models.Dto.UserDTOs;
 using FluentValidation.Results;
 
 namespace WorkoutGlobal.Api.Tests.Validators.UserValidators

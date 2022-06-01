@@ -1,7 +1,7 @@
 ﻿using WorkoutGlobal.Api.Models;
 using WorkoutGlobal.Api.RequestParameters;
 
-namespace WorkoutGlobal.Api.Contracts.RepositoryContracts
+namespace WorkoutGlobal.Api.Contracts
 {
     /// <summary>
     /// Base structure for video repository.
@@ -23,6 +23,5 @@ namespace WorkoutGlobal.Api.Contracts.RepositoryContracts
         public Task DeleteVideoAsync(Video video);
 
         public Task<CommentsBlock> GetVideoCommentsBlockAsync(Guid videoId);
-        // public Task<IEnumerable<Video>> GetCreatorVideosAsync(Guid creatorId);
     }
 }

@@ -1,6 +1,6 @@
 ﻿using WorkoutGlobal.Api.Models;
 
-namespace WorkoutGlobal.Api.Contracts.RepositoryContracts
+namespace WorkoutGlobal.Api.Contracts
 {
     public interface ISubscribeEventRepository
     {
@@ -14,6 +14,6 @@ namespace WorkoutGlobal.Api.Contracts.RepositoryContracts
 
         public Task<IEnumerable<SubscribeEvent>> GetAllSubscribeEventsAsync();
 
-        // public Task<IEnumerable<SportEvent>> GetUserSubscribeEventsAsync(Guid userId);
+        public Task<bool> IsSportEventSubscriptionExists(Guid userId, Guid eventId);
     }
 }

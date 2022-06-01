@@ -1,6 +1,6 @@
 ﻿using WorkoutGlobal.Api.Context;
 
-namespace WorkoutGlobal.Api.Contracts.RepositoryContracts
+namespace WorkoutGlobal.Api.Contracts
 {
     /// <summary>
     /// Base interface for all model repositories.

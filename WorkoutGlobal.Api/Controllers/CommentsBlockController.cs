@@ -1,11 +1,10 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
-using WorkoutGlobal.Api.Contracts.RepositoryManagerContracts;
+using WorkoutGlobal.Api.Contracts;
 using WorkoutGlobal.Api.Filters.ActionFilters;
 using WorkoutGlobal.Api.Models;
-using WorkoutGlobal.Api.Models.DTOs.CommentDTOs;
-using WorkoutGlobal.Api.Models.DTOs.CommentsBlockDTOs;
+using WorkoutGlobal.Api.Models.Dto;
 using WorkoutGlobal.Api.Models.ErrorModels;
 
 namespace WorkoutGlobal.Api.Controllers
@@ -31,9 +30,9 @@ namespace WorkoutGlobal.Api.Controllers
             var commentsBlock = await _repositoryManager.CommentsBlockRepository.GetCommentsBlockAsync(commentsBlockId);
 
             if (commentsBlock == null)
-                return BadRequest(new ErrorDetails()
+                return NotFound(new ErrorDetails()
                 {
-                    StatusCode = StatusCodes.Status400BadRequest,
+                    StatusCode = StatusCodes.Status404NotFound,
                     Message = "There is no comment block with such id.",
                     Details = new StackTrace().ToString()
                 });
@@ -49,9 +48,9 @@ namespace WorkoutGlobal.Api.Controllers
             var blockComments = await _repositoryManager.CommentsBlockRepository.GetCommentsBlockAsync(commentsBlockId);
 
             if (blockComments == null)
-                return BadRequest(new ErrorDetails()
+                return NotFound(new ErrorDetails()
                 {
-                    StatusCode = StatusCodes.Status400BadRequest,
+                    StatusCode = StatusCodes.Status404NotFound,
                     Message = "There is no comment block with such id.",
                     Details = new StackTrace().ToString()
                 });

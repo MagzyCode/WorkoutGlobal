@@ -1,11 +1,10 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
-using WorkoutGlobal.Api.Contracts.RepositoryManagerContracts;
+using WorkoutGlobal.Api.Contracts;
 using WorkoutGlobal.Api.Filters.ActionFilters;
 using WorkoutGlobal.Api.Models;
-using WorkoutGlobal.Api.Models.DTOs.SubscribeEventDTOs;
+using WorkoutGlobal.Api.Models.Dto;
 using WorkoutGlobal.Api.Models.ErrorModels;
 
 namespace WorkoutGlobal.Api.Controllers
@@ -29,6 +28,18 @@ namespace WorkoutGlobal.Api.Controllers
         [ModelValidationFilter]
         public async Task<IActionResult> CreateSubscribeEvent([FromBody] CreationSubscribeEventDto subscribeEventDto)
         {
+            var isExisted = await _repositoryManager.SubscribeEventRepository.IsSportEventSubscriptionExists(
+                userId: subscribeEventDto.UserId,
+                eventId: subscribeEventDto.EventId);
+
+            if (isExisted)
+                return Conflict(new ErrorDetails()
+                {
+                    StatusCode = StatusCodes.Status409Conflict,
+                    Message = "There is course subscription with such data.",
+                    Details = new StackTrace().ToString()
+                });
+
             var subscribeEvent = _mapper.Map<SubscribeEvent>(subscribeEventDto);
 
             await _repositoryManager.SubscribeEventRepository.CreateSubscribeEventAsync(subscribeEvent);
@@ -43,9 +54,9 @@ namespace WorkoutGlobal.Api.Controllers
             var subscribeEvent = await _repositoryManager.SubscribeEventRepository.GetSubscribeEventAsync(subscribeEventId);
 
             if (subscribeEvent == null)
-                return BadRequest(new ErrorDetails()
+                return NotFound(new ErrorDetails()
                 {
-                    StatusCode = StatusCodes.Status400BadRequest,
+                    StatusCode = StatusCodes.Status404NotFound,
                     Message = "There is no subscribe video with such id.",
                     Details = new StackTrace().ToString()
                 });
@@ -63,9 +74,9 @@ namespace WorkoutGlobal.Api.Controllers
             var subscribeEvent = await _repositoryManager.SubscribeEventRepository.GetSubscribeEventAsync(subscribeEventId);
 
             if (subscribeEvent == null)
-                return BadRequest(new ErrorDetails()
+                return NotFound(new ErrorDetails()
                 {
-                    StatusCode = StatusCodes.Status400BadRequest,
+                    StatusCode = StatusCodes.Status404NotFound,
                     Message = "There is no subscribe video with such id.",
                     Details = new StackTrace().ToString()
                 });

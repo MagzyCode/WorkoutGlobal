@@ -1,10 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using WorkoutGlobal.Api.Context;
-using WorkoutGlobal.Api.Contracts.RepositoryContracts;
+using WorkoutGlobal.Api.Contracts;
 using WorkoutGlobal.Api.Models;
-using WorkoutGlobal.Api.Repositories.BaseRepositories;
 
-namespace WorkoutGlobal.Api.Repositories.ModelsRepositories
+namespace WorkoutGlobal.Api.Repositories
 {
     public class SportEventRepository : BaseRepository<SportEvent>, ISportEventRepository
     {
@@ -33,13 +32,6 @@ namespace WorkoutGlobal.Api.Repositories.ModelsRepositories
 
             return events;
         }
-
-        //public async Task<IEnumerable<SportEvent>> GetCreatorEventsAsync(Guid creatorId)
-        //{
-        //    var events = await GetAll().Where(x => x.TrainerId == creatorId).ToListAsync();
-
-        //    return events;
-        //}
 
         public async Task<SportEvent> GetEventAsync(Guid eventId)
         {

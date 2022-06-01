@@ -1,14 +1,10 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
-using WorkoutGlobal.Api.Contracts.RepositoryManagerContracts;
+using WorkoutGlobal.Api.Contracts;
 using WorkoutGlobal.Api.Filters.ActionFilters;
 using WorkoutGlobal.Api.Models;
-using WorkoutGlobal.Api.Models.DTOs.CategoryDTOs;
-using WorkoutGlobal.Api.Models.DTOs.CourseDTOs;
-using WorkoutGlobal.Api.Models.DTOs.VideoDTOs;
+using WorkoutGlobal.Api.Models.Dto;
 using WorkoutGlobal.Api.Models.ErrorModels;
 
 namespace WorkoutGlobal.Api.Controllers
@@ -46,9 +42,9 @@ namespace WorkoutGlobal.Api.Controllers
             var category = await _repositoryManager.CategoryRepository.GetCategoryAsync(categoryId);
 
             if (category == null)
-                return BadRequest(new ErrorDetails()
+                return NotFound(new ErrorDetails()
                 {
-                    StatusCode = StatusCodes.Status400BadRequest,
+                    StatusCode = StatusCodes.Status404NotFound,
                     Message = "There is no category with such id.",
                     Details = new StackTrace().ToString()
                 });
@@ -67,9 +63,9 @@ namespace WorkoutGlobal.Api.Controllers
             var category = await _repositoryManager.CategoryRepository.GetCategoryAsync(categoryId);
 
             if (category == null)
-                return BadRequest(new ErrorDetails()
+                return NotFound(new ErrorDetails()
                 {
-                    StatusCode = StatusCodes.Status400BadRequest,
+                    StatusCode = StatusCodes.Status404NotFound,
                     Message = "There is no category with such id.",
                     Details = new StackTrace().ToString()
                 });
@@ -82,6 +78,7 @@ namespace WorkoutGlobal.Api.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllCategories()
         {
+
             var categories = await _repositoryManager.CategoryRepository.GetAllCategoriesAsync();
 
             var categoriesDto = _mapper.Map<IEnumerable<CategoryDto>>(categories);
@@ -95,9 +92,9 @@ namespace WorkoutGlobal.Api.Controllers
             var category = await _repositoryManager.CategoryRepository.GetCategoryAsync(categoryId);
 
             if (category == null)
-                return BadRequest(new ErrorDetails()
+                return NotFound(new ErrorDetails()
                 {
-                    StatusCode = StatusCodes.Status400BadRequest,
+                    StatusCode = StatusCodes.Status404NotFound,
                     Message = "There is no category with such id.",
                     Details = new StackTrace().ToString()
                 });
@@ -114,9 +111,9 @@ namespace WorkoutGlobal.Api.Controllers
             var category = await _repositoryManager.CategoryRepository.GetCategoryAsync(categoryId);
 
             if (category == null)
-                return BadRequest(new ErrorDetails()
+                return NotFound(new ErrorDetails()
                 {
-                    StatusCode = StatusCodes.Status400BadRequest,
+                    StatusCode = StatusCodes.Status404NotFound,
                     Message = "There is no category with such id.",
                     Details = new StackTrace().ToString()
                 });
@@ -134,9 +131,9 @@ namespace WorkoutGlobal.Api.Controllers
             var category = await _repositoryManager.CategoryRepository.GetCategoryAsync(categoryId);
 
             if (category == null)
-                return BadRequest(new ErrorDetails()
+                return NotFound(new ErrorDetails()
                 {
-                    StatusCode = StatusCodes.Status400BadRequest,
+                    StatusCode = StatusCodes.Status404NotFound,
                     Message = "There is no category with such id.",
                     Details = new StackTrace().ToString()
                 });
@@ -148,15 +145,15 @@ namespace WorkoutGlobal.Api.Controllers
             return Ok(categoryCoursesDto);
         }
 
-        [HttpGet("name/{categoryName}")]
+        [HttpGet("category/{categoryName}")]
         public async Task<IActionResult> GetCategoryByName(string categoryName)
         {
             var category = await _repositoryManager.CategoryRepository.GetCategoryByNameAsync(categoryName);
-            
+
             if (category == null)
-                return BadRequest(new ErrorDetails()
+                return NotFound(new ErrorDetails()
                 {
-                    StatusCode = StatusCodes.Status400BadRequest,
+                    StatusCode = StatusCodes.Status404NotFound,
                     Message = "There is no category with name.",
                     Details = new StackTrace().ToString()
                 });

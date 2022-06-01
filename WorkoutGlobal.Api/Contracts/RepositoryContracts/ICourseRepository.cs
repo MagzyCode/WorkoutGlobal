@@ -1,6 +1,6 @@
 ﻿using WorkoutGlobal.Api.Models;
 
-namespace WorkoutGlobal.Api.Contracts.RepositoryContracts
+namespace WorkoutGlobal.Api.Contracts
 {
     public interface ICourseRepository
     {
@@ -17,8 +17,5 @@ namespace WorkoutGlobal.Api.Contracts.RepositoryContracts
         public Task DeleteCourseAsync(Course course);
 
         public Task<IEnumerable<User>> GetCourseSubscribersAsync(Guid courseId);
-
-        // public Task<IEnumerable<Course>> GetCreatorCoursesAsync(Guid creatorId);
-
     }
 }

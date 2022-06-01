@@ -1,8 +1,6 @@
-﻿using WorkoutGlobal.Api.Contracts.AuthenticationManagerContracts;
-using WorkoutGlobal.Api.Contracts.RepositoryContracts;
-using WorkoutGlobal.Api.Contracts.RepositoryManagerContracts;
+﻿using WorkoutGlobal.Api.Contracts;
 
-namespace WorkoutGlobal.Api.Repositories.BaseRepositories
+namespace WorkoutGlobal.Api.Repositories
 {
     /// <summary>
     /// Represents base repository manager class for manage all model repositories.

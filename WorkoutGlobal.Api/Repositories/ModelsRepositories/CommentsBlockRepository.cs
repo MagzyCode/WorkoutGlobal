@@ -1,28 +1,17 @@
-﻿using AutoMapper;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using WorkoutGlobal.Api.Context;
-using WorkoutGlobal.Api.Contracts.RepositoryContracts;
+using WorkoutGlobal.Api.Contracts;
 using WorkoutGlobal.Api.Models;
-using WorkoutGlobal.Api.Models.DTOs.CommentsBlockDTOs;
-using WorkoutGlobal.Api.Repositories.BaseRepositories;
 
-namespace WorkoutGlobal.Api.Repositories.ModelsRepositories
+namespace WorkoutGlobal.Api.Repositories
 {
     public class CommentsBlockRepository : BaseRepository<CommentsBlock>, ICommentsBlockRepository
     {
-        // private readonly ICommentRepository _commentRepository;
-        private readonly IMapper _mapper;
-
         public CommentsBlockRepository(
             WorkoutGlobalContext workoutGlobalContext, 
-            IConfiguration configurationManager,
-            // ICommentRepository commentRepository,
-            IMapper mapper) 
+            IConfiguration configurationManager)
             : base(workoutGlobalContext, configurationManager)
-        {
-            // _commentRepository = commentRepository;
-            _mapper = mapper;
-        }
+        { }
 
         public async Task CreateCommentBlockAsync(CommentsBlock commentsBlock)
             => await CreateAsync(commentsBlock);
@@ -32,7 +21,6 @@ namespace WorkoutGlobal.Api.Repositories.ModelsRepositories
             var comments = await Context.Comments
                 .Where(model => model.CommentsBlockId == commentBlockId)
                 .ToListAsync();
-                // _commentRepository.GetBlockCommentsAsync(commentBlockId);
 
             return comments;
         }
@@ -43,12 +31,5 @@ namespace WorkoutGlobal.Api.Repositories.ModelsRepositories
 
             return model;
         }
-
-        //public async Task<CommentsBlock> GetCommentsBlockByVideoIdAsync(Guid videoId)
-        //{
-        //    var model = await GetAll().Where(x => x.CommentedVideoId == videoId).FirstOrDefaultAsync();
-
-        //    return model;
-        //}
     }
 }

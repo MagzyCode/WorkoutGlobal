@@ -14,5 +14,6 @@
         public IUserService UserService { get; }
         public IVideoService VideoService { get; }
         public ICourseVideoService CourseVideoService { get; }
+        public IAuthenticationService AuthenticationService { get; }
     }
 }

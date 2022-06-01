@@ -17,17 +17,20 @@ namespace WorkoutGlobal.UI.Controllers
     public class HomeController : Controller
     {
         private readonly IMapper _mapper;
-        private readonly ApiConnection.Contracts.IAuthenticationService _authenticationService;
+        private readonly IServiceManager _serviceManager;
+        //private readonly ApiConnection.Contracts.IAuthenticationService _authenticationService;
 
         /// <summary>
         /// Ctor for home controller.
         /// </summary>
         public HomeController(
             IMapper mapper,
-            ApiConnection.Contracts.IAuthenticationService authenticationService)
+            IServiceManager serviceManager)
+            // ApiConnection.Contracts.IAuthenticationService authenticationService)
         {
             _mapper = mapper;
-            _authenticationService = authenticationService;
+            _serviceManager = serviceManager;
+            // _authenticationService = authenticationService;
         }
 
         /// <summary>
@@ -74,8 +77,8 @@ namespace WorkoutGlobal.UI.Controllers
         public async Task<IActionResult> Registration(UserRegistrationViewModel userRegistrationViewModel)
         {
             var registrationUser = _mapper.Map<RegistrationUser>(userRegistrationViewModel);
-
-            await _authenticationService.RegistrateAsync(registrationUser);
+            
+            await _serviceManager.AuthenticationService.RegistrateAsync(registrationUser);
             var authenticationUser = _mapper.Map<AuthenticationUser>(registrationUser);
             await Authenticate(authenticationUser);
 
@@ -105,7 +108,7 @@ namespace WorkoutGlobal.UI.Controllers
         /// <returns>A task that represents asynchronous Authenticate operation.</returns>
         private async Task Authenticate(AuthenticationUser authenticationUser)
         {
-            var token = await _authenticationService.AuthenticateAsync(authenticationUser);
+            var token = await _serviceManager.AuthenticationService.AuthenticateAsync(authenticationUser);
 
             var claims = new List<Claim>
             {

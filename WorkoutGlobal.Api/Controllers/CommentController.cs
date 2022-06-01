@@ -1,11 +1,10 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
-using WorkoutGlobal.Api.Contracts.RepositoryManagerContracts;
+using WorkoutGlobal.Api.Contracts;
 using WorkoutGlobal.Api.Filters.ActionFilters;
 using WorkoutGlobal.Api.Models;
-using WorkoutGlobal.Api.Models.DTOs.CommentDTOs;
+using WorkoutGlobal.Api.Models.Dto;
 using WorkoutGlobal.Api.Models.ErrorModels;
 
 namespace WorkoutGlobal.Api.Controllers
@@ -42,9 +41,9 @@ namespace WorkoutGlobal.Api.Controllers
             var comment = await _repositoryManager.CommentRepository.GetCommentAsync(commentId);
 
             if (comment == null)
-                return BadRequest(new ErrorDetails()
+                return NotFound(new ErrorDetails()
                 {
-                    StatusCode = StatusCodes.Status400BadRequest,
+                    StatusCode = StatusCodes.Status404NotFound,
                     Message = "There is no comment with such id.",
                     Details = new StackTrace().ToString()
                 });

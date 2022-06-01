@@ -21,8 +21,15 @@
                 }
             }
         }
-        
     </div>
+    @*<div >
+        <form method="get" asp-controller="Video" asp-action="SearchVideos">*@
+         @*   <label class="login-label">Поиск<sup class="login-span-error">*</sup></label>
+            <br />
+            <input class="login-input" type="text" placeholder="Поиск">
+        </form>
+
+    </div>*@
     <div id="videoListPage">
         @foreach(var video in @Model)
         {

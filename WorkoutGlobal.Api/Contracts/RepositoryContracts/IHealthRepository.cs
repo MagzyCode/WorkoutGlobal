@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Diagnostics.HealthChecks;
 
-namespace WorkoutGlobal.Api.Contracts.RepositoryContracts
+namespace WorkoutGlobal.Api.Contracts
 {
     /// <summary>
     /// Interface for base base methods of health repository.

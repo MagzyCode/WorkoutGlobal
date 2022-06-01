@@ -1,6 +1,6 @@
 ﻿using WorkoutGlobal.Api.Models;
 
-namespace WorkoutGlobal.Api.Contracts.RepositoryContracts
+namespace WorkoutGlobal.Api.Contracts
 {
     public interface IStoreVideoRepository
     {
@@ -14,6 +14,6 @@ namespace WorkoutGlobal.Api.Contracts.RepositoryContracts
 
         public Task<IEnumerable<StoreVideo>> GetAllStoreVideosAsync();
 
-        // public Task<IEnumerable<Video>> GetUserVideosAsync(Guid userId);
+        public Task<bool> IsStoreVideoExists(Guid userId, Guid videoId);
     }
 }

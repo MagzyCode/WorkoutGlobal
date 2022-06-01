@@ -195,11 +195,6 @@ namespace WorkoutGlobal.Api.Context
             #endregion
         }
 
-        ///// <summary>
-        ///// Represents table of user credentials.
-        ///// </summary>
-        //public DbSet<UserCredentials> UserCredentials { get; set; }
-
         /// <summary>
         /// Represent table of user account.
         /// </summary>

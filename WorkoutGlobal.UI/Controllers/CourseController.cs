@@ -9,16 +9,13 @@ namespace WorkoutGlobal.UI.Controllers
 {
     public class CourseController : Controller
     {
-        private readonly ICourseService _courseService;
         private readonly IMapper _mapper;
         private readonly IServiceManager _serviceManager;
 
         public CourseController(
-            ICourseService courseService,
             IMapper mapper,
             IServiceManager serviceManager)
         {
-            _courseService = courseService;
             _mapper = mapper;
             _serviceManager = serviceManager;
         }
@@ -30,7 +27,7 @@ namespace WorkoutGlobal.UI.Controllers
 
         public async Task<IActionResult> CoursesList()
         {
-            var courses = await _courseService.GetAllCoursesAsync();
+            var courses = await _serviceManager.CourseService.GetAllCoursesAsync();
 
             var coursesViewModel = _mapper.Map<IEnumerable<CourseViewModel>>(courses);
 
@@ -39,7 +36,7 @@ namespace WorkoutGlobal.UI.Controllers
 
         public async Task<IActionResult> ShowCourseTitle(Guid courseId)
         {
-            var course = await _courseService.GetCourseAsync(courseId);
+            var course = await _serviceManager.CourseService.GetCourseAsync(courseId);
 
             var courseViewModel = _mapper.Map<CourseViewModel>(course);
 

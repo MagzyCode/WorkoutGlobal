@@ -1,11 +1,10 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
-using WorkoutGlobal.Api.Contracts.RepositoryManagerContracts;
+using WorkoutGlobal.Api.Contracts;
 using WorkoutGlobal.Api.Filters.ActionFilters;
 using WorkoutGlobal.Api.Models;
-using WorkoutGlobal.Api.Models.DTOs.StoreVideoDTOs;
+using WorkoutGlobal.Api.Models.Dto;
 using WorkoutGlobal.Api.Models.ErrorModels;
 
 namespace WorkoutGlobal.Api.Controllers
@@ -29,14 +28,12 @@ namespace WorkoutGlobal.Api.Controllers
         [ModelValidationFilter]
         public async Task<IActionResult> CreateStoreVideo([FromBody] CreationStoreVideoDto storeVideoDto)
         {
-            var storeVideos = await _repositoryManager.StoreVideoRepository.GetAllStoreVideosAsync();
-
-            var isExisted = storeVideos.Any(x => x.SavedVideoId == storeVideoDto.SavedVideoId && x.UserId == storeVideoDto.UserId);
+            var isExisted = await _repositoryManager.StoreVideoRepository.IsStoreVideoExists(storeVideoDto.UserId, storeVideoDto.SavedVideoId);
 
             if (isExisted)
-                return BadRequest(new ErrorDetails()
+                return Conflict(new ErrorDetails()
                 {
-                    StatusCode = StatusCodes.Status400BadRequest,
+                    StatusCode = StatusCodes.Status409Conflict,
                     Message = "There is exist store video with data.",
                     Details = new StackTrace().ToString()
                 });
@@ -55,9 +52,9 @@ namespace WorkoutGlobal.Api.Controllers
             var storeVideo = await _repositoryManager.StoreVideoRepository.GetStoreVideoAsync(storeVideoId);
 
             if (storeVideo == null)
-                return BadRequest(new ErrorDetails()
+                return NotFound(new ErrorDetails()
                 {
-                    StatusCode = StatusCodes.Status400BadRequest,
+                    StatusCode = StatusCodes.Status404NotFound,
                     Message = "There is no store video with such id.",
                     Details = new StackTrace().ToString()
                 });
@@ -75,9 +72,9 @@ namespace WorkoutGlobal.Api.Controllers
             var storeVideo = await _repositoryManager.StoreVideoRepository.GetStoreVideoAsync(storeVideoId);
 
             if (storeVideo == null)
-                return BadRequest(new ErrorDetails()
+                return NotFound(new ErrorDetails()
                 {
-                    StatusCode = StatusCodes.Status400BadRequest,
+                    StatusCode = StatusCodes.Status404NotFound,
                     Message = "There is no store video with such id.",
                     Details = new StackTrace().ToString()
                 });
@@ -93,9 +90,9 @@ namespace WorkoutGlobal.Api.Controllers
             var storeVideo = await _repositoryManager.StoreVideoRepository.GetStoreVideoAsync(storeVideoId);
 
             if (storeVideo == null)
-                return BadRequest(new ErrorDetails()
+                return NotFound(new ErrorDetails()
                 {
-                    StatusCode = StatusCodes.Status400BadRequest,
+                    StatusCode = StatusCodes.Status404NotFound,
                     Message = "There is no store video with such id.",
                     Details = new StackTrace().ToString()
                 });

@@ -1,26 +1,17 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using WorkoutGlobal.Api.Context;
-using WorkoutGlobal.Api.Contracts.RepositoryContracts;
+using WorkoutGlobal.Api.Contracts;
 using WorkoutGlobal.Api.Models;
-using WorkoutGlobal.Api.Repositories.BaseRepositories;
 
-namespace WorkoutGlobal.Api.Repositories.ModelsRepositories
+namespace WorkoutGlobal.Api.Repositories
 {
     public class SubscribeCourseRepository : BaseRepository<SubscribeCourse>, ISubscribeCourseRepository
     {
-        //private readonly ICourseRepository _courseRepository;
-        // private readonly IUserRepository _userRepository;
-
         public SubscribeCourseRepository(
             WorkoutGlobalContext workoutGlobalContext, 
             IConfiguration configurationManager)
-            // ICourseRepository courseRepository,
-            //IUserRepository userRepository) 
             : base(workoutGlobalContext, configurationManager)
-        {
-            // _courseRepository = courseRepository;
-            // _userRepository = userRepository;
-        }
+        { }
 
         public async Task CreateSubscribeCourseAsync(SubscribeCourse subscribeCourse)
         {
@@ -41,21 +32,6 @@ namespace WorkoutGlobal.Api.Repositories.ModelsRepositories
             return models;
         }
 
-        //public async Task<IEnumerable<User>> GetCourseSubscribersAsync(Guid courseId)
-        //{
-        //    var usersIds = await GetAll()
-        //        .Where(x => x.SubscribeCourseId == courseId)
-        //        .Select(x => x.SubscriberId)
-        //        .ToListAsync();
-
-        //    var users = new List<User>();
-
-        //    foreach (var userId in usersIds)
-        //        users.Add(await _userRepository.GetUserAsync(userId));
-
-        //    return users;
-        //}
-
         public async Task<SubscribeCourse> GetSubscribeCourseAsync(Guid subscribeCourseId)
         {
             var model = await GetModelAsync(subscribeCourseId);
@@ -63,20 +39,12 @@ namespace WorkoutGlobal.Api.Repositories.ModelsRepositories
             return model;
         }
 
-        //public async Task<IEnumerable<Course>> GetUserSubscribeCoursesAsync(Guid userId)
-        //{
-        //    var coursesIds = await GetAll()
-        //        .Where(x => x.SubscriberId == userId)
-        //        .Select(x => x.SubscribeCourseId)
-        //        .ToListAsync();
+        public async Task<bool> IsCourseSubscriptionExists(Guid userId, Guid courseId)
+        {
+            var isExisted = await Context.SubscribeCourses.AnyAsync(model => model.SubscriberId == userId && model.SubscribeCourseId == courseId);
 
-        //    var courses = new List<Course>();
-
-        //    foreach (var courseId in coursesIds)
-        //        courses.Add(await Context.Courses.FindAsync(courseId));
-
-        //    return courses;
-        //}
+            return isExisted;
+        }
 
         public async Task UpdateSubscribeCourseAsync(SubscribeCourse subscribeCourse)
         {

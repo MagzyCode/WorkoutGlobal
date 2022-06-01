@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
-using WorkoutGlobal.Api.Models.DTOs.UserDTOs;
+using WorkoutGlobal.Api.Models.Dto;
 
-namespace WorkoutGlobal.Api.Models.Validators.UserValidators
+namespace WorkoutGlobal.Api.Models.Validators
 {
     /// <summary>
     /// Fluent Validator for UserRegistrationDto.

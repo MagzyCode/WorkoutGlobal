@@ -5,55 +5,55 @@ namespace WorkoutGlobal.UI.ApiConnection.Contracts
 {
     public interface IUserService : IApiData
     {
-        [Put("/api/users/{userId}")]
-        public Task UpdateUserAsync(Guid userId, [Body] User user);
+        [Put("/api/accounts/{accountId}")]
+        public Task UpdateUserAsync(Guid accountId, [Body] User user);
 
-        [Delete("/api/users/{userId}")]
-        public Task DeleteUserAsync(Guid userId);
+        [Delete("/api/accounts/{accountId}")]
+        public Task DeleteUserAsync(Guid accountId);
 
-        [Get("/api/users/{userId}")]
-        public Task<User> GetUserAsync(Guid userId);
+        [Get("/api/accounts/{accountId}")]
+        public Task<User> GetUserAsync(Guid accountId);
 
-        [Get("/api/users")]
+        [Get("/api/accounts")]
         public Task<IEnumerable<User>> GetAllUsersAsync();
 
-        [Get("/api/users/{userId}/userCredential")]
-        public Task<UserCredentialsModel> GetUserCredentialsAsync(Guid userId);
+        [Get("/api/accounts/{accountId}/userCredential")]
+        public Task<UserCredentialsModel> GetUserCredentialsAsync(Guid accountId);
 
-        [Get("/api/users/username/{username}")]
+        [Get("/api/accounts/account/{username}")]
         public Task<User> GetUserByUsernameAsync(string username);
 
-        [Get("/api/users/{userId}/createdVideos")]
-        public Task<IEnumerable<Video>> GetTrainerCreatedVideosAsync(Guid userId);
+        [Get("/api/accounts/{accountId}/createdVideos")]
+        public Task<IEnumerable<Video>> GetTrainerCreatedVideosAsync(Guid accountId);
 
-        [Get("/api/users/{userId}/createdCourses")]
-        public Task<IEnumerable<Course>> GetTrainerCreatedCoursesAsync(Guid userId);
+        [Get("/api/accounts/{accountId}/createdCourses")]
+        public Task<IEnumerable<Course>> GetTrainerCreatedCoursesAsync(Guid accountId);
 
-        [Get("/api/users/{userId}/createdEvents")]
-        public Task<IEnumerable<SportEvent>> GetTrainerCreatedEventsAsync(Guid userId);
+        [Get("/api/accounts/{accountId}/createdEvents")]
+        public Task<IEnumerable<SportEvent>> GetTrainerCreatedEventsAsync(Guid accountId);
 
-        [Get("/api/users/{userId}/orders")]
-        public Task<IEnumerable<Order>> GetUserOrdersAsync(Guid userId);
+        [Get("/api/accounts/{accountId}/orders")]
+        public Task<IEnumerable<Order>> GetUserOrdersAsync(Guid accountId);
 
-        [Get("/api/users/{userId}/posts")]
-        public Task<IEnumerable<Post>> GetUserPostsAsync (Guid userId);
+        [Get("/api/accounts/{accountId}/posts")]
+        public Task<IEnumerable<Post>> GetUserPostsAsync (Guid accountId);
 
-        [Get("/api/users/{userId}/comments")]
-        public Task<IEnumerable<Comment>> GetUserCommentsAsync(Guid userId);
+        [Get("/api/accounts/{accountId}/comments")]
+        public Task<IEnumerable<Comment>> GetUserCommentsAsync(Guid accountId);
 
-        [Get("/api/users/{userId}/subscribeCourses")]
-        public Task<IEnumerable<Course>> GetUserSubscribeCoursesAsync(Guid userId);
+        [Get("/api/accounts/{accountId}/savedCourses")]
+        public Task<IEnumerable<Course>> GetUserSubscribeCoursesAsync(Guid accountId);
 
-        [Get("/api/users/{userId}/savedVideos")]
-        public Task<IEnumerable<Video>> GetUserSavedVideosAsync(Guid userId);
+        [Get("/api/accounts/{accountId}/savedVideos")]
+        public Task<IEnumerable<Video>> GetUserSavedVideosAsync(Guid accountId);
 
-        [Get("/api/users/{userId}/subscribeEvents")]
-        public Task<IEnumerable<SportEvent>> GetUserSubscribeEventsAsync(Guid userId);
+        [Get("/api/accounts/{accountId}/subscribeEvents")]
+        public Task<IEnumerable<SportEvent>> GetUserSubscribeEventsAsync(Guid accountId);
 
-        [Post("/api/users")]
+        [Post("/api/accounts")]
         public Task CreateUserAsync([Body] User user);
 
-        [Get("/api/users/{userId}/subscribe/subscriveCourses")]
-        public Task<IEnumerable<SubscribeCourse>> GetUserSubscribeCoursesByIdAsync(Guid userId);
+        [Get("/api/accounts/{accountId}/subscriveCourses")]
+        public Task<IEnumerable<SubscribeCourse>> GetUserSubscribeCoursesByIdAsync(Guid accountId);
     }
 }

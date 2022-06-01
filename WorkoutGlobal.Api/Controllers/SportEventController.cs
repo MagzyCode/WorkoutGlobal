@@ -1,12 +1,10 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
-using WorkoutGlobal.Api.Contracts.RepositoryManagerContracts;
+using WorkoutGlobal.Api.Contracts;
 using WorkoutGlobal.Api.Filters.ActionFilters;
 using WorkoutGlobal.Api.Models;
-using WorkoutGlobal.Api.Models.DTOs.SportEventDTOs;
-using WorkoutGlobal.Api.Models.DTOs.UserDTOs;
+using WorkoutGlobal.Api.Models.Dto;
 using WorkoutGlobal.Api.Models.ErrorModels;
 
 namespace WorkoutGlobal.Api.Controllers
@@ -44,10 +42,10 @@ namespace WorkoutGlobal.Api.Controllers
             var sportEvent = await _repositoryManager.SportEventRepository.GetEventAsync(sportEventId);
 
             if (sportEvent == null)
-                return BadRequest(new ErrorDetails()
+                return NotFound(new ErrorDetails()
                 {
-                    StatusCode = StatusCodes.Status400BadRequest,
-                    Message = "There is no category with such id.",
+                    StatusCode = StatusCodes.Status404NotFound,
+                    Message = "There is no sport event with such id.",
                     Details = new StackTrace().ToString()
                 });
 
@@ -64,10 +62,10 @@ namespace WorkoutGlobal.Api.Controllers
             var sportEvent = await _repositoryManager.SportEventRepository.GetEventAsync(sportEventId);
 
             if (sportEvent == null)
-                return BadRequest(new ErrorDetails()
+                return NotFound(new ErrorDetails()
                 {
-                    StatusCode = StatusCodes.Status400BadRequest,
-                    Message = "There is no category with such id.",
+                    StatusCode = StatusCodes.Status404NotFound,
+                    Message = "There is no sport event with such id.",
                     Details = new StackTrace().ToString()
                 });
 
@@ -92,10 +90,10 @@ namespace WorkoutGlobal.Api.Controllers
             var sportEvent = await _repositoryManager.SportEventRepository.GetEventAsync(sportEventId);
 
             if (sportEvent == null)
-                return BadRequest(new ErrorDetails()
+                return NotFound(new ErrorDetails()
                 {
-                    StatusCode = StatusCodes.Status400BadRequest,
-                    Message = "There is no category with such id.",
+                    StatusCode = StatusCodes.Status404NotFound,
+                    Message = "There is no sport event with such id.",
                     Details = new StackTrace().ToString()
                 });
 
@@ -110,10 +108,10 @@ namespace WorkoutGlobal.Api.Controllers
             var sportEvent = await _repositoryManager.SportEventRepository.GetEventAsync(sportEventId);
 
             if (sportEvent == null)
-                return BadRequest(new ErrorDetails()
+                return NotFound(new ErrorDetails()
                 {
-                    StatusCode = StatusCodes.Status400BadRequest,
-                    Message = "There is no category with such id.",
+                    StatusCode = StatusCodes.Status404NotFound,
+                    Message = "There is no sport event with such id.",
                     Details = new StackTrace().ToString()
                 });
 

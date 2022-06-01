@@ -1,6 +1,6 @@
 ﻿using WorkoutGlobal.Api.Models;
 
-namespace WorkoutGlobal.Api.Contracts.RepositoryContracts
+namespace WorkoutGlobal.Api.Contracts
 {
     public interface ISubscribeCourseRepository
     {
@@ -14,8 +14,6 @@ namespace WorkoutGlobal.Api.Contracts.RepositoryContracts
 
         public Task<IEnumerable<SubscribeCourse>> GetAllSubscribeCourseAsync();
 
-        // public Task<IEnumerable<Course>> GetUserSubscribeCoursesAsync(Guid userId);
-
-        // public Task<IEnumerable<User>> GetCourseSubscribersAsync(Guid courseId);
+        public Task<bool> IsCourseSubscriptionExists(Guid userId, Guid courseId);
     }
 }

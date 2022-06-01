@@ -1,21 +1,15 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using WorkoutGlobal.Api.Context;
-using WorkoutGlobal.Api.Contracts.RepositoryContracts;
+using WorkoutGlobal.Api.Contracts;
 using WorkoutGlobal.Api.Models;
-using WorkoutGlobal.Api.Repositories.BaseRepositories;
 
-namespace WorkoutGlobal.Api.Repositories.ModelsRepositories
+namespace WorkoutGlobal.Api.Repositories
 {
     public class CategoryRepository : BaseRepository<Category>, ICategoryRepository
     {
-        //private readonly ICourseRepository _courseRepository;
-        //private readonly IVideoRepository _videoRepository;
-
         public CategoryRepository(
             WorkoutGlobalContext workoutGlobalContext, 
             IConfiguration configurationManager)
-            //ICourseRepository courseRepository,
-            //IVideoRepository videoRepository) 
             : base(workoutGlobalContext, configurationManager)
         {
         }
@@ -58,20 +52,12 @@ namespace WorkoutGlobal.Api.Repositories.ModelsRepositories
             var courses = await Context.Courses
                 .Where(model => model.CategoryId == categoryId)
                 .ToListAsync();
-                
-                // _courseRepository.GetAllCoursesAsync();
-
-            //var courses = allCourses.Where(model => model.CategoryId == categoryId).ToList();
 
             return courses;
         }
 
         public async Task<IEnumerable<Video>> GetCategoryVideosAsync(Guid categoryId)
         {
-            //var allVideos = await _videoRepository.GetAllVideosAsync();
-
-            //var videos = allVideos.Where(model => model.CategoryId == categoryId).ToList();
-
             var videos = await Context.Videos
                 .Where(model => model.CategoryId == categoryId && model.IsPublic == true)
                 .ToListAsync();

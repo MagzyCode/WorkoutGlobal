@@ -1,6 +1,6 @@
 ﻿using WorkoutGlobal.Api.Models;
 
-namespace WorkoutGlobal.Api.Contracts.RepositoryContracts
+namespace WorkoutGlobal.Api.Contracts
 {
     public interface ICourseVideoRepository
     {

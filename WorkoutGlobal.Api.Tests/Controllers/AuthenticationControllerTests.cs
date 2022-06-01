@@ -4,7 +4,7 @@ using Xunit;
 using AutoMapper;
 using WorkoutGlobal.Api.Contracts.RepositoryManagerContracts;
 using System.Threading.Tasks;
-using WorkoutGlobal.Api.Models.DTOs.UserDTOs;
+using WorkoutGlobal.Api.Models.Dto.UserDTOs;
 using WorkoutGlobal.Api.Contracts.AuthenticationManagerContracts;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;

@@ -1,23 +1,15 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
-using WorkoutGlobal.Api.Contracts.RepositoryManagerContracts;
+using WorkoutGlobal.Api.Contracts;
 using WorkoutGlobal.Api.Filters.ActionFilters;
 using WorkoutGlobal.Api.Models;
-using WorkoutGlobal.Api.Models.DTOs.CommentDTOs;
-using WorkoutGlobal.Api.Models.DTOs.CourseDTOs;
-using WorkoutGlobal.Api.Models.DTOs.OrderDTOs;
-using WorkoutGlobal.Api.Models.DTOs.PostDTOs;
-using WorkoutGlobal.Api.Models.DTOs.SportEventDTOs;
-using WorkoutGlobal.Api.Models.DTOs.SubscribeCourseDTOs;
-using WorkoutGlobal.Api.Models.DTOs.UserCredentialDTOs;
-using WorkoutGlobal.Api.Models.DTOs.UserDTOs;
-using WorkoutGlobal.Api.Models.DTOs.VideoDTOs;
+using WorkoutGlobal.Api.Models.Dto;
 using WorkoutGlobal.Api.Models.ErrorModels;
 
 namespace WorkoutGlobal.Api.Controllers
 {
-    [Route("api/users")]
+    [Route("api/accounts")]
     [ApiController]
     public class UserController : ControllerBase
     {
@@ -32,16 +24,16 @@ namespace WorkoutGlobal.Api.Controllers
             _mapper = mapper;
         }
 
-        [HttpPut("{userId}")]
+        [HttpPut("{accountId}")]
         [ModelValidationFilter]
-        public async Task<IActionResult> UpdateUser(Guid userId, [FromBody] UserDto userDto)
+        public async Task<IActionResult> UpdateUser(Guid accountId, [FromBody] UserDto userDto)
         {
-            var user = await _repositoryManager.UserRepository.GetUserAsync(userId);
+            var user = await _repositoryManager.UserRepository.GetUserAsync(accountId);
 
             if (user == null)
-                return BadRequest(new ErrorDetails()
+                return NotFound(new ErrorDetails()
                 {
-                    StatusCode = StatusCodes.Status400BadRequest,
+                    StatusCode = StatusCodes.Status404NotFound,
                     Message = "There is no user with such id.",
                     Details = new StackTrace().ToString()
                 });
@@ -53,15 +45,15 @@ namespace WorkoutGlobal.Api.Controllers
             return NoContent();
         }
 
-        [HttpDelete("{userId}")]
-        public async Task<IActionResult> DeleteUser(Guid userId)
+        [HttpDelete("{accountId}")]
+        public async Task<IActionResult> DeleteUser(Guid accountId)
         {
-            var user = await _repositoryManager.UserRepository.GetUserAsync(userId);
+            var user = await _repositoryManager.UserRepository.GetUserAsync(accountId);
 
             if (user == null)
-                return BadRequest(new ErrorDetails()
+                return NotFound(new ErrorDetails()
                 {
-                    StatusCode = StatusCodes.Status400BadRequest,
+                    StatusCode = StatusCodes.Status404NotFound,
                     Message = "There is no user with such id.",
                     Details = new StackTrace().ToString()
                 });
@@ -71,10 +63,18 @@ namespace WorkoutGlobal.Api.Controllers
             return NoContent();
         }
 
-        [HttpGet("{userId}")]
-        public async Task<IActionResult> GetUser(Guid userId)
+        [HttpGet("{accountId}")]
+        public async Task<IActionResult> GetUser(Guid accountId)
         {
-            var user = await _repositoryManager.UserRepository.GetUserAsync(userId);
+            var user = await _repositoryManager.UserRepository.GetUserAsync(accountId);
+
+            if (user == null)
+                return NotFound(new ErrorDetails()
+                {
+                    StatusCode = StatusCodes.Status404NotFound,
+                    Message = "There is no user with such id.",
+                    Details = new StackTrace().ToString()
+                });
 
             var userDto = _mapper.Map<UserDto>(user);
 
@@ -91,35 +91,35 @@ namespace WorkoutGlobal.Api.Controllers
             return Ok(usersDto);
         }
 
-        [HttpGet("{userId}/userCredential")]
-        public async Task<IActionResult> GetUserCredentials(Guid userId)
+        [HttpGet("{accountId}/userCredential")]
+        public async Task<IActionResult> GetUserCredentials(Guid accountId)
         {
-            var user = await _repositoryManager.UserRepository.GetUserAsync(userId);
+            var user = await _repositoryManager.UserRepository.GetUserAsync(accountId);
 
             if (user == null)
-                return BadRequest(new ErrorDetails()
+                return NotFound(new ErrorDetails()
                 {
-                    StatusCode = StatusCodes.Status400BadRequest,
+                    StatusCode = StatusCodes.Status404NotFound,
                     Message = "There is no user with such id.",
                     Details = new StackTrace().ToString()
                 });
 
-            var userCredential = await _repositoryManager.UserRepository.GetUserCredentialsAsync(userId);
+            var userCredential = await _repositoryManager.UserRepository.GetUserCredentialsAsync(accountId);
 
             var userCredentialDto = _mapper.Map<UserCredentialDto>(userCredential);
 
             return Ok(userCredentialDto);
         }
 
-        [HttpGet("username/{username}")]
+        [HttpGet("account/{username}")]
         public async Task<IActionResult> GetUserByUsername(string username)
         {
             var user = await _repositoryManager.UserRepository.GetUserByUsernameAsync(username);
 
             if (user == null)
-                return BadRequest(new ErrorDetails()
+                return NotFound(new ErrorDetails()
                 {
-                    StatusCode = StatusCodes.Status400BadRequest,
+                    StatusCode = StatusCodes.Status404NotFound,
                     Message = "There is no user with such id.",
                     Details = new StackTrace().ToString()
                 });
@@ -129,20 +129,20 @@ namespace WorkoutGlobal.Api.Controllers
             return Ok(userDto);
         }
 
-        [HttpGet("{userId}/createdVideos")]
-        public async Task<IActionResult> GetTrainerCreatedVideos(Guid userId)
+        [HttpGet("{accountId}/createdVideos")]
+        public async Task<IActionResult> GetTrainerCreatedVideos(Guid accountId)
         {
-            var user = await _repositoryManager.UserRepository.GetUserAsync(userId);
+            var user = await _repositoryManager.UserRepository.GetUserAsync(accountId);
 
             if (user == null)
-                return BadRequest(new ErrorDetails()
+                return NotFound(new ErrorDetails()
                 {
-                    StatusCode = StatusCodes.Status400BadRequest,
+                    StatusCode = StatusCodes.Status404NotFound,
                     Message = "There is no user with such id.",
                     Details = new StackTrace().ToString()
                 });
 
-            var createdVideos = await _repositoryManager.UserRepository.GetTrainerCreatedVideosAsync(userId);
+            var createdVideos = await _repositoryManager.UserRepository.GetTrainerCreatedVideosAsync(accountId);
 
             var videosDto = _mapper.Map<IEnumerable<VideoDto>>(createdVideos);
 
@@ -150,160 +150,160 @@ namespace WorkoutGlobal.Api.Controllers
         }
 
 
-        [HttpGet("{userId}/createdCourses")]
-        public async Task<IActionResult> GetTrainerCreatedCourses(Guid userId)
+        [HttpGet("{accountId}/createdCourses")]
+        public async Task<IActionResult> GetTrainerCreatedCourses(Guid accountId)
         {
-            var user = await _repositoryManager.UserRepository.GetUserAsync(userId);
+            var user = await _repositoryManager.UserRepository.GetUserAsync(accountId);
 
             if (user == null)
-                return BadRequest(new ErrorDetails()
+                return NotFound(new ErrorDetails()
                 {
-                    StatusCode = StatusCodes.Status400BadRequest,
+                    StatusCode = StatusCodes.Status404NotFound,
                     Message = "There is no user with such id.",
                     Details = new StackTrace().ToString()
                 });
 
-            var createdCourses = await _repositoryManager.UserRepository.GetTrainerCreatedCoursesAsync(userId);
+            var createdCourses = await _repositoryManager.UserRepository.GetTrainerCreatedCoursesAsync(accountId);
 
             var coursesDto = _mapper.Map<IEnumerable<CourseDto>>(createdCourses);
 
             return Ok(coursesDto);
         }
 
-        [HttpGet("{userId}/createdEvents")]
-        public async Task<IActionResult> GetTrainerCreatedEvents(Guid userId)
+        [HttpGet("{accountId}/createdEvents")]
+        public async Task<IActionResult> GetTrainerCreatedEvents(Guid accountId)
         {
-            var user = await _repositoryManager.UserRepository.GetUserAsync(userId);
+            var user = await _repositoryManager.UserRepository.GetUserAsync(accountId);
 
             if (user == null)
-                return BadRequest(new ErrorDetails()
+                return NotFound(new ErrorDetails()
                 {
-                    StatusCode = StatusCodes.Status400BadRequest,
+                    StatusCode = StatusCodes.Status404NotFound,
                     Message = "There is no user with such id.",
                     Details = new StackTrace().ToString()
                 });
 
-            var createdEvents = _repositoryManager.UserRepository.GetTrainerCreatedEventsAsync(userId);
+            var createdEvents = _repositoryManager.UserRepository.GetTrainerCreatedEventsAsync(accountId);
 
             var eventsDto = _mapper.Map<IEnumerable<SportEventDto>>(createdEvents);
 
             return Ok(eventsDto);
         }
 
-        [HttpGet("{userId}/orders")]
-        public async Task<IActionResult> GetUserOrders(Guid userId)
+        [HttpGet("{accountId}/orders")]
+        public async Task<IActionResult> GetUserOrders(Guid accountId)
         {
-            var user = await _repositoryManager.UserRepository.GetUserAsync(userId);
+            var user = await _repositoryManager.UserRepository.GetUserAsync(accountId);
 
             if (user == null)
-                return BadRequest(new ErrorDetails()
+                return NotFound(new ErrorDetails()
                 {
-                    StatusCode = StatusCodes.Status400BadRequest,
+                    StatusCode = StatusCodes.Status404NotFound,
                     Message = "There is no user with such id.",
                     Details = new StackTrace().ToString()
                 });
 
-            var orders = _repositoryManager.UserRepository.GetUserOrdersAsync(userId);
+            var orders = _repositoryManager.UserRepository.GetUserOrdersAsync(accountId);
 
             var ordersDto = _mapper.Map<IEnumerable<OrderDto>>(orders);
 
             return Ok(ordersDto);
         }
 
-        [HttpGet("{userId}/posts")]
-        public async Task<IActionResult> GetUserPosts(Guid userId)
+        [HttpGet("{accountId}/posts")]
+        public async Task<IActionResult> GetUserPosts(Guid accountId)
         {
-            var user = await _repositoryManager.UserRepository.GetUserAsync(userId);
+            var user = await _repositoryManager.UserRepository.GetUserAsync(accountId);
 
             if (user == null)
-                return BadRequest(new ErrorDetails()
+                return NotFound(new ErrorDetails()
                 {
-                    StatusCode = StatusCodes.Status400BadRequest,
+                    StatusCode = StatusCodes.Status404NotFound,
                     Message = "There is no user with such id.",
                     Details = new StackTrace().ToString()
                 });
 
-            var posts = _repositoryManager.UserRepository.GetUserPostsAsync(userId);
+            var posts = _repositoryManager.UserRepository.GetUserPostsAsync(accountId);
 
             var postsDto = _mapper.Map<IEnumerable<PostDto>>(posts);
 
             return Ok(postsDto);
         }
 
-        [HttpGet("{userId}/comments")]
-        public async Task<IActionResult> GetUserComments(Guid userId)
+        [HttpGet("{accountId}/comments")]
+        public async Task<IActionResult> GetUserComments(Guid accountId)
         {
-            var user = await _repositoryManager.UserRepository.GetUserAsync(userId);
+            var user = await _repositoryManager.UserRepository.GetUserAsync(accountId);
 
             if (user == null)
-                return BadRequest(new ErrorDetails()
+                return NotFound(new ErrorDetails()
                 {
-                    StatusCode = StatusCodes.Status400BadRequest,
+                    StatusCode = StatusCodes.Status404NotFound,
                     Message = "There is no user with such id.",
                     Details = new StackTrace().ToString()
                 });
 
-            var comments = _repositoryManager.UserRepository.GetUserCommentsAsync(userId);
+            var comments = _repositoryManager.UserRepository.GetUserCommentsAsync(accountId);
 
             var commentsDto = _mapper.Map<IEnumerable<CommentDto>>(comments);
 
             return Ok(commentsDto);
         }
 
-        [HttpGet("{userId}/subscribeCourses")]
-        public async Task<IActionResult> GetUserSubscribeCourses(Guid userId)
+        [HttpGet("{accountId}/savedCourses")]
+        public async Task<IActionResult> GetUserSavedCourses(Guid accountId)
         {
-            var user = await _repositoryManager.UserRepository.GetUserAsync(userId);
+            var user = await _repositoryManager.UserRepository.GetUserAsync(accountId);
 
             if (user == null)
-                return BadRequest(new ErrorDetails()
+                return NotFound(new ErrorDetails()
                 {
-                    StatusCode = StatusCodes.Status400BadRequest,
+                    StatusCode = StatusCodes.Status404NotFound,
                     Message = "There is no user with such id.",
                     Details = new StackTrace().ToString()
                 });
 
-            var subscribeCourses = await _repositoryManager.UserRepository.GetUserSubscribeCoursesAsync(userId);
+            var subscribeCourses = await _repositoryManager.UserRepository.GetUserSubscribeCoursesAsync(accountId);
 
             var subscribeCoursesDto = _mapper.Map<IEnumerable<CourseDto>>(subscribeCourses);
 
             return Ok(subscribeCoursesDto);
         }
 
-        [HttpGet("{userId}/savedVideos")]
-        public async Task<IActionResult> GetUserSavedVideos(Guid userId)
+        [HttpGet("{accountId}/savedVideos")]
+        public async Task<IActionResult> GetUserSavedVideos(Guid accountId)
         {
-            var user = await _repositoryManager.UserRepository.GetUserAsync(userId);
+            var user = await _repositoryManager.UserRepository.GetUserAsync(accountId);
 
             if (user == null)
-                return BadRequest(new ErrorDetails()
+                return NotFound(new ErrorDetails()
                 {
-                    StatusCode = StatusCodes.Status400BadRequest,
+                    StatusCode = StatusCodes.Status404NotFound,
                     Message = "There is no user with such id.",
                     Details = new StackTrace().ToString()
                 });
 
-            var savedVideos = await _repositoryManager.UserRepository.GetUserSavedVideosAsync(userId);
+            var savedVideos = await _repositoryManager.UserRepository.GetUserSavedVideosAsync(accountId);
 
             var savedVideosDto = _mapper.Map<IEnumerable<VideoDto>>(savedVideos);
 
             return Ok(savedVideosDto);
         }
 
-        [HttpGet("{userId}/subscribeEvents")]
-        public async Task<IActionResult> GetUserSubscribeEvents(Guid userId)
+        [HttpGet("{accountId}/subscribeEvents")]
+        public async Task<IActionResult> GetUserSubscribeEvents(Guid accountId)
         {
-            var user = await _repositoryManager.UserRepository.GetUserAsync(userId);
+            var user = await _repositoryManager.UserRepository.GetUserAsync(accountId);
 
             if (user == null)
-                return BadRequest(new ErrorDetails()
+                return NotFound(new ErrorDetails()
                 {
-                    StatusCode = StatusCodes.Status400BadRequest,
+                    StatusCode = StatusCodes.Status404NotFound,
                     Message = "There is no user with such id.",
                     Details = new StackTrace().ToString()
                 });
 
-            var subscribeEvents = await _repositoryManager.UserRepository.GetUserSubscribeEventsAsync(userId);
+            var subscribeEvents = await _repositoryManager.UserRepository.GetUserSubscribeEventsAsync(accountId);
 
             var subscribeEventsDto = _mapper.Map<IEnumerable<SportEventDto>>(subscribeEvents);
 
@@ -320,20 +320,20 @@ namespace WorkoutGlobal.Api.Controllers
             return StatusCode(StatusCodes.Status201Created);
         }
 
-        [HttpGet("{userId}/subscribe/subscriveCourses")]
-        public async Task<IActionResult> GetUserSubscribeCoursesById(Guid userId)
+        [HttpGet("{accountId}/subscriveCourses")]
+        public async Task<IActionResult> GetUserSubscribeCourses(Guid accountId)
         {
-            var user = await _repositoryManager.UserRepository.GetUserAsync(userId);
+            var user = await _repositoryManager.UserRepository.GetUserAsync(accountId);
 
             if (user == null)
-                return BadRequest(new ErrorDetails()
+                return NotFound(new ErrorDetails()
                 {
-                    StatusCode = StatusCodes.Status400BadRequest,
+                    StatusCode = StatusCodes.Status404NotFound,
                     Message = "There is no user with such id.",
                     Details = new StackTrace().ToString()
                 });
 
-            var subscribeCourses = await _repositoryManager.UserRepository.GetUserSubscribeCoursesByIdAsync(userId);
+            var subscribeCourses = await _repositoryManager.UserRepository.GetUserSubscribeCoursesByIdAsync(accountId);
 
             var subscribeCoursesDto = _mapper.Map<IEnumerable<SubscribeCourseDto>>(subscribeCourses);
 

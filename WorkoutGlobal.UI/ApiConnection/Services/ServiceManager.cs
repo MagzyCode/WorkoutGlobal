@@ -16,6 +16,7 @@ namespace WorkoutGlobal.UI.ApiConnection.Services
         private readonly IUserService _userService;
         private readonly IVideoService _videoService;
         private readonly ICourseVideoService _courseVideoService;
+        private readonly IAuthenticationService _authenticationService;
 
         public ServiceManager(
             ICategoryService categoryService,
@@ -29,7 +30,8 @@ namespace WorkoutGlobal.UI.ApiConnection.Services
             IUserCredentialsServive userCredentialsServive,
             IUserService userService,
             IVideoService videoService,
-            ICourseVideoService courseVideoService)
+            ICourseVideoService courseVideoService,
+            IAuthenticationService authenticationService)
         {
             _categoryService = categoryService;
             _commentsBlockService = commentsBlockService;
@@ -43,6 +45,7 @@ namespace WorkoutGlobal.UI.ApiConnection.Services
             _videoService = videoService;
             _storeVideoService = storeVideoService;
             _courseVideoService = courseVideoService;
+            _authenticationService = authenticationService;
         }
 
         public ICategoryService CategoryService => _categoryService;
@@ -67,5 +70,7 @@ namespace WorkoutGlobal.UI.ApiConnection.Services
 
         public IVideoService VideoService => _videoService;
         public ICourseVideoService CourseVideoService => _courseVideoService;
+
+        public IAuthenticationService AuthenticationService => _authenticationService;
     }
 }

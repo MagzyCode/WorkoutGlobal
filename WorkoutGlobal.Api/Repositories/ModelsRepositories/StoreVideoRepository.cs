@@ -1,23 +1,17 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using WorkoutGlobal.Api.Context;
-using WorkoutGlobal.Api.Contracts.RepositoryContracts;
+using WorkoutGlobal.Api.Contracts;
 using WorkoutGlobal.Api.Models;
-using WorkoutGlobal.Api.Repositories.BaseRepositories;
 
-namespace WorkoutGlobal.Api.Repositories.ModelsRepositories
+namespace WorkoutGlobal.Api.Repositories
 {
     public class StoreVideoRepository : BaseRepository<StoreVideo>, IStoreVideoRepository
     {
-        // private readonly IVideoRepository _videoRepository;
- 
         public StoreVideoRepository(
             WorkoutGlobalContext workoutGlobalContext, 
             IConfiguration configurationManager)
-            // IVideoRepository videoRepository) 
             : base(workoutGlobalContext, configurationManager)
-        {
-            // _videoRepository = videoRepository;
-        }
+        { }
 
         public async Task CreateStoreVideoAsync(StoreVideo storeVideo)
         {
@@ -45,20 +39,12 @@ namespace WorkoutGlobal.Api.Repositories.ModelsRepositories
             return model;
         }
 
-        //public async Task<IEnumerable<Video>> GetUserVideosAsync(Guid userId)
-        //{
-        //    var videoIds = await GetAll()
-        //        .Where(x => x.UserId == userId)
-        //        .Select(x => x.SavedVideoId)
-        //        .ToListAsync();
+        public async Task<bool> IsStoreVideoExists(Guid userId, Guid videoId)
+        {
+            var isExists = await Context.StoreVideos.AnyAsync(model => model.SavedVideoId == videoId &&  model.UserId == userId);
 
-        //    var videos = new List<Video>();
-
-        //    foreach (var videoId in videoIds)
-        //        videos.Add(await _videoRepository.GetVideoAsync(videoId));
-
-        //    return videos;
-        //}
+            return isExists;
+        }
 
         public async Task UpdateStoreVideoAsync(StoreVideo storeVideo)
         {
