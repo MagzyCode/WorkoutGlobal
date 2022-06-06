@@ -1,6 +1,7 @@
 ﻿using Refit;
 using WorkoutGlobal.UI.ApiConnection.Contracts;
 using WorkoutGlobal.UI.Models;
+using WorkoutGlobal.UI.ViewModels;
 
 namespace WorkoutGlobal.UI.ApiConnection.Services
 {
@@ -9,7 +10,7 @@ namespace WorkoutGlobal.UI.ApiConnection.Services
         public SportEventService(IConfiguration configuration) : base(configuration)
         { }
 
-        public async Task CreateSportEventAsync(SportEvent sportEvent)
+        public async Task CreateSportEventAsync(CreationSportEventViewModel sportEvent)
             => await Service.CreateSportEventAsync(sportEvent);
 
         public async Task DeleteSportEventAsync(Guid sportEventId)

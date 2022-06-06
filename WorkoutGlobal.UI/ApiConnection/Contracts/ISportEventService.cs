@@ -1,12 +1,13 @@
 ﻿using Refit;
 using WorkoutGlobal.UI.Models;
+using WorkoutGlobal.UI.ViewModels;
 
 namespace WorkoutGlobal.UI.ApiConnection.Contracts
 {
     public interface ISportEventService : IApiData
     {
         [Post("/api/sportEvents")]
-        public Task CreateSportEventAsync([Body] SportEvent sportEvent);
+        public Task CreateSportEventAsync([Body] CreationSportEventViewModel sportEvent);
 
         [Put("/api/sportEvents/{sportEventId}")]
         public Task UpdateSportEventAsync(Guid sportEventId, [Body] SportEvent sportEvent);

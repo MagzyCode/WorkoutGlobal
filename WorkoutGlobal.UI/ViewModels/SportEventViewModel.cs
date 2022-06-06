@@ -11,5 +11,6 @@
         public string HostLink { get; set; }
 
         public string JoinLink { get; set; }
+        public DateTime EventStartTime { get; set; }
     }
 }

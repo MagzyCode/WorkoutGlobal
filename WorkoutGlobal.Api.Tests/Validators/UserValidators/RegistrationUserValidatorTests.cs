@@ -1,8 +1,8 @@
 ﻿using FluentAssertions;
 using FluentValidation.Results;
 using System.Threading.Tasks;
-using WorkoutGlobal.Api.Models.Dto.UserDTOs;
-using WorkoutGlobal.Api.Models.Validators.UserValidators;
+using WorkoutGlobal.Api.Models.Dto;
+using WorkoutGlobal.Api.Models.Validators;
 using Xunit;
 
 namespace WorkoutGlobal.Api.Tests.Validators.UserValidators
@@ -20,7 +20,7 @@ namespace WorkoutGlobal.Api.Tests.Validators.UserValidators
                 UserName = null,
                 Email = null,
                 Password = null,
-                ConfirmPassword = null
+                // ConfirmPassword = null
             };
 
             // act
@@ -42,7 +42,7 @@ namespace WorkoutGlobal.Api.Tests.Validators.UserValidators
                 UserName = "",
                 Email = "",
                 Password = "",
-                ConfirmPassword = ""
+                // ConfirmPassword = ""
             };
 
             // act
@@ -64,7 +64,7 @@ namespace WorkoutGlobal.Api.Tests.Validators.UserValidators
                 UserName = "AA",
                 Email = "aa@mail.com",
                 Password = "asdas",
-                ConfirmPassword = "asdas"
+                // ConfirmPassword = "asdas"
             };
 
             // act
@@ -86,7 +86,7 @@ namespace WorkoutGlobal.Api.Tests.Validators.UserValidators
                 UserName = "alpha bet",
                 Email = "aa@mail.com",
                 Password = "zqwert 123",
-                ConfirmPassword = "zqwert 123"
+                // ConfirmPassword = "zqwert 123"
             };
 
             // act
@@ -108,7 +108,7 @@ namespace WorkoutGlobal.Api.Tests.Validators.UserValidators
                 UserName = "alphabet",
                 Email = "@mail.com",
                 Password = "zqwert123",
-                ConfirmPassword = "zqwert123"
+                // ConfirmPassword = "zqwert123"
             };
 
             // act
@@ -131,7 +131,7 @@ namespace WorkoutGlobal.Api.Tests.Validators.UserValidators
                 UserName = "alphabet",
                 Email = "a@mail.com",
                 Password = "zqwert123",
-                ConfirmPassword = "zqwert1234"
+                // ConfirmPassword = "zqwert1234"
             };
 
             // act

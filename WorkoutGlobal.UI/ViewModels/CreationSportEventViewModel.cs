@@ -1,16 +1,12 @@
-﻿namespace WorkoutGlobal.Api.Models.Dto
+﻿namespace WorkoutGlobal.UI.ViewModels
 {
-    public class SportEventDto
+    public class CreationSportEventViewModel
     {
-        public Guid Id { get; set; }
         public string EventName { get; set; }
         public string EventDescription { get; set; }
 
         public Guid TrainerId { get; set; }
 
-        public string HostLink { get; set; }
-
-        public string JoinLink { get; set; }
         public DateTime EventStartTime { get; set; }
     }
 }

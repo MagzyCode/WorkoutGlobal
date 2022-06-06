@@ -2,14 +2,13 @@
 using Moq;
 using Xunit;
 using AutoMapper;
-using WorkoutGlobal.Api.Contracts.RepositoryManagerContracts;
+using WorkoutGlobal.Api.Contracts;
 using System.Threading.Tasks;
-using WorkoutGlobal.Api.Models.Dto.UserDTOs;
-using WorkoutGlobal.Api.Contracts.AuthenticationManagerContracts;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using WorkoutGlobal.Api.Models.ErrorModels;
 using Microsoft.AspNetCore.Http;
+using WorkoutGlobal.Api.Models.Dto;
 
 namespace WorkoutGlobal.Api.Tests.Controllers
 {

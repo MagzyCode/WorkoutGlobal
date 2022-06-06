@@ -1,8 +1,8 @@
 ﻿using System.Threading.Tasks;
-using WorkoutGlobal.Api.Models.Validators.UserValidators;
+using WorkoutGlobal.Api.Models.Validators;
 using FluentAssertions;
 using Xunit;
-using WorkoutGlobal.Api.Models.Dto.UserDTOs;
+using WorkoutGlobal.Api.Models.Dto;
 using FluentValidation.Results;
 
 namespace WorkoutGlobal.Api.Tests.Validators.UserValidators
