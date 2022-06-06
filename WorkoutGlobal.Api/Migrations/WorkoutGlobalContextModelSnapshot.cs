@@ -52,21 +52,21 @@ namespace WorkoutGlobal.Api.Migrations
                         new
                         {
                             Id = "f4a4ce79-c6b3-4e12-9c98-ff07b5030752",
-                            ConcurrencyStamp = "ac6fd6e7-7376-434f-98a2-cf1000d41fb4",
+                            ConcurrencyStamp = "31aec6cb-c5fb-4d5c-8fcc-d82c458d87dd",
                             Name = "User",
                             NormalizedName = "USER"
                         },
                         new
                         {
                             Id = "6abe6f33-ae4b-4430-8f14-493dc9a5a9d1",
-                            ConcurrencyStamp = "9aa8aa2b-a7c6-41b5-948f-43e0766184cf",
+                            ConcurrencyStamp = "af7f4d4f-0d27-4a54-bf67-b74c7778da97",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
                             Id = "4f4d7080-beee-4a97-be65-2ffccde5eb72",
-                            ConcurrencyStamp = "d3c888ca-4b12-44b3-9b2f-91b126a2ffc8",
+                            ConcurrencyStamp = "d0b380c1-ca7b-4dc2-8325-5dda1c9d243d",
                             Name = "Trainer",
                             NormalizedName = "TRAINER"
                         });
@@ -400,7 +400,7 @@ namespace WorkoutGlobal.Api.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("EventCreatorId")
+                    b.Property<Guid>("CategoryId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("EventDescription")
@@ -423,7 +423,9 @@ namespace WorkoutGlobal.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("EventCreatorId");
+                    b.HasIndex("CategoryId");
+
+                    b.HasIndex("TrainerId");
 
                     b.ToTable("SportEvents");
                 });
@@ -569,6 +571,22 @@ namespace WorkoutGlobal.Api.Migrations
                         .HasFilter("[UserCredentialsId] IS NOT NULL");
 
                     b.ToTable("UserAccounts");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("07d1a783-adf7-4dcc-aa35-53abd353152d"),
+                            DateOfBirth = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DateOfRegistration = new DateTime(2022, 6, 6, 12, 6, 4, 828, DateTimeKind.Utc).AddTicks(2806),
+                            FirstName = "Admin",
+                            IsStatusVerify = false,
+                            LastName = "Admin",
+                            Patronymic = "Admin",
+                            ResidencePlace = "Server room",
+                            Sex = 0,
+                            SportsActivity = 0,
+                            UserCredentialsId = "b5b84fd7-5366-44eb-9d1b-408c6a4a8926"
+                        });
                 });
 
             modelBuilder.Entity("WorkoutGlobal.Api.Models.UserCredentials", b =>
@@ -643,13 +661,13 @@ namespace WorkoutGlobal.Api.Migrations
                         {
                             Id = "b5b84fd7-5366-44eb-9d1b-408c6a4a8926",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "cfd37afd-a0e4-42e2-9fa3-5083f0c08691",
+                            ConcurrencyStamp = "97fe8204-b066-4053-a3e1-41d953e33a8c",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             PasswordHash = "21c9b9e74e5071de6d6c872ccae5af4deb3b42563cd649a3179a5780163b6238",
                             PasswordSalt = "46da4fb783d806ab",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "9fc8d43a-a9c8-46e2-a6e0-b47e6e457b1d",
+                            SecurityStamp = "4d913bb0-a1c2-408d-9555-73682e8d76c4",
                             TwoFactorEnabled = false,
                             UserName = "MagzyCode"
                         });
@@ -850,9 +868,19 @@ namespace WorkoutGlobal.Api.Migrations
 
             modelBuilder.Entity("WorkoutGlobal.Api.Models.SportEvent", b =>
                 {
+                    b.HasOne("WorkoutGlobal.Api.Models.Category", "Category")
+                        .WithMany("SportEvents")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
                     b.HasOne("WorkoutGlobal.Api.Models.User", "EventCreator")
-                        .WithMany()
-                        .HasForeignKey("EventCreatorId");
+                        .WithMany("SportEvents")
+                        .HasForeignKey("TrainerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Category");
 
                     b.Navigation("EventCreator");
                 });
@@ -957,6 +985,8 @@ namespace WorkoutGlobal.Api.Migrations
                 {
                     b.Navigation("Courses");
 
+                    b.Navigation("SportEvents");
+
                     b.Navigation("Videos");
                 });
 
@@ -1002,6 +1032,8 @@ namespace WorkoutGlobal.Api.Migrations
                     b.Navigation("Posts");
 
                     b.Navigation("SavedVideos");
+
+                    b.Navigation("SportEvents");
 
                     b.Navigation("SubscribeCourses");
 

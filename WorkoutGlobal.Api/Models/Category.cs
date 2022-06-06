@@ -10,5 +10,6 @@
 
         public ICollection<Video> Videos { get; set; }
         public ICollection<Course> Courses { get; set; }
+        public ICollection<SportEvent> SportEvents { get; set; }
     }
 }

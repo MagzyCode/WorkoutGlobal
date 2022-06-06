@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace WorkoutGlobal.Api.Migrations
 {
-    public partial class ReInit : Migration
+    public partial class ReInitial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -286,18 +286,25 @@ namespace WorkoutGlobal.Api.Migrations
                     EventName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     EventDescription = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     TrainerId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    EventCreatorId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     HostLink = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    JoinLink = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    JoinLink = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    EventStartTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CategoryId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_SportEvents", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_SportEvents_UserAccounts_EventCreatorId",
-                        column: x => x.EventCreatorId,
-                        principalTable: "UserAccounts",
+                        name: "FK_SportEvents_Categories_CategoryId",
+                        column: x => x.CategoryId,
+                        principalTable: "Categories",
                         principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_SportEvents_UserAccounts_TrainerId",
+                        column: x => x.TrainerId,
+                        principalTable: "UserAccounts",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -518,20 +525,25 @@ namespace WorkoutGlobal.Api.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "4f4d7080-beee-4a97-be65-2ffccde5eb72", "f8ac6a34-885e-4e85-95f3-7525fc949a5e", "Trainer", "TRAINER" },
-                    { "6abe6f33-ae4b-4430-8f14-493dc9a5a9d1", "65d59954-feb8-4bce-97ca-991f995c35d2", "Admin", "ADMIN" },
-                    { "f4a4ce79-c6b3-4e12-9c98-ff07b5030752", "9c6accec-e100-4a19-b3c4-7cbb0edeb3b8", "User", "USER" }
+                    { "4f4d7080-beee-4a97-be65-2ffccde5eb72", "d0b380c1-ca7b-4dc2-8325-5dda1c9d243d", "Trainer", "TRAINER" },
+                    { "6abe6f33-ae4b-4430-8f14-493dc9a5a9d1", "af7f4d4f-0d27-4a54-bf67-b74c7778da97", "Admin", "ADMIN" },
+                    { "f4a4ce79-c6b3-4e12-9c98-ff07b5030752", "31aec6cb-c5fb-4d5c-8fcc-d82c458d87dd", "User", "USER" }
                 });
 
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PasswordSalt", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
-                values: new object[] { "b5b84fd7-5366-44eb-9d1b-408c6a4a8926", 0, "9f44ea84-8914-4e75-be31-bbc5fc3128ea", null, false, false, null, null, null, "21c9b9e74e5071de6d6c872ccae5af4deb3b42563cd649a3179a5780163b6238", "46da4fb783d806ab", null, false, "fdfde3c8-a995-4cfc-91b9-3882545a5d95", false, "MagzyCode" });
+                values: new object[] { "b5b84fd7-5366-44eb-9d1b-408c6a4a8926", 0, "97fe8204-b066-4053-a3e1-41d953e33a8c", null, false, false, null, null, null, "21c9b9e74e5071de6d6c872ccae5af4deb3b42563cd649a3179a5780163b6238", "46da4fb783d806ab", null, false, "4d913bb0-a1c2-408d-9555-73682e8d76c4", false, "MagzyCode" });
 
             migrationBuilder.InsertData(
                 table: "AspNetUserRoles",
                 columns: new[] { "RoleId", "UserId" },
                 values: new object[] { "6abe6f33-ae4b-4430-8f14-493dc9a5a9d1", "b5b84fd7-5366-44eb-9d1b-408c6a4a8926" });
+
+            migrationBuilder.InsertData(
+                table: "UserAccounts",
+                columns: new[] { "Id", "ClassificationNumber", "DateOfBirth", "DateOfRegistration", "FirstName", "Height", "IsStatusVerify", "LastName", "Patronymic", "ResidencePlace", "Sex", "SportsActivity", "UserCredentialsId", "Weight" },
+                values: new object[] { new Guid("07d1a783-adf7-4dcc-aa35-53abd353152d"), null, new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2022, 6, 6, 12, 6, 4, 828, DateTimeKind.Utc).AddTicks(2806), "Admin", null, false, "Admin", "Admin", "Server room", 0, 0, "b5b84fd7-5366-44eb-9d1b-408c6a4a8926", null });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -629,9 +641,14 @@ namespace WorkoutGlobal.Api.Migrations
                 column: "ProductSupplierId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_SportEvents_EventCreatorId",
+                name: "IX_SportEvents_CategoryId",
                 table: "SportEvents",
-                column: "EventCreatorId");
+                column: "CategoryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SportEvents_TrainerId",
+                table: "SportEvents",
+                column: "TrainerId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Stockrooms_ProductId",

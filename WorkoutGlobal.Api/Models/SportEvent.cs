@@ -17,5 +17,9 @@
         public DateTime EventStartTime { get; set; }
         
         public ICollection<SubscribeEvent> ParticipatingUsers { get; set; }
+
+        public Guid CategoryId { get; set; }
+
+        public Category Category { get; set; }
     }
 }

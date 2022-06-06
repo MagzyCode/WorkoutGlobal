@@ -140,8 +140,6 @@ namespace WorkoutGlobal.Api.Controllers
         {
             var tokenHandler = new JwtSecurityTokenHandler();
 
-            var key = _configuration["Zoom:ApiKey"];
-
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Issuer = _configuration["Zoom:ApiKey"],
@@ -169,7 +167,7 @@ namespace WorkoutGlobal.Api.Controllers
             RestResponse restResponse = await client.ExecuteAsync(request);
             var jObject = JObject.Parse(restResponse.Content);
 
-            return ((string)jObject["join_url"], (string)jObject["start_url"]);
+            return (jObject["join_url"].ToString(), jObject["start_url"].ToString());
         }
 
     }

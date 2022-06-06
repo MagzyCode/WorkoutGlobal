@@ -7,6 +7,8 @@
 
         public Guid TrainerId { get; set; }
 
+        public Guid CategoryId { get; set; }
+
         public DateTime EventStartTime { get; set; }
     }
 }

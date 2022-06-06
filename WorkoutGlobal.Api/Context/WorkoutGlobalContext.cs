@@ -27,8 +27,9 @@ namespace WorkoutGlobal.Api.Context
             base.OnModelCreating(modelBuilder);
             modelBuilder.ApplyConfiguration(new RoleConfiguration());
             modelBuilder.ApplyConfiguration(new UserCredentialsConfiguration());
+            modelBuilder.ApplyConfiguration(new UserAccountsConfiguration());
             modelBuilder.ApplyConfiguration(new UserRolesConfiguration());
-
+            
             #region UserCredentials relations with User
 
             modelBuilder.Entity<UserCredentials>()
@@ -64,6 +65,21 @@ namespace WorkoutGlobal.Api.Context
                 .HasOne(course => course.Category)
                 .WithMany(category => category.Courses)
                 .HasForeignKey(course => course.CategoryId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            #endregion
+
+            #region SportEvent relations with User, ssCategoty
+
+            modelBuilder.Entity<SportEvent>()
+                .HasOne(sportEvent => sportEvent.EventCreator)
+                .WithMany(trainer => trainer.SportEvents)
+                .HasForeignKey(sportEvent => sportEvent.TrainerId);
+
+            modelBuilder.Entity<SportEvent>()
+                .HasOne(sportEvent => sportEvent.Category)
+                .WithMany(category => category.SportEvents)
+                .HasForeignKey(sportEvent => sportEvent.CategoryId)
                 .OnDelete(DeleteBehavior.NoAction);
 
             #endregion

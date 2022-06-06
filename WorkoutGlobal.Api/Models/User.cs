@@ -108,5 +108,6 @@ namespace WorkoutGlobal.Api.Models
         public ICollection<SubscribeCourse> SubscribeCourses { get; set; }
         public ICollection<StoreVideo> SavedVideos { get; set; }
         public ICollection<SubscribeEvent> SubscribeEvents { get; set; }
+        public ICollection<SportEvent> SportEvents { get; set; }
     }
 }

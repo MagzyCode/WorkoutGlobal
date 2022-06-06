@@ -99,6 +99,7 @@ namespace WorkoutGlobal.Api.Repositories
             var userCredentials = await GenerateUserCredentialsAsync(userCredentialsDto);
             var user = _mapper.Map<User>(userRegistrationDto);
 
+            userCredentials.Id = Guid.NewGuid().ToString();
             await _userManager.CreateAsync(userCredentials);
             user.UserCredentialsId = userCredentials.Id;
             await _userManager.AddToRoleAsync(userCredentials, "User");
