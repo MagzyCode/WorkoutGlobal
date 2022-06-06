@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using WorkoutGlobal.UI.ViewModels.Authentication;
+using WorkoutGlobal.UI.ViewModels;
 
 namespace WorkoutGlobal.UI.Models.Validators.UserValidators
 {

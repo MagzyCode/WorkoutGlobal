@@ -1,16 +1,11 @@
-﻿namespace WorkoutGlobal.UI.Models
+﻿namespace WorkoutGlobal.Api.Models.Dto
 {
-    /// <summary>
-    /// Represents user credentials model.
-    /// </summary>
-    public class UserCredentials
+    public class UpdationUserCredentialsDto
     {
         public string Id { get; set; }
-
         public string UserName { get; set; }
-
         public string Email { get; set; }
-
         public string PhoneNumber { get; set; }
+        public string Password { get; set; }
     }
 }

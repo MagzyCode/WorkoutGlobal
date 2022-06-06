@@ -32,5 +32,6 @@
         public IStoreVideoRepository StoreVideoRepository { get; }
         public ISubscribeCourseRepository SubscribeCourseRepository { get; }
         public ISubscribeEventRepository SubscribeEventRepository { get; }
+        public IPostRepository PostRepository { get; }
     }
 }

@@ -6,10 +6,10 @@ namespace WorkoutGlobal.UI.ApiConnection.Contracts
     public interface IUserCredentialsServive : IApiData
     {
         [Get("/api/userCredentials/{userCredentialId}")]
-        public Task<UserCredentialsModel> GetUserCredentialAsync(string userCredentialId);
+        public Task<UserCredentials> GetUserCredentialAsync(string userCredentialId);
 
         [Put("/api/userCredentials/{userCredentialId}")]
-        public Task UpdateUserCredentialAsync(string userCredentialId, [Body] UserCredentialsModel userCredentialsModel);
+        public Task UpdateUserCredentialAsync(string userCredentialId, [Body] UserCredentials userCredentialsModel);
 
         [Delete("/api/userCredentials/{userCredentialId}")]
         public Task DeleteUserCredentialAsync(string userCredentialId);

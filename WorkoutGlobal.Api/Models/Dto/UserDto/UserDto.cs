@@ -65,11 +65,6 @@ namespace WorkoutGlobal.Api.Models.Dto
         public string ClassificationNumber { get; set; }
 
         /// <summary>
-        /// Identifies whether the trainer's status has been confirmed.
-        /// </summary>
-        public bool IsStatusVerify { get; set; }
-
-        /// <summary>
         /// Foreign key with user credentials model.
         /// </summary>
         public string UserCredentialsId { get; set; }

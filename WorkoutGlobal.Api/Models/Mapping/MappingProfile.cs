@@ -14,13 +14,17 @@ namespace WorkoutGlobal.Api.Models.Mapping
         public MappingProfile()
         {
             CreateMap<UserRegistrationDto, UserCredentials>();
-            CreateMap<UserRegistrationDto, UserWithCredentialsDto>();
-            CreateMap<UserAuthorizationDto, UserWithCredentialsDto>();
-            CreateMap<UserWithCredentialsDto, UserCredentials>();
+
+            CreateMap<UserRegistrationDto, UpdationUserCredentialsDto>();
+            CreateMap<UpdationUserCredentialsDto, UserCredentials>();
+
             CreateMap<UserCredentialDto, UserCredentials>().ReverseMap();
+            CreateMap<UserCredentials, UpdationUserCredentialsDto>().ReverseMap();
+            CreateMap<UpdationUserDto, UpdationUserCredentialsDto>().ReverseMap();
 
             CreateMap<UserRegistrationDto, User>();
             CreateMap<User, UserDto>().ReverseMap();
+            CreateMap<UpdationUserDto, User>().ReverseMap();
 
             CreateMap<Video, VideoDto>().ReverseMap();
             CreateMap<Video, CreationVideoDto>().ReverseMap();

@@ -12,7 +12,7 @@
                         var userCredentials = await ServiceManager.UserService.GetUserCredentialsAsync(user.Id);
                         var userFullName = $"{user.FirstName} {user.LastName} {user.Patronymic} ({userCredentials.UserName})";
                     }
-                    <p>@userFullName</p> <b>@waitingTrainer.ClassificationNumber</b>
+                    @userFullName <b>@waitingTrainer.ClassificationNumber</b>
                 </p>
                 <form method="post" asp-controller="User" asp-action="AdminProfile" asp-route-userId="@waitingTrainer.Id">
                     <button class="addTrainer-button" type="submit">Повысить</button>

@@ -29,14 +29,6 @@ namespace WorkoutGlobal.UI.Models
         public string Password { get; set; }
 
         /// <summary>
-        /// User confirm password for registration.
-        /// </summary>
-        /// <example>
-        /// password_1
-        /// </example>
-        public string ConfirmPassword { get; set; }
-
-        /// <summary>
         /// User first name.
         /// </summary>
         public string FirstName { get; set; }
@@ -80,12 +72,6 @@ namespace WorkoutGlobal.UI.Models
         /// User's attitude to sports.
         /// </summary>
         public int SportsActivity { get; set; }
-
-
-        /// <summary>
-        /// Registration date for user in system. 
-        /// </summary>
-        public DateTime DateOfRegistration { get; set; } = DateTime.Now;
 
         /// <summary>
         /// Trainer official classification number.

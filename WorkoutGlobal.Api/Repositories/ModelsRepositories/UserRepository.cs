@@ -182,7 +182,7 @@ namespace WorkoutGlobal.Api.Repositories
 
         public async Task UpdateUserAsync(User user)
         {
-            await UpdateUserAsync(user);
+            Update(user);
             await SaveChangesAsync();
         }
     }

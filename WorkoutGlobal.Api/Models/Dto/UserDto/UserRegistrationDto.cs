@@ -31,13 +31,7 @@ namespace WorkoutGlobal.Api.Models.Dto
         /// </example>
         public string Password { get; set; }
 
-        /// <summary>
-        /// User confirm password for registration.
-        /// </summary>
-        /// <example>
-        /// password_1
-        /// </example>
-        public string ConfirmPassword { get; set; }
+        public string PhoneNumber { get; set; }
 
         /// <summary>
         /// User first name.
@@ -83,12 +77,6 @@ namespace WorkoutGlobal.Api.Models.Dto
         /// User's attitude to sports.
         /// </summary>
         public SportsActivity SportsActivity { get; set; }
-
-
-        /// <summary>
-        /// Registration date for user in system. 
-        /// </summary>
-        public DateTime DateOfRegistration { get; set; } = DateTime.Now;
 
         /// <summary>
         /// Trainer official classification number.

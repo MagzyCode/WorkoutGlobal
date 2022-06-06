@@ -41,6 +41,8 @@ namespace WorkoutGlobal.Api.Contracts
         /// Generate valid user credentials on registration info.
         /// </summary>
         /// <param name="userCredentialsDto">User credentials.</param>
-        public Task<UserCredentials> GenerateUserCredentialsAsync(UserWithCredentialsDto userCredentialsDto);
+        public Task<UserCredentials> GenerateUserCredentialsAsync(UpdationUserCredentialsDto updationUserCredentialsDto);
+
+        public Task<string> GenerateHashPasswordAsync(string password, string salt);
     }
 }

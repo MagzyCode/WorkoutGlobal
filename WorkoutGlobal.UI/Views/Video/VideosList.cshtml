@@ -7,8 +7,7 @@
         @{
             if (User.Identity.IsAuthenticated)
             {
-                var username = User.Identity.Name;
-                var user = await ServiceManager.UserService.GetUserByUsernameAsync(username);
+                var user = await ServiceManager.UserService.GetUserByUsernameAsync(User.Identity.Name);
                 var userCredential = await ServiceManager.UserService.GetUserCredentialsAsync(user.Id);
                 var role = await ServiceManager.UserCredentialsServive.GetUserCredentialRoleAsync(userCredential.Id);
 

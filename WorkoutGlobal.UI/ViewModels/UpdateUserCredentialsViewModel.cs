@@ -1,6 +1,6 @@
 ﻿namespace WorkoutGlobal.UI.ViewModels
 {
-    public class UserCredentialsModelViewModel
+    public class UpdateUserCredentialsViewModel
     {
         public string UserName { get; set; }
         public string Email { get; set; }

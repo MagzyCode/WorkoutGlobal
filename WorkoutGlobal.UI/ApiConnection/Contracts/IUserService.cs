@@ -18,7 +18,7 @@ namespace WorkoutGlobal.UI.ApiConnection.Contracts
         public Task<IEnumerable<User>> GetAllUsersAsync();
 
         [Get("/api/accounts/{accountId}/userCredential")]
-        public Task<UserCredentialsModel> GetUserCredentialsAsync(Guid accountId);
+        public Task<UserCredentials> GetUserCredentialsAsync(Guid accountId);
 
         [Get("/api/accounts/account/{username}")]
         public Task<User> GetUserByUsernameAsync(string username);

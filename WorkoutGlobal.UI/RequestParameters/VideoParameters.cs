@@ -1,4 +1,6 @@
-﻿namespace WorkoutGlobal.UI.RequestParameters
+﻿using Refit;
+
+namespace WorkoutGlobal.UI.RequestParameters
 {
     public class VideoParameters : RequestParameters
     {
@@ -6,6 +8,7 @@
             : base(pageNumber, pageSize)
         { }
 
+        [AliasAs("pageNumber")]
         public override int PageNumber
         {
             get { return _pageNumber; }
@@ -17,6 +20,8 @@
                   : throw new ArgumentException("Page number cannot be less than 1.");
             }
         }
+
+        [AliasAs("pageSize")]
         public override int PageSize
         {
             get { return _pageSize; }

@@ -43,6 +43,7 @@ namespace WorkoutGlobal.Api.Extensions
             services.AddScoped<IStoreVideoRepository, StoreVideoRepository>();
             services.AddScoped<ISubscribeCourseRepository, SubscribeCourseRepository>();
             services.AddScoped<ISubscribeEventRepository, SubscribeEventRepository>();
+            services.AddScoped<IPostRepository, PostRepository>();
 
             services.AddScoped<IRepositoryManager, RepositoryManager>();
         }

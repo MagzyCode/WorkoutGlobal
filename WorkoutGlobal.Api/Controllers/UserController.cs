@@ -26,7 +26,7 @@ namespace WorkoutGlobal.Api.Controllers
 
         [HttpPut("{accountId}")]
         [ModelValidationFilter]
-        public async Task<IActionResult> UpdateUser(Guid accountId, [FromBody] UserDto userDto)
+        public async Task<IActionResult> UpdateUser(Guid accountId, [FromBody] UpdationUserDto updationUserDto)
         {
             var user = await _repositoryManager.UserRepository.GetUserAsync(accountId);
 
@@ -38,11 +38,61 @@ namespace WorkoutGlobal.Api.Controllers
                     Details = new StackTrace().ToString()
                 });
 
-            var updateUser = _mapper.Map<User>(userDto);
+            var userCredentials = await _repositoryManager.UserRepository.GetUserCredentialsAsync(accountId);
 
-            await _repositoryManager.UserRepository.UpdateUserAsync(updateUser);
+            
+
+            // var updateUser = _mapper.Map<User>(updationUserDto);
+            //updateUser.Id = accountId;
+            // var updateUserCredentialsDto = _mapper.Map<UpdationUserCredentialsDto>(userDto);
+
+            await ToUserCredentials(userCredentials, updationUserDto);
+            ToUserAccount(user, updationUserDto);
+
+            //userCredentials.PasswordHash = await _repositoryManager.AuthenticationRepository.GenerateHashPasswordAsync(
+            //    updationUserDto.Password, userCredentials.PasswordSalt);
+            //userCredentials.UserName = updationUserDto.UserName;
+            //userCredentials.Email = updationUserDto.Email;
+            //userCredentials.PhoneNumber = updationUserDto.PhoneNumber;
+
+
+            //updateUserCredentialsDto.Password = await _repositoryManager.AuthenticationRepository.GenerateHashPasswordAsync(
+            //    updateUserCredentialsDto.Password, userCredentials.PasswordSalt);
+
+            //updateUserCredentialsDto.Id = userCredentials.Id;
+            // userCredentials = null;
+
+            // var updateUserCredentials = _mapper.Map<UserCredentials>(updateUserCredentialsDto);
+            await _repositoryManager.UserCredentialRepository.UpdateUserCredentialsAsync(userCredentials);
+
+            await _repositoryManager.UserRepository.UpdateUserAsync(user);
+            
 
             return NoContent();
+        }
+
+        private async Task ToUserCredentials(UserCredentials userCredentials, UpdationUserDto updationUserDto)
+        {
+            userCredentials.PasswordHash = await _repositoryManager.AuthenticationRepository.GenerateHashPasswordAsync(
+                updationUserDto.Password, userCredentials.PasswordSalt);
+            userCredentials.UserName = updationUserDto.UserName;
+            userCredentials.Email = updationUserDto.Email;
+            userCredentials.PhoneNumber = updationUserDto.PhoneNumber;
+        }
+
+        private void ToUserAccount(User user, UpdationUserDto updationUserDto)
+        {
+            user.FirstName = updationUserDto.FirstName;
+            user.LastName = updationUserDto.LastName;
+            user.Patronymic = updationUserDto.Patronymic;
+            user.DateOfBirth = updationUserDto.DateOfBirth;
+            user.ResidencePlace = updationUserDto.ResidencePlace;
+            user.Sex = updationUserDto.Sex;
+            user.Height = updationUserDto.Height;
+            user.Weight = updationUserDto.Weight;
+            user.SportsActivity = updationUserDto.SportsActivity;
+            user.DateOfRegistration = updationUserDto.DateOfRegistration;
+            user.ClassificationNumber = updationUserDto.ClassificationNumber;
         }
 
         [HttpDelete("{accountId}")]

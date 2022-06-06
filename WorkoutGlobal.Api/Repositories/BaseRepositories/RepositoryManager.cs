@@ -21,6 +21,7 @@ namespace WorkoutGlobal.Api.Repositories
         private readonly IStoreVideoRepository _storeVideoRepository;
         private readonly ISubscribeCourseRepository _subscribeCourseRepository;
         private readonly ISubscribeEventRepository _subscribeEventRepository;
+        private readonly IPostRepository _postRepository;
 
         /// <summary>
         /// Ctor for repository manager.
@@ -43,7 +44,8 @@ namespace WorkoutGlobal.Api.Repositories
             IStoreVideoRepository storeVideoRepository,
             ISubscribeCourseRepository subscribeCourseRepository,
             ISubscribeEventRepository subscribeEventRepository,
-            ICategoryRepository categoryRepository) 
+            ICategoryRepository categoryRepository,
+            IPostRepository postRepository) 
         {
             _healthRepository = healthRepository;
             _userCredentialsRepository = userCredentialsRepository;
@@ -59,6 +61,7 @@ namespace WorkoutGlobal.Api.Repositories
             _subscribeCourseRepository = subscribeCourseRepository;
             _subscribeEventRepository = subscribeEventRepository;
             _categoryRepository = categoryRepository;
+            _postRepository = postRepository;
         }
 
         /// <summary>
@@ -89,6 +92,7 @@ namespace WorkoutGlobal.Api.Repositories
         public IStoreVideoRepository StoreVideoRepository => _storeVideoRepository;
         public ISubscribeCourseRepository SubscribeCourseRepository => _subscribeCourseRepository;
         public ISubscribeEventRepository SubscribeEventRepository => _subscribeEventRepository;
+        public IPostRepository PostRepository => _postRepository;
 
     }
 }

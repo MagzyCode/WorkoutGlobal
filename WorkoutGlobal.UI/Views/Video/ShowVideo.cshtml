@@ -2,6 +2,14 @@
 @model VideoWithCommentsAndSubscriptionViewModel;
 
 <div id="showVideoPage">
+    @{
+        var isAuthenticated = User.Identity.IsAuthenticated;
+        var user = isAuthenticated
+            ? await ServiceManager.UserService.GetUserByUsernameAsync(User.Identity.Name)
+            : new User();
+        var userCredential = isAuthenticated ? await ServiceManager.UserService.GetUserCredentialsAsync(user.Id) : new UserCredentials();
+        var role = isAuthenticated ? await ServiceManager.UserCredentialsServive.GetUserCredentialRoleAsync(userCredential.Id) : string.Empty;
+    }
     <div>
         <iframe class="showVideo-iframe" src="@Model.Link"></iframe>
     </div>
@@ -18,11 +26,6 @@
         @{
             if (User.Identity.IsAuthenticated)
             {
-                var username = User.Identity.Name;
-                var user = await ServiceManager.UserService.GetUserByUsernameAsync(username);
-                var userCredential = await ServiceManager.UserService.GetUserCredentialsAsync(user.Id);
-                var role = await ServiceManager.UserCredentialsServive.GetUserCredentialRoleAsync(userCredential.Id);
-
                 if (role == "User")
                 {
                     <form method="post">
@@ -54,13 +57,13 @@
     <div class="video-list-background">
         <h2 class="showVideo-h2">Комментарии</h2>
 
-        @{
+      @*  @{
             var user1 = await ServiceManager.UserService.GetUserByUsernameAsync(User.Identity.Name);
             var userCredentials = await ServiceManager.UserService.GetUserCredentialsAsync(user1.Id);
             var role1 = await ServiceManager.UserCredentialsServive.GetUserCredentialRoleAsync(userCredentials.Id);
-        }
+        }*@
 
-        @if (User.Identity.IsAuthenticated && role1 == "User")
+        @if (User.Identity.IsAuthenticated && role == "User")
         {
             <form method="post">
                 <input class="showVideo-input-comment" type="text" asp-for="AdditionComment" placeholder="Type comment..." class="form-control"/>
@@ -95,47 +98,3 @@
     </div>
 
 </div>
-
-@*<div>
-    <div>
-        <iframe id="singleVideoFrameId" src="@Model.Link"></iframe>
-    </div>
-    <div class="video-list-background">
-        <p class="video-titles p-youtube-font-family-lg">@Model.Title</p>
-        <p class="video-titles p-youtube-font-family-sm">@Model.Description</p>
-    </div>
-    <div class="video-list-background">
-        <h2>Comments</h2>
-        <br>
-        @if (User.Identity.IsAuthenticated)
-        {
-            <form method="post">
-                <input type="text" asp-for="AdditionComment" placeholder="Type comment..." class="form-control"/>
-                <input type="hidden" asp-for="Id" value="@Model.Id"/>
-                <input type="hidden" asp-for="Link" value="@Model.Link"/>
-                <input type="hidden" asp-for="Title" value="@Model.Title"/>
-                <input type="hidden" asp-for="Description" value="@Model.Description"/>
-                <input type="hidden" asp-for="IsPublic" value="@Model.IsPublic"/>
-                <input type="hidden" asp-for="UserId" value="@Model.UserId"/>
-                <br>
-                <button asp-controller="Video" asp-action="SaveComment" type="submit" class="btn btn-primary">Leave a comment</button>
-            </form>
-            <br>
-        }
-        @foreach(var comment in Model.Comments.OrderByDescending(x => x.PostTime))
-        {
-            <div class="comment">
-                <p>
-                    @{
-                        var userName = comment.CommentatorName ?? "Anonymous";
-                    }
-                    <b>@userName</b> <small>@comment.PostTime.ToLocalTime()</small>
-                </p>
-                <p class="p-youtube-font-family-sm">
-                    @comment.CommentText
-                </p>
-            </div>
-            <br>
-        }
-    </div>
-</div>*@

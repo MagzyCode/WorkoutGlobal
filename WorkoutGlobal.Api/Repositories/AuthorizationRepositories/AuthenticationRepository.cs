@@ -60,35 +60,18 @@ namespace WorkoutGlobal.Api.Repositories
         }
 
         /// <summary>
-        /// Find user by his credentials.
-        /// </summary>
-        /// <param name="userCredentialsDto">User credentials.</param>
-        /// <returns>Existed user.</returns>
-        public UserCredentials FindUserByCredentials(UserWithCredentialsDto userCredentialsDto)
-        {
-            if (_userManager == null)
-                throw new ArgumentNullException(nameof(userCredentialsDto));
-
-            var userCredentials = Context.Users
-                .Where(user => user.UserName == userCredentialsDto.UserName)
-                .SingleOrDefault();
-
-            return userCredentials;
-        }
-
-        /// <summary>
         /// Generate valid user credentials on registration info.
         /// </summary>
-        /// <param name="userCredentialsDto">User credentials.</param>
-        public async Task<UserCredentials> GenerateUserCredentialsAsync(UserWithCredentialsDto userCredentialsDto)
+        /// <param name="updationUserCredentialsDto">User credentials.</param>
+        public async Task<UserCredentials> GenerateUserCredentialsAsync(UpdationUserCredentialsDto updationUserCredentialsDto)
         {
-            var userCredentials = _mapper.Map<UserCredentials>(userCredentialsDto);
+            var userCredentials = _mapper.Map<UserCredentials>(updationUserCredentialsDto);
 
             var saltBytes = new byte[8];
             new Random().NextBytes(saltBytes);
 
             userCredentials.PasswordSalt = BitConverter.ToString(saltBytes).ToLower().Replace("-", ""); ;
-            userCredentials.PasswordHash = await GenerateHashPasswordAsync(userCredentialsDto.Password, userCredentials.PasswordSalt);
+            userCredentials.PasswordHash = await GenerateHashPasswordAsync(updationUserCredentialsDto.Password, userCredentials.PasswordSalt);
 
             return userCredentials;
         }
@@ -100,11 +83,7 @@ namespace WorkoutGlobal.Api.Repositories
         /// <returns>If user existed in system, return true, otherwise return false.</returns>
         public bool IsUserExisted(UserRegistrationDto userRegistrationDto)
         {
-            if (userRegistrationDto == null)
-                throw new ArgumentNullException(nameof(userRegistrationDto));
-
-            var userCredentialsDto = _mapper.Map<UserWithCredentialsDto>(userRegistrationDto);
-            var existedUser = FindUserByCredentials(userCredentialsDto);
+            var existedUser = FindUserByCredentials(userRegistrationDto.UserName);
 
             return existedUser != null;
         }
@@ -116,10 +95,7 @@ namespace WorkoutGlobal.Api.Repositories
         /// <returns>A task that represents asynchronous Registrate action.</returns>
         public async Task RegistrateUserAsync(UserRegistrationDto userRegistrationDto)
         {
-            if (userRegistrationDto == null)
-                throw new ArgumentNullException(nameof(userRegistrationDto));
-
-            var userCredentialsDto = _mapper.Map<UserWithCredentialsDto>(userRegistrationDto);
+            var userCredentialsDto = _mapper.Map<UpdationUserCredentialsDto>(userRegistrationDto);
             var userCredentials = await GenerateUserCredentialsAsync(userCredentialsDto);
             var user = _mapper.Map<User>(userRegistrationDto);
 
@@ -142,8 +118,8 @@ namespace WorkoutGlobal.Api.Repositories
             if (userAuthorizationDto == null)
                 return false;
 
-            var userCredentialsDto = _mapper.Map<UserWithCredentialsDto>(userAuthorizationDto);
-            var userCredentials = FindUserByCredentials(userCredentialsDto);
+            // var userCredentialsDto = _mapper.Map<UserWithCredentialsDto>(userAuthorizationDto);
+            var userCredentials = FindUserByCredentials(userAuthorizationDto.UserName);
 
             if (userCredentials == null)
                 return false;
@@ -185,7 +161,7 @@ namespace WorkoutGlobal.Api.Repositories
             return tokenOptions;
         }
 
-        private async Task<string> GenerateHashPasswordAsync(string password, string salt)
+        public async Task<string> GenerateHashPasswordAsync(string password, string salt)
         {
             using var sha256 = SHA256.Create();
             var hashedBytes = await sha256.ComputeHashAsync(
@@ -194,6 +170,20 @@ namespace WorkoutGlobal.Api.Repositories
             var hashPassword = BitConverter.ToString(hashedBytes).ToString().ToLower().Replace("-", "");
 
             return hashPassword;
+        }
+
+        /// <summary>
+        /// Find user by his credentials.
+        /// </summary>
+        /// <param name="userCredentialsDto">User credentials.</param>
+        /// <returns>Existed user.</returns>
+        private UserCredentials FindUserByCredentials(string username)
+        {
+            var userCredentials = Context.Users
+                .Where(user => user.UserName == username)
+                .SingleOrDefault();
+
+            return userCredentials;
         }
     }
 

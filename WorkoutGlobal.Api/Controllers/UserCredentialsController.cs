@@ -44,7 +44,7 @@ namespace WorkoutGlobal.Api.Controllers
 
         [HttpPut("{userCredentialId}")]
         [ModelValidationFilter]
-        public async Task<IActionResult> UpdateUserCredential(string userCredentialId, [FromBody] UserCredentialDto userCredentialDto)
+        public async Task<IActionResult> UpdateUserCredential(string userCredentialId, [FromBody] UpdationUserCredentialsDto updationUserCredentialsDto)
         {
             var userCredential = await _repositoryManager.UserCredentialRepository.GetUserCredentialsAsync(userCredentialId);
 
@@ -56,7 +56,7 @@ namespace WorkoutGlobal.Api.Controllers
                     Details = new StackTrace().ToString()
                 });
 
-            var updateUserCredential = _mapper.Map<UserCredentials>(userCredentialDto);
+            var updateUserCredential = _mapper.Map<UserCredentials>(updationUserCredentialsDto);
 
             await _repositoryManager.UserCredentialRepository.UpdateUserCredentialsAsync(updateUserCredential);
 
@@ -113,6 +113,11 @@ namespace WorkoutGlobal.Api.Controllers
                 });
 
             await _repositoryManager.UserCredentialRepository.UpdateUserToTrainerAsync(userCredentialId);
+
+            var userAccount = await _repositoryManager.UserRepository.GetUserByUsernameAsync(userCredential.UserName);
+
+            userAccount.IsStatusVerify = true;
+            await _repositoryManager.UserRepository.UpdateUserAsync(userAccount);
 
             return NoContent();
         }

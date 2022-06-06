@@ -21,8 +21,8 @@ namespace WorkoutGlobal.Api.Repositories
 
         public async Task DeleteUserCredentialsAsync(UserCredentials userCredentials)
         {
-            // TODO: Проверить, работает ли без метода SaveChanges
-            await _userManager.DeleteAsync(userCredentials);
+            await _userManager.DeleteAsync(userCredentials); 
+            await SaveChangesAsync();
         }
 
         public async Task<IEnumerable<UserCredentials>> GetAllUserCredentialsAsync()
@@ -59,8 +59,8 @@ namespace WorkoutGlobal.Api.Repositories
 
         public async Task UpdateUserCredentialsAsync(UserCredentials userCredentials)
         {
-            // TODO: Проверить, работает ли без методы SaveChanges
             await _userManager.UpdateAsync(userCredentials);
+            await SaveChangesAsync();
         }
 
         public async Task UpdateUserToTrainerAsync(string userCredentialsId)

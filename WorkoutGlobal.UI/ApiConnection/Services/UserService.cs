@@ -36,7 +36,7 @@ namespace WorkoutGlobal.UI.ApiConnection.Services
         public async Task<IEnumerable<Comment>> GetUserCommentsAsync(Guid userId)
             => await Service.GetUserCommentsAsync(userId);
 
-        public async Task<UserCredentialsModel> GetUserCredentialsAsync(Guid userId)
+        public async Task<UserCredentials> GetUserCredentialsAsync(Guid userId)
             => await Service.GetUserCredentialsAsync(userId);
 
         public async Task<IEnumerable<Order>> GetUserOrdersAsync(Guid userId)

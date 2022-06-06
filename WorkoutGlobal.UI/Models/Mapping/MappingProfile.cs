@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using WorkoutGlobal.UI.ViewModels;
-using WorkoutGlobal.UI.ViewModels.Authentication;
 
 namespace WorkoutGlobal.UI.Models.Mapping
 {
@@ -37,6 +36,8 @@ namespace WorkoutGlobal.UI.Models.Mapping
             
             CreateMap<User, UserViewModel>().ReverseMap();
 
+            CreateMap<UpdateUser, UpdateUserViewModel>().ReverseMap();
+
             CreateMap<SportEvent, SportEventViewModel>().ReverseMap();
 
             CreateMap<StoreVideo, StoreVideoViewModel>().ReverseMap();
@@ -47,7 +48,7 @@ namespace WorkoutGlobal.UI.Models.Mapping
             CreateMap<Order, OrderViewModel>().ReverseMap();
             CreateMap<Post, PostViewModel>().ReverseMap();
 
-            CreateMap<UserCredentialsModel, UserCredentialsModelViewModel>().ReverseMap();
+            // CreateMap<UserCredentialsModel, UserCredentialsModelViewModel>().ReverseMap();
         }
     }
 }

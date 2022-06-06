@@ -2,12 +2,11 @@
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics;
 using System.Security.Claims;
 using WorkoutGlobal.UI.ApiConnection.Contracts;
 using WorkoutGlobal.UI.Filters.ActionFilters;
 using WorkoutGlobal.UI.Models;
-using WorkoutGlobal.UI.ViewModels.Authentication;
+using WorkoutGlobal.UI.ViewModels;
 
 namespace WorkoutGlobal.UI.Controllers
 {

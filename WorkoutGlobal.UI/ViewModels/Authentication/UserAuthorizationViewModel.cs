@@ -1,4 +1,4 @@
-﻿namespace WorkoutGlobal.UI.ViewModels.Authentication
+﻿namespace WorkoutGlobal.UI.ViewModels
 {
     /// <summary>
     /// Represents view model for authorization user.
