@@ -19,11 +19,6 @@ builder.Services.AddControllers();
 builder.Services.AddHealthChecks();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-//builder.Services.AddSwaggerGen(options => 
-//{
-//    var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-//    options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
-//});
 builder.Services.ConfigureSqlContext(builder.Configuration);
 builder.Services.ConfigureRepositories();
 builder.Services.AddAutoMapper(typeof(Program));
@@ -57,6 +52,8 @@ builder.Services.AddControllers()
         configuration.RegisterValidatorsFromAssemblyContaining<Program>();
         configuration.DisableDataAnnotationsValidation = true;
     });
+
+DtoModelsExtensions.Configuration = builder.Configuration;
 
 var app = builder.Build();
 

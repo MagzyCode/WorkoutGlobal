@@ -49,8 +49,6 @@ namespace WorkoutGlobal.Api.Middleware
                         error.Message = "Internal server error on WorkoutGlobal API.";
                         error.Details = new StackTrace().ToString();
                         break;
-
-
                 }
                 httpContext.Response.ContentType = "application/json";
 

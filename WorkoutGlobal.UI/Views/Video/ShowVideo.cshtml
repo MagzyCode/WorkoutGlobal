@@ -56,13 +56,6 @@
 
     <div class="video-list-background">
         <h2 class="showVideo-h2">Комментарии</h2>
-
-      @*  @{
-            var user1 = await ServiceManager.UserService.GetUserByUsernameAsync(User.Identity.Name);
-            var userCredentials = await ServiceManager.UserService.GetUserCredentialsAsync(user1.Id);
-            var role1 = await ServiceManager.UserCredentialsServive.GetUserCredentialRoleAsync(userCredentials.Id);
-        }*@
-
         @if (User.Identity.IsAuthenticated && role == "User")
         {
             <form method="post">

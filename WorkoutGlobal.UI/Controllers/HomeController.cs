@@ -17,7 +17,6 @@ namespace WorkoutGlobal.UI.Controllers
     {
         private readonly IMapper _mapper;
         private readonly IServiceManager _serviceManager;
-        //private readonly ApiConnection.Contracts.IAuthenticationService _authenticationService;
 
         /// <summary>
         /// Ctor for home controller.
@@ -25,11 +24,9 @@ namespace WorkoutGlobal.UI.Controllers
         public HomeController(
             IMapper mapper,
             IServiceManager serviceManager)
-            // ApiConnection.Contracts.IAuthenticationService authenticationService)
         {
             _mapper = mapper;
             _serviceManager = serviceManager;
-            // _authenticationService = authenticationService;
         }
 
         /// <summary>

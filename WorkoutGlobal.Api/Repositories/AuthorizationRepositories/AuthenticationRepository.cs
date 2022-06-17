@@ -70,7 +70,7 @@ namespace WorkoutGlobal.Api.Repositories
             var saltBytes = new byte[8];
             new Random().NextBytes(saltBytes);
 
-            userCredentials.PasswordSalt = BitConverter.ToString(saltBytes).ToLower().Replace("-", ""); ;
+            userCredentials.PasswordSalt = BitConverter.ToString(saltBytes).ToLower().Replace("-", "");
             userCredentials.PasswordHash = await GenerateHashPasswordAsync(updationUserCredentialsDto.Password, userCredentials.PasswordSalt);
 
             return userCredentials;
@@ -119,7 +119,6 @@ namespace WorkoutGlobal.Api.Repositories
             if (userAuthorizationDto == null)
                 return false;
 
-            // var userCredentialsDto = _mapper.Map<UserWithCredentialsDto>(userAuthorizationDto);
             var userCredentials = FindUserByCredentials(userAuthorizationDto.UserName);
 
             if (userCredentials == null)
@@ -187,6 +186,5 @@ namespace WorkoutGlobal.Api.Repositories
             return userCredentials;
         }
     }
-
 }
 

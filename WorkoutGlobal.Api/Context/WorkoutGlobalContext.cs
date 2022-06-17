@@ -24,12 +24,16 @@ namespace WorkoutGlobal.Api.Context
         /// <param name="modelBuilder">Model builder.</param>
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            #region Seeding
+
             base.OnModelCreating(modelBuilder);
             modelBuilder.ApplyConfiguration(new RoleConfiguration());
             modelBuilder.ApplyConfiguration(new UserCredentialsConfiguration());
             modelBuilder.ApplyConfiguration(new UserAccountsConfiguration());
             modelBuilder.ApplyConfiguration(new UserRolesConfiguration());
-            
+
+            #endregion
+
             #region UserCredentials relations with User
 
             modelBuilder.Entity<UserCredentials>()
@@ -253,7 +257,7 @@ namespace WorkoutGlobal.Api.Context
 
         /// <summary>
         /// Represents table of user posts.
-        /// </summary>
+        /// </summary> 
         public DbSet<Post> Posts { get; set; }
         public DbSet<CommentsBlock> CommentsBlocks { get; set; }
         public DbSet<SubscribeCourse> SubscribeCourses { get; set; }

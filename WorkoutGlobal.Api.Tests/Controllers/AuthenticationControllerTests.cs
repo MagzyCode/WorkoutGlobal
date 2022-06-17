@@ -100,11 +100,11 @@ namespace WorkoutGlobal.Api.Tests.Controllers
 
             // assert
             result.Should().NotBeNull();
-            result.Should().BeOfType(typeof(BadRequestObjectResult));
+            result.Should().BeOfType(typeof(UnauthorizedObjectResult));
 
-            var badRequestResult = result.As<BadRequestObjectResult>();
+            var badRequestResult = result.As<UnauthorizedObjectResult>();
             badRequestResult.StatusCode.Should().HaveValue();
-            badRequestResult.StatusCode.Should().Be(StatusCodes.Status400BadRequest);
+            badRequestResult.StatusCode.Should().Be(StatusCodes.Status401Unauthorized);
         }
     }
 }

@@ -47,8 +47,6 @@ namespace WorkoutGlobal.UI.Models.Mapping
             CreateMap<SubscribeEvent, SubscribeEventViewModel>().ReverseMap();
             CreateMap<Order, OrderViewModel>().ReverseMap();
             CreateMap<Post, PostViewModel>().ReverseMap();
-
-            // CreateMap<UserCredentialsModel, UserCredentialsModelViewModel>().ReverseMap();
         }
     }
 }

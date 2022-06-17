@@ -83,12 +83,5 @@ namespace WorkoutGlobal.Api.Repositories
 
             return commentBlock;
         }
-
-        //public async Task<IEnumerable<Video>> GetCreatorVideosAsync(Guid creatorId)
-        //{
-        //    var videos = await GetAll().Where(model => model.UserId == creatorId).ToListAsync();
-
-        //    return videos;
-        //}
     }
 }

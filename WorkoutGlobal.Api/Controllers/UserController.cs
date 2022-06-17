@@ -40,33 +40,14 @@ namespace WorkoutGlobal.Api.Controllers
 
             var userCredentials = await _repositoryManager.UserRepository.GetUserCredentialsAsync(accountId);
 
-            
-
-            // var updateUser = _mapper.Map<User>(updationUserDto);
-            //updateUser.Id = accountId;
-            // var updateUserCredentialsDto = _mapper.Map<UpdationUserCredentialsDto>(userDto);
-
+            // no using mapper because filled in properties of user credentias object overwritten (for example: Id, IsStatusVerify),
+            // and IMappingExpression extension don't work for this solution, because we convert dto to model, where dto don't have Id
             await ToUserCredentials(userCredentials, updationUserDto);
             ToUserAccount(user, updationUserDto);
 
-            //userCredentials.PasswordHash = await _repositoryManager.AuthenticationRepository.GenerateHashPasswordAsync(
-            //    updationUserDto.Password, userCredentials.PasswordSalt);
-            //userCredentials.UserName = updationUserDto.UserName;
-            //userCredentials.Email = updationUserDto.Email;
-            //userCredentials.PhoneNumber = updationUserDto.PhoneNumber;
-
-
-            //updateUserCredentialsDto.Password = await _repositoryManager.AuthenticationRepository.GenerateHashPasswordAsync(
-            //    updateUserCredentialsDto.Password, userCredentials.PasswordSalt);
-
-            //updateUserCredentialsDto.Id = userCredentials.Id;
-            // userCredentials = null;
-
-            // var updateUserCredentials = _mapper.Map<UserCredentials>(updateUserCredentialsDto);
             await _repositoryManager.UserCredentialRepository.UpdateUserCredentialsAsync(userCredentials);
 
             await _repositoryManager.UserRepository.UpdateUserAsync(user);
-            
 
             return NoContent();
         }
@@ -80,7 +61,7 @@ namespace WorkoutGlobal.Api.Controllers
             userCredentials.PhoneNumber = updationUserDto.PhoneNumber;
         }
 
-        private void ToUserAccount(User user, UpdationUserDto updationUserDto)
+        private static void ToUserAccount(User user, UpdationUserDto updationUserDto)
         {
             user.FirstName = updationUserDto.FirstName;
             user.LastName = updationUserDto.LastName;

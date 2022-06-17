@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using WorkoutGlobal.Api.Extensions;
 using WorkoutGlobal.Api.Models.Dto;
 
 namespace WorkoutGlobal.Api.Models.Mapping
@@ -14,13 +15,14 @@ namespace WorkoutGlobal.Api.Models.Mapping
         public MappingProfile()
         {
             CreateMap<UserRegistrationDto, UserCredentials>();
-
+            
             CreateMap<UserRegistrationDto, UpdationUserCredentialsDto>();
             CreateMap<UpdationUserCredentialsDto, UserCredentials>();
 
             CreateMap<UserCredentialDto, UserCredentials>().ReverseMap();
             CreateMap<UserCredentials, UpdationUserCredentialsDto>().ReverseMap();
             CreateMap<UpdationUserDto, UpdationUserCredentialsDto>().ReverseMap();
+            CreateMap<UpdationUserDto, UserCredentials>();
 
             CreateMap<UserRegistrationDto, User>();
             CreateMap<User, UserDto>().ReverseMap();

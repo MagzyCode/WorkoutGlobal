@@ -4,10 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Workout Global</title>
-    <link rel="stylesheet" href="~/css/workout-global-styles.css" asp-append-version="true" />
-    @*<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />*@
-@*    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/WorkoutGlobal.UI.styles.css" asp-append-version="true" />*@
+    <link rel="stylesheet" href="~/css/workout-global-styles.css" asp-append-version="true"/>
 </head>
 <body>
     <header>
@@ -19,7 +16,6 @@
                     <li class="main-li-references"><a class="main-li-a main-a-text" asp-controller="Video" asp-action="VideosList">Видео</a></li>
                     <li class="main-li-references"><a class="main-li-a main-a-text" asp-controller="Course" asp-action="CoursesList">Курсы</a></li>
                     <li class="main-li-references"><a class="main-li-a main-a-text" asp-controller="SportEvent" asp-action="SportEventList">События</a></li>
-                    <li class="main-li-references"><a class="main-li-a main-a-text" asp-controller="Category" asp-action="SelectCategory">Категории</a></li>
 
 
                     @if (User.Identity.IsAuthenticated)

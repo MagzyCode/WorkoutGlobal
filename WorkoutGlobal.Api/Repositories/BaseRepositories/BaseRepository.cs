@@ -1,4 +1,5 @@
-﻿using WorkoutGlobal.Api.Context;
+﻿using Microsoft.EntityFrameworkCore;
+using WorkoutGlobal.Api.Context;
 using WorkoutGlobal.Api.Contracts;
 
 namespace WorkoutGlobal.Api.Repositories

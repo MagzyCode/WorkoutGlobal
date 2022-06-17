@@ -1,17 +1,15 @@
-﻿namespace WorkoutGlobal.UI.Models.Enums
+﻿using System.ComponentModel;
+
+namespace WorkoutGlobal.UI.Models.Enums
 {
     /// <summary>
     /// Repsents users sex.
     /// </summary>
     public enum Sex
     {
-        /// <summary>
-        /// Male sex.
-        /// </summary>
+        [Description("Male sex.")]
         Male,
-        /// <summary>
-        /// Female sex.
-        /// </summary>
+        [Description("Female sex.")]
         Female
     }
 }

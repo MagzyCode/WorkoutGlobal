@@ -8,6 +8,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Net;
 using System.Text;
 using WorkoutGlobal.Api.Contracts;
+using WorkoutGlobal.Api.Extensions;
 using WorkoutGlobal.Api.Filters.ActionFilters;
 using WorkoutGlobal.Api.Models;
 using WorkoutGlobal.Api.Models.Dto;
@@ -21,25 +22,33 @@ namespace WorkoutGlobal.Api.Controllers
     {
         private readonly IRepositoryManager _repositoryManager;
         private readonly IMapper _mapper;
-        private readonly IConfiguration _configuration;
 
         public SportEventController(
             IRepositoryManager repositoryManager,
-            IMapper mapper,
-            IConfiguration configuration)
+            IMapper mapper)
         {
             _repositoryManager = repositoryManager;
             _mapper = mapper;
-            _configuration = configuration;
         }
 
         [HttpPost]
         [ModelValidationFilter]
-        public async Task<IActionResult> CreateSportEvent([FromBody] CreationSportEventDto sportEventDto)
+        public async Task<IActionResult> CreateSportEvent([FromBody] CreationSportEventDto creationSportEventDto)
         {
-            var (joinLink, hostLink) = await GetZoomLinksAsync(sportEventDto);
+            var userAccount = await _repositoryManager.UserRepository.GetUserAsync(creationSportEventDto.TrainerId);
+            var category = await _repositoryManager.CategoryRepository.GetCategoryAsync(creationSportEventDto.CategoryId);
 
-            var sportEvent = _mapper.Map<SportEvent>(sportEventDto);
+            if (userAccount == null || category == null)
+                return NotFound(new ErrorDetails()
+                {
+                    StatusCode = StatusCodes.Status404NotFound,
+                    Message = "There is no sport event with such id.",
+                    Details = new StackTrace().ToString()
+                });
+
+            var (joinLink, hostLink) = await creationSportEventDto.GetZoomLinksAsync();
+
+            var sportEvent = _mapper.Map<SportEvent>(creationSportEventDto);
             sportEvent.JoinLink = joinLink;
             sportEvent.HostLink = hostLink;
 
@@ -134,41 +143,5 @@ namespace WorkoutGlobal.Api.Controllers
 
             return Ok(usersDto);
         }
-
-
-        private async Task<(string joinLink, string hostLink)> GetZoomLinksAsync(CreationSportEventDto sportEventDto)
-        {
-            var tokenHandler = new JwtSecurityTokenHandler();
-
-            var tokenDescriptor = new SecurityTokenDescriptor
-            {
-                Issuer = _configuration["Zoom:ApiKey"],
-                Expires = DateTime.UtcNow.AddSeconds(8000),
-                SigningCredentials = new SigningCredentials(
-                    key: new SymmetricSecurityKey(
-                        Encoding.ASCII.GetBytes(_configuration["Zoom:ApiSecret"])), 
-                    algorithm: SecurityAlgorithms.HmacSha256)
-            };
-            var token = tokenHandler.CreateToken(tokenDescriptor);
-            var tokenString = tokenHandler.WriteToken(token);
-
-            var client = new RestClient($"https://api.zoom.us/v2/users/{_configuration["Zoom:Mail"]}/meetings");
-            var request = new RestRequest($"https://api.zoom.us/v2/users/{_configuration["Zoom:Mail"]}/meetings", Method.Post)
-            {
-                RequestFormat = DataFormat.Json
-            };
-
-            var date = $"{sportEventDto.EventStartTime:s}Z";
-
-            request.AddJsonBody(new { agenda = sportEventDto.EventName, start_time=$"{sportEventDto.EventStartTime:s}Z", duration = "90", type = "2" });
-            request.AddHeader("authorization", string.Format("Bearer {0}", tokenString));
-
-
-            RestResponse restResponse = await client.ExecuteAsync(request);
-            var jObject = JObject.Parse(restResponse.Content);
-
-            return (jObject["join_url"].ToString(), jObject["start_url"].ToString());
-        }
-
     }
 }
