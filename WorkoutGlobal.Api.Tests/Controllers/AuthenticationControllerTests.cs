@@ -2,14 +2,13 @@
 using Moq;
 using Xunit;
 using AutoMapper;
-using WorkoutGlobal.Api.Contracts.RepositoryManagerContracts;
+using WorkoutGlobal.Api.Contracts;
 using System.Threading.Tasks;
-using WorkoutGlobal.Api.Models.DTOs.UserDTOs;
-using WorkoutGlobal.Api.Contracts.AuthenticationManagerContracts;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using WorkoutGlobal.Api.Models.ErrorModels;
 using Microsoft.AspNetCore.Http;
+using WorkoutGlobal.Api.Models.Dto;
 
 namespace WorkoutGlobal.Api.Tests.Controllers
 {
@@ -18,11 +17,20 @@ namespace WorkoutGlobal.Api.Tests.Controllers
         private readonly AuthenticationController _authenticationController;
         private readonly Mock<IMapper> _mapperMock;
         private readonly Mock<IRepositoryManager> _repositoryManagerMock;
+        private readonly Mock<IAuthenticationRepository> _authenticationRepositoryMock;
 
         public AuthenticationControllerTests()
         {
             _mapperMock = new Mock<IMapper>();
+
+            _authenticationRepositoryMock = new Mock<IAuthenticationRepository>();
+            _authenticationRepositoryMock.Setup(x => x.ValidateUserAsync(It.IsAny<UserAuthorizationDto>())).Returns(Task.FromResult(true));
+            _authenticationRepositoryMock.Setup(x => x.CreateToken(It.IsAny<UserAuthorizationDto>())).Returns("aaa.aaa.aaa");
+            _authenticationRepositoryMock.Setup(x => x.IsUserExisted(It.IsAny<UserRegistrationDto>())).Returns(true);
+
             _repositoryManagerMock = new Mock<IRepositoryManager>();
+            _repositoryManagerMock.Setup(x => x.AuthenticationRepository).Returns(_authenticationRepositoryMock.Object);
+
             _authenticationController = new AuthenticationController(_mapperMock.Object, _repositoryManagerMock.Object);
         }
 
@@ -30,38 +38,39 @@ namespace WorkoutGlobal.Api.Tests.Controllers
         public async Task Authenticate_ExistedAuthorizationUser_ReturnOkObjectResultWithToken()
         {
             // arrange
-            var authenticationRepositoryMock = new Mock<IAuthenticationRepository>();
-            _repositoryManagerMock.Setup(x => x.AuthenticationRepository).Returns(authenticationRepositoryMock.Object);
-            authenticationRepositoryMock.Setup(x => x.ValidateUserAsync(It.IsAny<UserAuthorizationDto>())).Returns(Task.FromResult(true));
-            authenticationRepositoryMock.Setup(x => x.CreateToken(It.IsAny<UserAuthorizationDto>())).Returns("aaa.aaa.aaa");
+            var userAuthorizationDto = new UserAuthorizationDto();
 
             // act
-            var result = await _authenticationController.Authenticate(new UserAuthorizationDto());
+            var result = await _authenticationController.Authenticate(userAuthorizationDto);
 
             // assert
-            result.Should().NotBeNull()
-                .And.BeOfType<OkObjectResult>()
-                .Which.Value.Should().NotBeNull()
-                    .And.BeOfType<string>()
-                    .Which.Should().NotBeNullOrWhiteSpace();
+            result.Should().NotBeNull();
+            result.Should().BeOfType<OkObjectResult>();
+
+            var okResult = result.As<OkObjectResult>();
+            okResult.Value.Should().NotBeNull();
+            okResult.Value.Should().BeOfType<string>();
+            okResult.Value.As<string>().Should().NotBeNullOrWhiteSpace();
         }
 
         [Fact]
         public async Task Authenticate_NotExistedAuthorizationUser_ReturnUnauthorizedObjectResult()
         {
             // arrange
-            var authenticationRepositoryMock = new Mock<IAuthenticationRepository>();
-            _repositoryManagerMock.Setup(x => x.AuthenticationRepository).Returns(authenticationRepositoryMock.Object);
+            var userAuthorizationDto = new UserAuthorizationDto();
+            _authenticationRepositoryMock.Setup(x => x.ValidateUserAsync(It.IsAny<UserAuthorizationDto>())).Returns(Task.FromResult(false));
 
             // act
-            var result = await _authenticationController.Authenticate(new UserAuthorizationDto());
+            var result = await _authenticationController.Authenticate(userAuthorizationDto);
 
             // assert
-            result.Should().NotBeNull()
-                .And.BeOfType<UnauthorizedObjectResult>()
-                .Which.Value.Should().NotBeNull()
-                    .And.BeOfType<ErrorDetails>()
-                    .Which.StatusCode.Should().Be(StatusCodes.Status401Unauthorized);
+            result.Should().NotBeNull();
+            result.Should().BeOfType(typeof(UnauthorizedObjectResult));
+
+            var unauthorizedResult = result.As<UnauthorizedObjectResult>();
+            unauthorizedResult.Value.Should().NotBeNull();
+            unauthorizedResult.Value.Should().BeOfType(typeof(ErrorDetails));
+            unauthorizedResult.Value.As<ErrorDetails>().StatusCode.Should().Be(StatusCodes.Status401Unauthorized);
         }
 
         [Fact]
@@ -69,16 +78,15 @@ namespace WorkoutGlobal.Api.Tests.Controllers
         {
             // arrange
             var userRegistrationDto = new UserRegistrationDto();
-            var authenticationRepositoryMock = new Mock<IAuthenticationRepository>();
-            _repositoryManagerMock.Setup(x => x.AuthenticationRepository).Returns(authenticationRepositoryMock.Object);
+            _authenticationRepositoryMock.Setup(x => x.IsUserExisted(It.IsAny<UserRegistrationDto>())).Returns(false);
 
             // act
             var result = await _authenticationController.Registrate(userRegistrationDto);
 
             // assert
-            result.Should().NotBeNull()
-                .And.BeOfType<StatusCodeResult>()
-                .Which.StatusCode.Should().Be(StatusCodes.Status201Created);
+            result.Should().NotBeNull();
+            result.Should().BeOfType(typeof(StatusCodeResult));
+            result.As<StatusCodeResult>().StatusCode.Should().Be(StatusCodes.Status201Created);
         }
 
         [Fact]
@@ -86,18 +94,17 @@ namespace WorkoutGlobal.Api.Tests.Controllers
         {
             // arrange
             var userRegistrationDto = new UserRegistrationDto();
-            var authenticationRepositoryMock = new Mock<IAuthenticationRepository>();
-            _repositoryManagerMock.Setup(x => x.AuthenticationRepository).Returns(authenticationRepositoryMock.Object);
-            authenticationRepositoryMock.Setup(x => x.IsUserExisted(It.IsAny<UserRegistrationDto>())).Returns(true);
 
             // act
             var result = await _authenticationController.Registrate(userRegistrationDto);
 
             // assert
-            result.Should().NotBeNull()
-                .And.BeOfType<BadRequestObjectResult>()
-                .Which.StatusCode.Should().HaveValue()
-                    .And.Be(StatusCodes.Status400BadRequest);
+            result.Should().NotBeNull();
+            result.Should().BeOfType(typeof(UnauthorizedObjectResult));
+
+            var badRequestResult = result.As<UnauthorizedObjectResult>();
+            badRequestResult.StatusCode.Should().HaveValue();
+            badRequestResult.StatusCode.Should().Be(StatusCodes.Status401Unauthorized);
         }
     }
 }

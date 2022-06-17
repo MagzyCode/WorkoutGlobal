@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
-using WorkoutGlobal.Api.Contracts.RepositoryManagerContracts;
+using WorkoutGlobal.Api.Contracts;
 using WorkoutGlobal.Api.Filters.ActionFilters;
-using WorkoutGlobal.Api.Models.DTOs.UserDTOs;
+using WorkoutGlobal.Api.Models.Dto;
 using WorkoutGlobal.Api.Models.ErrorModels;
 
 namespace WorkoutGlobal.Api.Controllers
@@ -16,17 +16,14 @@ namespace WorkoutGlobal.Api.Controllers
     [Produces("application/json")]
     public class AuthenticationController : ControllerBase
     {
-        private readonly IMapper _mapper;
         private readonly IRepositoryManager _repositoryManager;
 
         /// <summary>
         /// Ctor for authentication controller.
         /// </summary>
-        /// <param name="mapper">AutoMapper instance.</param>
         /// <param name="repositoryManager">Repository manager instance.</param>
         public AuthenticationController(IMapper mapper, IRepositoryManager repositoryManager)
         {
-            _mapper = mapper;
             _repositoryManager = repositoryManager;
         }
 
@@ -78,17 +75,14 @@ namespace WorkoutGlobal.Api.Controllers
             var isUserExisted = _repositoryManager.AuthenticationRepository.IsUserExisted(userRegistrationDto);
 
             if (isUserExisted)
-                return BadRequest(new ErrorDetails()
+                return Unauthorized(new ErrorDetails()
                 {
-                    StatusCode = StatusCodes.Status400BadRequest,
+                    StatusCode = StatusCodes.Status401Unauthorized,
                     Message = "User already exists.",
                     Details = new StackTrace().ToString()
                 });
 
-            var userCredentialsDto = _mapper.Map<UserCredentialsDto>(userRegistrationDto);
-
-            var user = await _repositoryManager.AuthenticationRepository.GenerateUserCredentialsAsync(userCredentialsDto);
-            await _repositoryManager.AuthenticationRepository.RegistrateUserAsync(user);
+            await _repositoryManager.AuthenticationRepository.RegistrateUserAsync(userRegistrationDto);
 
             return StatusCode(StatusCodes.Status201Created);
         }

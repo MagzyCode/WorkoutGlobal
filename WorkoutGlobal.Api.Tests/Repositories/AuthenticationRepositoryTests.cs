@@ -4,10 +4,10 @@ using Microsoft.Extensions.Configuration;
 using Moq;
 using System;
 using System.Threading.Tasks;
-using WorkoutGlobal.Api.Contracts.RepositoryContracts;
+using WorkoutGlobal.Api.Contracts;
 using WorkoutGlobal.Api.Models;
-using WorkoutGlobal.Api.Models.DTOs.UserDTOs;
-using WorkoutGlobal.Api.Repositories.AuthorizationRepositories;
+using WorkoutGlobal.Api.Models.Dto;
+using WorkoutGlobal.Api.Repositories;
 using WorkoutGlobal.Api.Tests.Configuration;
 using Xunit;
 
@@ -19,13 +19,11 @@ namespace WorkoutGlobal.Api.Tests.Repositories
         private readonly AuthenticationRepository _authenticationRepository;
         private readonly Mock<IConfiguration> _configuration;
         private readonly Mock<IMapper> _mapper;
-        private readonly Mock<IUserCredentialsRepository> _userCredentialsRepository;
         private readonly Mock<IConfigurationSection> _jwtSettings;
 
         public AuthenticationRepositoryTests()
         {
             _testConfiguration = ConfigurationAccessor.GetTestConfiguration();
-
             _jwtSettings = new Mock<IConfigurationSection>();
             _configuration = new Mock<IConfiguration>();
             _configuration
@@ -34,23 +32,18 @@ namespace WorkoutGlobal.Api.Tests.Repositories
 
             _mapper = new Mock<IMapper>();
             _mapper
-                .Setup(x => x.Map<UserCredentials>(It.IsAny<UserCredentialsDto>()))
+                .Setup(x => x.Map<UserCredentials>(It.IsAny<UserRegistrationDto>()))
+                .Returns(new UserCredentials());
+            _mapper
+                .Setup(x => x.Map<UserCredentials>(It.IsAny<UpdationUserCredentialsDto>()))
                 .Returns(new UserCredentials());
 
-            _userCredentialsRepository = new Mock<IUserCredentialsRepository>();
-            _userCredentialsRepository
-                .Setup(x => x.GetHashPasswordAsync(It.IsAny<string>(), It.IsAny<string>()))
-                .Returns(Task.FromResult(string.Empty));
-            _userCredentialsRepository
-                .Setup(x => x.GetHashPasswordAsync(null, It.IsAny<string>()))
-                .Throws(() => new ArgumentNullException());
-
             _authenticationRepository = new AuthenticationRepository(
-                null, 
                 null,
-                _configuration.Object, 
-                _userCredentialsRepository.Object, 
+                null,
+                _configuration.Object,
                 _mapper.Object);
+
         }
 
         [Fact]
@@ -131,12 +124,12 @@ namespace WorkoutGlobal.Api.Tests.Repositories
         [Fact]
         public void CreateToken_InvalidUserName_ReturnArgumentNullException()
         {
-            // arrange
-            var userAuthorizationDto = new UserAuthorizationDto()
-            {
-                UserName = null,
-                Password = null
-            };
+           // arrange
+           var userAuthorizationDto = new UserAuthorizationDto()
+           {
+               UserName = null,
+               Password = null
+           };
 
             _jwtSettings
                 .Setup(x => x.GetSection("Key").Value)
@@ -214,11 +207,11 @@ namespace WorkoutGlobal.Api.Tests.Repositories
         [Fact]
         public async Task GenerateUserCredentialsAsync_NullUserCredentials_ReturnNullReferenceException()
         {
-            // act
-            UserCredentialsDto? userCredentialsDto = null;
-
             // arrange
-            var result = async () => await _authenticationRepository.GenerateUserCredentialsAsync(userCredentialsDto);
+            UpdationUserCredentialsDto? updationUserCredentialsDto = null;
+
+            // act
+            var result = async () => await _authenticationRepository.GenerateUserCredentialsAsync(updationUserCredentialsDto);
 
             // assert
             await result.Should().ThrowAsync<NullReferenceException>();
@@ -227,35 +220,36 @@ namespace WorkoutGlobal.Api.Tests.Repositories
         [Fact]
         public async Task GenerateUserCredentialsAsync_NullUserPassword_ReturnArgumentNullException()
         {
-            // act
-            var userCredentialsDto = new UserCredentialsDto()
+            // arrange
+            var userCredentialsDto = new UpdationUserCredentialsDto()
             {
                 UserName = string.Empty,
                 Email = string.Empty,
                 Password = null
             };
 
-            // arrange
-            var result = async () => await _authenticationRepository.GenerateUserCredentialsAsync(userCredentialsDto);
+            // act
+            var result = await _authenticationRepository.GenerateUserCredentialsAsync(userCredentialsDto);
 
             // assert
-            await result.Should().ThrowAsync<ArgumentNullException>();
+            result.Should().NotBeNull();
         }
 
         [Fact]
         public async Task GenerateUserCredentialsAsync_NullUserPassword_ReturnUserPasswordHash()
         {
-            // act
-            var userCredentialsDto = new UserCredentialsDto()
+            // arrange
+            var userCredentialsDto = new UpdationUserCredentialsDto()
             {
                 UserName = null,
                 Email = null,
                 Password = "qwerty123"
             };
 
-            // arrange
+            // act
             var result = await _authenticationRepository.GenerateUserCredentialsAsync(userCredentialsDto);
-          
+
+            // assert
             result.Should().BeOfType<UserCredentials>();
             result.PasswordHash.Should().NotBeNull();
         }
@@ -263,15 +257,15 @@ namespace WorkoutGlobal.Api.Tests.Repositories
         [Fact]
         public async Task GenerateUserCredentialsAsync_ValidUserPassword_ReturnUserPasswordHash()
         {
-            // act
-            var userCredentialsDto = new UserCredentialsDto()
+            // arrange
+            var userCredentialsDto = new UpdationUserCredentialsDto()
             {
                 UserName = "",
                 Email = "",
                 Password = "qwerty123"
             };
 
-            // arrange
+            // act
             var result = await _authenticationRepository.GenerateUserCredentialsAsync(userCredentialsDto);
 
             // assert
@@ -289,7 +283,75 @@ namespace WorkoutGlobal.Api.Tests.Repositories
             var result = () => _authenticationRepository.IsUserExisted(userRegistrationDto);
 
             // assert
-            result.Should().Throw<ArgumentNullException>();
+            result.Should().Throw<NullReferenceException>();
+        }
+
+        [Fact]
+        public async Task GenerateHashPasswordAsync_ValidUserPasswordCredentials_ReturnHashedPassword()
+        {
+            // arrange 
+            var (password, salt) = ("qwerty123", "123");
+
+            // act
+            var result = await _authenticationRepository.GenerateHashPasswordAsync(password, salt);
+
+            // assert
+
+            result.Should().BeOfType(typeof(string));
+            result.Should().NotBeNullOrWhiteSpace();
+            result.Should().MatchRegex("^([0-9a-z]{1})([0-9a-z]*)$");
+        }
+
+        [Fact]
+        public async Task GenerateHashPasswordAsync_NullPassword_ReturnHash()
+        {
+            // arrange 
+            var salt = "123";
+
+            // act
+            var result = await _authenticationRepository.GenerateHashPasswordAsync(null, salt);
+
+            // assert
+            result.Should().Be("a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3");
+        }
+
+        [Fact]
+        public async Task GenerateHashPasswordAsync_NullPasswordSalt_ReturnHash()
+        {
+            // arrange 
+            var password = "123";
+
+            // act
+            var result = await _authenticationRepository.GenerateHashPasswordAsync(password, null);
+
+            // assert
+            result.Should().Be("a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3");
+        }
+
+        [Fact]
+        public async Task GenerateHashPasswordAsync_EmptyPassword_ReturnHash()
+        {
+            // arrange 
+            var (password, salt) = ("", "123");
+
+            // act
+            var result = await _authenticationRepository.GenerateHashPasswordAsync(password, salt);
+
+            // assert
+            result.Should().Be("a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3");
+        }
+
+        [Fact]
+        public async Task GenerateHashPasswordAsync_EmptyPasswordSalt_ReturnHash()
+        {
+            // arrange 
+            var (password, salt) = ("qwerty", "");
+
+            // act
+            var result = await _authenticationRepository.GenerateHashPasswordAsync(password, salt);
+
+            // assert
+            result.Should().Be("65e84be33532fb784c48129675f9eff3a682b27168c0ea744b2cf58ee02337c5");
         }
     }
 }

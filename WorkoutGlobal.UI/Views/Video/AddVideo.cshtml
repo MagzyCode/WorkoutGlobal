@@ -1,0 +1,56 @@
+﻿@model CreationVideoViewModel;
+
+<div id="addVideo">
+    <h2 class="addVideo-h2">Добавить видео</h2>
+    <form method="post" asp-controller="Video" asp-action="AddVideo" asp-route-username="@User.Identity.Name">
+        <input type="hidden" asp-for="UserId" value="@Model.UserId"/>
+        <div>
+            <label class="addVideo-label" asp-for="Link" >Ссылка на youtube</label>
+            <br/>
+            <input class="addVideo-input" asp-for="Link" type="text" placeholder="https://www.youtube.com/embed/HJMcNNyI7p0">
+            <span class="addVideo-span-error" asp-validation-for="Link"></span>
+        </div>    
+        <div>
+            <label class="addVideo-label" asp-for="Title" >Заголовок видео</label>
+            <br/>
+            <input class="addVideo-input" asp-for="Title" type="text" placeholder="Title">
+            <span class="addVideo-span-error" asp-validation-for="Title"></span>
+        </div>    
+        <div>
+            <label class="addVideo-label" asp-for="Description" >Описание видео</label>
+            <br/>
+            <input class="addVideo-input" asp-for="Description" type="text" placeholder="A little description">
+            <span class="addVideo-span-error" asp-validation-for="Description"></span>
+            <br/>
+        </div>    
+        <div>
+            <label class="addVideo-label" asp-for="Description">Публичное видео</label>
+            <input asp-for="IsPublic" type="checkbox">
+            <span class="addVideo-span-error" asp-validation-for="IsPublic"></span>
+            <br/>
+        </div>
+        <div>
+            <label asp-for="CategoryName" class="addVideo-label">Категория видео</label>
+            <br />
+            <select asp-for="CategoryName" class="registration-select">
+                @foreach(var category in Model.Categories)
+                {
+                    <option>@category</option>
+                }
+            </select>
+            <span asp-validation-for="CategoryName"></span>
+            <br>
+            <br>
+        </div>
+        <div class="form-group row">
+            <button class="addVideo-button" type="submit">Создать видео</button>
+        </div>
+    </form>
+</div>
+
+
+
+@section scripts{
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+}

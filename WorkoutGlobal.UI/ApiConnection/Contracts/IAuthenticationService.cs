@@ -22,6 +22,6 @@ namespace WorkoutGlobal.UI.ApiConnection.Contracts
         /// <param name="userCredentials">User registration info.</param>
         /// <returns>A task that represents asynchronous Registrate operation.</returns>
         [Post("/api/authentication/registration")]
-        public Task RegistrateAsync([Body] UserCredentials userCredentials);
+        public Task RegistrateAsync([Body] RegistrationUser userCredentials);
     }
 }

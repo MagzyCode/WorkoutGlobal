@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
-using WorkoutGlobal.Api.Models.DTOs.UserDTOs;
+using WorkoutGlobal.Api.Extensions;
+using WorkoutGlobal.Api.Models.Dto;
 
 namespace WorkoutGlobal.Api.Models.Mapping
 {
@@ -14,11 +15,52 @@ namespace WorkoutGlobal.Api.Models.Mapping
         public MappingProfile()
         {
             CreateMap<UserRegistrationDto, UserCredentials>();
+            
+            CreateMap<UserRegistrationDto, UpdationUserCredentialsDto>();
+            CreateMap<UpdationUserCredentialsDto, UserCredentials>();
 
-            CreateMap<UserRegistrationDto, UserCredentialsDto>();
-            CreateMap<UserAuthorizationDto, UserCredentialsDto>();
+            CreateMap<UserCredentialDto, UserCredentials>().ReverseMap();
+            CreateMap<UserCredentials, UpdationUserCredentialsDto>().ReverseMap();
+            CreateMap<UpdationUserDto, UpdationUserCredentialsDto>().ReverseMap();
+            CreateMap<UpdationUserDto, UserCredentials>();
 
-            CreateMap<UserCredentialsDto, UserCredentials>();
+            CreateMap<UserRegistrationDto, User>();
+            CreateMap<User, UserDto>().ReverseMap();
+            CreateMap<UpdationUserDto, User>().ReverseMap();
+
+            CreateMap<Video, VideoDto>().ReverseMap();
+            CreateMap<Video, CreationVideoDto>().ReverseMap();
+
+            CreateMap<Comment, CommentDto>().ReverseMap();
+            CreateMap<Comment, CreationCommentDto>().ReverseMap();
+
+            CreateMap<CommentsBlockDto, CommentsBlock>().ReverseMap();
+            CreateMap<CreationCommentsBlockDto, CommentsBlock>().ReverseMap();
+
+            CreateMap<Course, CourseDto>().ReverseMap();
+            CreateMap<Course, CreationCourseDto>().ReverseMap();
+
+            CreateMap<Category, CategoryDto>().ReverseMap();
+            CreateMap<Category, CreationCategoryDto>().ReverseMap();
+
+            CreateMap<SportEvent, SportEventDto>().ReverseMap();
+            CreateMap<SportEvent, CreationSportEventDto>().ReverseMap();
+
+            CreateMap<CourseVideo, CreationCourseVideoDto>().ReverseMap();
+            CreateMap<CourseVideo, CourseVideoDto>().ReverseMap();
+
+            CreateMap<Order, OrderDto>().ReverseMap();
+
+            CreateMap<Post, PostDto>().ReverseMap();
+
+            CreateMap<StoreVideo, StoreVideoDto>().ReverseMap();
+            CreateMap<StoreVideo, CreationStoreVideoDto>().ReverseMap();
+
+            CreateMap<SubscribeCourse, SubscribeCourseDto>().ReverseMap();
+            CreateMap<SubscribeCourse, CreationSubscribeCourseDto>().ReverseMap();
+
+            CreateMap<SubscribeEvent, SubscribeEventDto>().ReverseMap();
+            CreateMap<SubscribeEvent, CreationSubscribeEventDto>().ReverseMap();
         }
     }
 }

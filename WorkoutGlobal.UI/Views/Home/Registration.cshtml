@@ -1,36 +1,111 @@
-﻿@model WorkoutGlobal.UI.ViewModels.Authentication.UserRegistrationViewModel
+﻿@model WorkoutGlobal.UI.ViewModels.UserRegistrationViewModel
 
-<h2>Registration form</h2>
-<br />
-<form method="post" asp-controller="Authentication" asp-action="Registration">
-    <div class="form-group row">
-        <label asp-for="UserName" class="col-xs-2 col-form-label">User name</label>
-        <br />
-        <input asp-for="UserName" class="form-control col-xs-2" type="text" id="example-text-input">
-        <span asp-validation-for="UserName"></span>
-    </div>
-    <div class="form-group row">
-        <label asp-for="Email" class="col-xs-2 col-form-label">Email</label>
-        <br />
-        <input asp-for="Email" class="form-control col-xs-2" type="email" id="example-text-input">
-        <span asp-validation-for="Email"></span>
-    </div>
-    <div class="form-group row">
-        <label asp-for="Password" class="col-xs-2 col-form-label">Password</label>
-        <br />
-        <input asp-for="Password" class="form-control col-xs-5" type="password" id="example-text-input">
-        <span asp-validation-for="Password"></span>
-    </div>
-    <div class="form-group row">
-        <label asp-for="ConfirmPassword" class="col-xs-2 col-form-label">Confirm password</label>
-        <br />
-        <input asp-for="ConfirmPassword" class="form-control col-xs-5" type="password" id="example-text-input">
-        <span asp-validation-for="ConfirmPassword"></span>
-    </div>
-    <div class="form-group row">
-        <button asp-controller="Home" asp-action="Registration" type="submit" class="btn btn-primary mb-2">Registration</button>
-    </div>
-</form>
+<div id="registrationPage">
+    <h2 class="login-h2">Регистрация</h2>
+    <br />
+    <form method="post" asp-controller="Authentication" asp-action="Registration">
+        <div>
+            <label asp-for="FirstName" class="login-label">Имя<sup class="login-span-error">*</sup></label>
+            <br />
+            <input asp-for="FirstName" type="text" class="login-input" placeholder="John">
+            <span class="login-span-error" asp-validation-for="FirstName"></span>
+        </div>
+        <div>
+            <label asp-for="LastName" class="login-label">Фамилия<sup class="login-span-error">*</sup></label>
+            <br />
+            <input asp-for="LastName" type="text" class="login-input" placeholder="Sims">
+            <span class="login-span-error" asp-validation-for="LastName"></span>
+        </div>
+        <div>
+            <label asp-for="Patronymic" class="login-label">Отчество<sup class="login-span-error">*</sup></label>
+            <br />
+            <input asp-for="Patronymic" type="text" class="login-input" placeholder="Andreevich">
+            <span class="login-span-error" asp-validation-for="Patronymic"></span>
+        </div>
+        <div>
+            <label class="login-label" asp-for="DateOfBirth">Дата рождения<sup class="login-span-error">*</sup></label>
+            <br />
+            <input class="login-input" asp-for="DateOfBirth" type="date">
+            <span class="login-span-error" asp-validation-for="DateOfBirth"></span>
+        </div>
+        <div>
+            <label asp-for="Sex" class="login-label">Пол<sup class="login-span-error">*</sup></label>
+            <br />
+            <select asp-for="Sex" class="registration-select">
+                <option value="Male" selected>Мужской</option>
+                <option value="Female">Женский</option>
+            </select>
+            <span class="login-span-error" asp-validation-for="Sex"></span>
+            <br>
+        </div>
+        <div>
+            <label asp-for="ResidencePlace" class="login-label">Residance place<sup class="login-span-error">*</sup></label>
+            <br />
+            <input class="login-input" asp-for="ResidencePlace" type="text" placeholder="Country,City,Street,House,Room">
+            <span class="login-span-error" asp-validation-for="ResidencePlace"></span>
+        </div>
+        <div>
+            <label asp-for="Height" class="login-label">Height</label>
+            <br />
+            <input class="login-input" asp-for="Height" min="0" max="400" type="number" placeholder="170">
+            <span class="login-span-error" asp-validation-for="Height"></span>
+        </div>
+        <div>
+            <label asp-for="Weight" class="login-label">Weight</label>
+            <br />
+            <input class="login-input" asp-for="Weight" min="0" max="400" type="number" placeholder="95">
+            <span class="login-span-error" asp-validation-for="Weight"></span>
+        </div>
+        <div>
+            <label asp-for="SportsActivity" class="login-label">Sport activity<sup class="login-span-error">*</sup></label>
+            <br />
+            <select asp-for="SportsActivity" class="registration-select">
+                <option value="Athletic">Атлетичный</option>
+                <option value="Active">Активный</option>
+                <option value="Moderate" selected>Умееренная активность</option>
+                <option value="Reduced">Сниженная активность</option>
+                <option value="Inactive"> Низкая активность</option>
+            </select>
+            <span class="login-span-error" asp-validation-for="SportsActivity"></span>
+            <br>
+        </div>
+        <div>
+            <label asp-for="UserName" class="login-label">Ник пользователя<sup class="login-span-error">*</sup></label>
+            <br />
+            <input asp-for="UserName" class="login-input" type="text" placeholder="Froggy">
+            <span class="login-span-error" asp-validation-for="UserName"></span>
+        </div>
+        <div>
+            <label asp-for="Email" class="login-label">Email<sup class="login-span-error">*</sup></label>
+            <br />
+            <input asp-for="Email" class="login-input" type="email" placeholder="your_account@gmail.ru">
+            <span class="login-span-error" asp-validation-for="Email"></span>
+        </div>
+        <div>
+            <label asp-for="Password" class="login-label">Пароль<sup class="login-span-error">*</sup></label>
+            <br />
+            <input class="login-input" asp-for="Password" type="password">
+            <span class="login-span-error" asp-validation-for="Password"></span>
+        </div>
+        <div>
+            <label asp-for="ConfirmPassword" class="login-label">Подтвердите пароль<sup class="login-span-error">*</sup></label>
+            <br />
+            <input class="login-input" asp-for="ConfirmPassword" type="password">
+            <span class="login-span-error" asp-validation-for="ConfirmPassword"></span>
+        </div>
+        <div>
+            <label asp-for="ClassificationNumber" class="login-label">Классификационная книжка тренера</label>
+            <br />
+            <input class="login-input" asp-for="ClassificationNumber" type="text" placeholder="UE18C123456789">
+            <span class="login-span-error" asp-validation-for="ClassificationNumber"></span>
+            <br/>
+        </div>
+        <div>   
+            <button class="login-button" asp-controller="Home" asp-action="Registration" type="submit">Зарегистрироваться</button>
+        </div>
+    </form>
+</div>
+
 
 @section scripts{
     <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>

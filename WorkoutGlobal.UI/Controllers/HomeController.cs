@@ -2,12 +2,11 @@
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics;
 using System.Security.Claims;
 using WorkoutGlobal.UI.ApiConnection.Contracts;
 using WorkoutGlobal.UI.Filters.ActionFilters;
 using WorkoutGlobal.UI.Models;
-using WorkoutGlobal.UI.ViewModels.Authentication;
+using WorkoutGlobal.UI.ViewModels;
 
 namespace WorkoutGlobal.UI.Controllers
 {
@@ -17,17 +16,17 @@ namespace WorkoutGlobal.UI.Controllers
     public class HomeController : Controller
     {
         private readonly IMapper _mapper;
-        private readonly ApiConnection.Contracts.IAuthenticationService _authenticationService;
+        private readonly IServiceManager _serviceManager;
 
         /// <summary>
         /// Ctor for home controller.
         /// </summary>
         public HomeController(
             IMapper mapper,
-            ApiConnection.Contracts.IAuthenticationService authenticationService)
+            IServiceManager serviceManager)
         {
             _mapper = mapper;
-            _authenticationService = authenticationService;
+            _serviceManager = serviceManager;
         }
 
         /// <summary>
@@ -52,7 +51,7 @@ namespace WorkoutGlobal.UI.Controllers
 
             await Authenticate(authenticationUser);
 
-            return RedirectToAction("Index", "MainMenu");
+            return RedirectToAction("VideosList", "Video");
         }
 
         /// <summary>
@@ -73,11 +72,13 @@ namespace WorkoutGlobal.UI.Controllers
         [ModelValidationFilter]
         public async Task<IActionResult> Registration(UserRegistrationViewModel userRegistrationViewModel)
         {
-            var registrationUser = _mapper.Map<UserCredentials>(userRegistrationViewModel);
+            var registrationUser = _mapper.Map<RegistrationUser>(userRegistrationViewModel);
+            
+            await _serviceManager.AuthenticationService.RegistrateAsync(registrationUser);
+            var authenticationUser = _mapper.Map<AuthenticationUser>(registrationUser);
+            await Authenticate(authenticationUser);
 
-            await _authenticationService.RegistrateAsync(registrationUser);
-
-            return RedirectToAction("Index", "MainMenu");
+            return RedirectToAction("Index", "Home");
         }
 
         /// <summary>
@@ -89,6 +90,13 @@ namespace WorkoutGlobal.UI.Controllers
             return View();
         }
 
+        public async Task<IActionResult> LogOut()
+        {
+            await HttpContext.SignOutAsync();
+
+            return RedirectToAction("Login", "Home");
+        }
+
         /// <summary>
         /// Authenticate user by credentials.
         /// </summary>
@@ -96,11 +104,12 @@ namespace WorkoutGlobal.UI.Controllers
         /// <returns>A task that represents asynchronous Authenticate operation.</returns>
         private async Task Authenticate(AuthenticationUser authenticationUser)
         {
-            var token = await _authenticationService.AuthenticateAsync(authenticationUser);
+            var token = await _serviceManager.AuthenticationService.AuthenticateAsync(authenticationUser);
 
             var claims = new List<Claim>
             {
-                new Claim("Token", token)
+                new Claim("Token", token),
+                new Claim(ClaimsIdentity.DefaultNameClaimType, authenticationUser.UserName)
             };
 
             ClaimsIdentity id = new(claims, "ApplicationCookie", ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);

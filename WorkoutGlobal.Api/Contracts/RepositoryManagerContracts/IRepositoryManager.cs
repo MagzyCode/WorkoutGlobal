@@ -1,7 +1,4 @@
-﻿using WorkoutGlobal.Api.Contracts.AuthenticationManagerContracts;
-using WorkoutGlobal.Api.Contracts.RepositoryContracts;
-
-namespace WorkoutGlobal.Api.Contracts.RepositoryManagerContracts
+﻿namespace WorkoutGlobal.Api.Contracts
 {
     /// <summary>
     /// Represents structure of model repositories manager.
@@ -22,5 +19,19 @@ namespace WorkoutGlobal.Api.Contracts.RepositoryManagerContracts
         /// Authentication repository instance.
         /// </summary>
         public IAuthenticationRepository AuthenticationRepository { get; }
+
+        public IVideoRepository VideoRepository { get; }
+
+        public IUserRepository UserRepository { get; }
+        public ICommentsBlockRepository CommentsBlockRepository { get; }
+        public ICommentRepository CommentRepository { get; }
+        public ICourseRepository CourseRepository { get; }
+        public ICourseVideoRepository CourseVideosRepository { get; }
+        public ICategoryRepository CategoryRepository { get; }
+        public ISportEventRepository SportEventRepository { get; }
+        public IStoreVideoRepository StoreVideoRepository { get; }
+        public ISubscribeCourseRepository SubscribeCourseRepository { get; }
+        public ISubscribeEventRepository SubscribeEventRepository { get; }
+        public IPostRepository PostRepository { get; }
     }
 }

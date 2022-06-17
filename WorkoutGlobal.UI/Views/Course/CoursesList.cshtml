@@ -1,0 +1,49 @@
+﻿@using WorkoutGlobal.UI.ViewModels
+@model IEnumerable<CourseViewModel>;
+
+<div>
+    <h1 class="coursesList-h1">Курсы</h1>
+    <div>
+        @{
+            if (User.Identity.IsAuthenticated)
+            {
+                var user = await ServiceManager.UserService.GetUserByUsernameAsync(User.Identity.Name);
+                var userCredential = await ServiceManager.UserService.GetUserCredentialsAsync(user.Id);
+                var role = await ServiceManager.UserCredentialsServive.GetUserCredentialRoleAsync(userCredential.Id);
+
+                if (role == "Trainer")
+                {
+                    <form method="get">
+                        <button asp-controller="Course" asp-action="AddCourse" asp-route-username="@User.Identity.Name" type="submit" class="coursesList-button-addVideo">Добавить</button>
+                    </form>
+                }
+            }
+        }
+        
+    </div>
+    <br>
+
+    <div id="coursesListPage">
+        @foreach(var course in @Model)
+        {
+            <div class="coursesList-course">
+                <a asp-controller="Course" asp-action="ShowCourseTitle" asp-route-courseId="@course.Id">
+                    <img class="coursesList-courseLogo" src="/images/courseLogo.jpg"/>
+                    <br>
+                    @{
+                        var shortTitle = course.CourseName.Count() > 40
+                            ? course.CourseName.Substring(0, 40) + "..."
+                            : course.CourseName;
+                    }
+                    <p>@shortTitle</p>
+                </a>
+            </div>
+        }
+    </div>
+
+</div>
+
+@section scripts{
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+}

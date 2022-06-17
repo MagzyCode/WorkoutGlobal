@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using WorkoutGlobal.UI.ViewModels.Authentication;
+using WorkoutGlobal.UI.ViewModels;
 
 namespace WorkoutGlobal.UI.Models.Validators.UserValidators
 {
@@ -32,6 +32,53 @@ namespace WorkoutGlobal.UI.Models.Validators.UserValidators
             RuleFor(user => user.ConfirmPassword)
                 .NotEmpty()
                 .Equal(user => user.Password);
+
+            RuleFor(user => user.FirstName)
+                .NotEmpty()
+                .Length(2, 100)
+                .Matches(@"^([A-Za-zА-Яа-я])([A-Za-zА-Яа-я]){2,100}$")
+                    .WithMessage("Name should contain only cyrillic or english letters");
+
+            RuleFor(user => user.LastName)
+                .NotEmpty()
+                .Length(2, 100)
+                .Matches(@"^([A-Za-zА-Яа-я])([A-Za-zА-Яа-я]){2,100}$")
+                    .WithMessage("Name should contain only cyrillic or english letters");
+
+            RuleFor(user => user.Patronymic)
+                .NotEmpty()
+                .Length(2, 100)
+                .Matches(@"^([A-Za-zА-Яа-я])([A-Za-zА-Яа-я]){2,100}$")
+                    .WithMessage("Name should contain only cyrillic or english letters");
+
+            RuleFor(user => user.DateOfBirth)
+                .NotEmpty()
+                .GreaterThanOrEqualTo(DateTime.Parse("01/01/1899"));
+
+            RuleFor(user => user.ResidencePlace)
+                .NotEmpty()
+                .Length(5, 200);
+
+            When(user => user.Height != null, () => {
+                RuleFor(user => user.Height)
+                    .NotEmpty()
+                    .InclusiveBetween(50, 300);
+            });
+
+            When(user => user.Weight != null, () => {
+                RuleFor(user => user.Weight)
+                    .NotEmpty()
+                    .InclusiveBetween(10, 300);
+            });
+
+            When(user => user.ClassificationNumber != null, () =>
+            {
+                RuleFor(user => user.ClassificationNumber)
+                    .NotEmpty()
+                    .Length(10, 25)
+                    .Matches(@"^([A-Za-z0-9])([[A-Za-z0-9]){10,25}$");
+            });
+            
         }
     }
 }

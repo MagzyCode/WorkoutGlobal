@@ -1,0 +1,93 @@
+﻿@using WorkoutGlobal.UI.ViewModels
+@model VideoWithCommentsAndSubscriptionViewModel;
+
+<div id="showVideoPage">
+    @{
+        var isAuthenticated = User.Identity.IsAuthenticated;
+        var user = isAuthenticated
+            ? await ServiceManager.UserService.GetUserByUsernameAsync(User.Identity.Name)
+            : new User();
+        var userCredential = isAuthenticated ? await ServiceManager.UserService.GetUserCredentialsAsync(user.Id) : new UserCredentials();
+        var role = isAuthenticated ? await ServiceManager.UserCredentialsServive.GetUserCredentialRoleAsync(userCredential.Id) : string.Empty;
+    }
+    <div>
+        <iframe class="showVideo-iframe" src="@Model.Link"></iframe>
+    </div>
+    <div class="video-list-background">
+        <p class="showVideo-p-title">@Model.Title</p>
+        <p class="showVideo-p-description">@Model.Description</p>
+        @{
+            var subscribers = await ServiceManager.StoreVideoService.GetAllStoreVideosAsync();
+            var count = subscribers.Where(x => x.SavedVideoId == Model.Id).Count();
+        }
+        <p>Сохранило @count пользователей</p>
+    </div>
+    <div>
+        @{
+            if (User.Identity.IsAuthenticated)
+            {
+                if (role == "User")
+                {
+                    <form method="post">
+                        <input type="hidden" asp-for="Id" value="@Model.Id"/>
+                        <input type="hidden" asp-for="Link" value="@Model.Link"/>
+                        <input type="hidden" asp-for="Title" value="@Model.Title"/>
+                        <input type="hidden" asp-for="Description" value="@Model.Description"/>
+                        <input type="hidden" asp-for="IsPublic" value="@Model.IsPublic"/>
+                        <input type="hidden" asp-for="UserId" value="@Model.UserId"/>
+                        <input type="hidden" asp-for="SubscriberId" value="@user.Id"/>
+                        <input type="hidden" asp-for="IsSubscribe" value="@Model.SubscriberId"/>
+                        @{
+                            if (!Model.IsSubscribe)
+                            {
+                                <button asp-controller="Video" asp-action="SubscribeVideo" type="submit" class="showVideo-button-subscribe">Сохранить видео</button>
+                            }
+                            else
+                            {
+                                <button asp-controller="Video" asp-action="UnsubscribeVideo" type="submit" class="showVideo-button-unsubscribe">Удалить видео из сохранённых</button>
+                            }
+                        }
+                    
+                    </form>
+                }
+            }
+        }
+    </div>
+
+    <div class="video-list-background">
+        <h2 class="showVideo-h2">Комментарии</h2>
+        @if (User.Identity.IsAuthenticated && role == "User")
+        {
+            <form method="post">
+                <input class="showVideo-input-comment" type="text" asp-for="AdditionComment" placeholder="Type comment..." class="form-control"/>
+                <input type="hidden" asp-for="Id" value="@Model.Id"/>
+                <input type="hidden" asp-for="Link" value="@Model.Link"/>
+                <input type="hidden" asp-for="Title" value="@Model.Title"/>
+                <input type="hidden" asp-for="Description" value="@Model.Description"/>
+                <input type="hidden" asp-for="IsPublic" value="@Model.IsPublic"/>
+                <input type="hidden" asp-for="UserId" value="@Model.UserId"/>
+                <input type="hidden" asp-for="IsSubscribe" value="@Model.IsSubscribe"/>
+                <br>
+                <br>
+                <button class="showVideo-button-commented" asp-controller="Video" asp-action="SaveComment" type="submit">Оставить комментарий</button>
+            </form>
+            <br>
+        }
+        @foreach(var comment in Model.Comments.OrderByDescending(x => x.PostTime))
+        {
+            <div class="showVideo-div-comment">
+                <p class="showVideo-p-comment-commentator">
+                    @{
+                        var userName = comment.CommentatorName ?? "Anonymous";
+                    }
+                    <b>@userName</b> <small>@comment.PostTime.ToLocalTime()</small>
+                </p>
+                <p class="showVideo-p-comment">
+                    @comment.CommentText
+                </p>
+            </div>
+            <br>
+        }
+    </div>
+
+</div>

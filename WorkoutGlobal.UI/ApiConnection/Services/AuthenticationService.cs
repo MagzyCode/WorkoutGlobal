@@ -22,14 +22,14 @@ namespace WorkoutGlobal.UI.ApiConnection.Services
         /// <param name="authenticationUser">User credentials.</param>
         /// <returns>Access token.</returns>
         public async Task<string> AuthenticateAsync(AuthenticationUser authenticationUser)
-            => await _service.AuthenticateAsync(authenticationUser);
+            => await Service.AuthenticateAsync(authenticationUser);
 
         /// <summary>
         /// Registrate user.
         /// </summary>
         /// <param name="userCredentials">User credentials.</param>
         /// <returns>A task that represents asynchronous Registrate operation.</returns>
-        public async Task RegistrateAsync(UserCredentials userCredentials)
-            => await _service.RegistrateAsync(userCredentials);
+        public async Task RegistrateAsync(RegistrationUser registrationUser)
+            => await Service.RegistrateAsync(registrationUser);
     }
 }

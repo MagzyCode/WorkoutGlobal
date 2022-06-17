@@ -1,15 +1,14 @@
 ﻿using Microsoft.Extensions.Diagnostics.HealthChecks;
 using System.Net;
 using WorkoutGlobal.Api.Context;
-using WorkoutGlobal.Api.Contracts.RepositoryContracts;
-using WorkoutGlobal.Api.Repositories.BaseRepositories;
+using WorkoutGlobal.Api.Contracts;
 
-namespace WorkoutGlobal.Api.Repositories.HealthRepository
+namespace WorkoutGlobal.Api.Repositories
 {
     /// <summary>
     /// Represents health repository class.
     /// </summary>
-    public class HealthRepository : BaseConnection, IHealthRepository
+    public class HealthRepository : BaseConnectionRepository, IHealthRepository
     {
         /// <summary>
         /// Ctor for base health repository.

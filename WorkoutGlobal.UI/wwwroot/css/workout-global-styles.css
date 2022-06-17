@@ -1,0 +1,528 @@
+﻿/*_Layout page*/
+
+header{
+    min-height: 90px;
+}
+
+a {
+    color: black;
+    text-decoration: none;
+    font-family: Arial, sans-serif;
+    font-size: 20px;
+}
+
+nav {
+    height: 100%;
+    width: 100%;
+}
+
+body {
+    background-image: url(../images/background.jpg);
+    background-size: cover;
+    background-attachment: fixed;
+}
+
+.main-ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    height: 90px;
+    background-color: white;
+}
+
+.main-a-text {
+    font-family: Arial, sans-serif;
+    font-size: 20px;
+    color: black;
+}
+
+.main-ul li:hover {
+    background-color: lightgrey;
+}
+
+.main-li-references {
+    margin-right: 15px;
+    float: left;
+    height: inherit;
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+.main-li-authentication {
+    margin-right: 15px;
+    float: right;
+    height: inherit;
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+.main-li-a {
+    padding: 30px 5px 0px 5px;
+    display: block;
+    color: black;
+    text-align: center;
+    text-decoration: none;
+} 
+
+.main-img-logo {
+    float: left;
+    height: 80px;
+    width: 80px;
+}
+
+/*Home page*/
+
+.index-p {
+    font-family: Arial, sans-serif;
+    font-size: 25px;
+    color: black
+}
+
+.index-h1 {
+    font-family: Arial, sans-serif;
+    font-size: 35px;
+    color: black
+}
+
+#homePage {
+    width: 50%;
+    margin-left: 100px;
+}
+
+/*Login & Registration page*/
+
+#loginPage {
+    height: 500px;
+    width: 100%;
+    margin-left: 100px;
+}
+
+#registrationPage {
+    width: 100%;
+    margin-left: 100px;
+}
+
+.login-h2 {
+    font-family: Arial, sans-serif;
+    font-size: 35px;
+    color: black
+}
+
+.login-label {
+    font-family: Arial, sans-serif;
+    font-size: 21px;
+    color: black;
+}
+
+.login-span-error {
+    font-family: Arial, sans-serif;
+    font-size: 1em;
+    color: red;
+}
+
+.login-button {
+    width: 41%;
+    height: 50px;
+    border: none;
+    font-weight: 600;
+    border-radius: 5px;
+    background-color: dodgerblue;
+    color: white;
+    font-size: 22px;
+}
+
+.login-input {
+    display: block;
+    width: 40%;
+    margin: 10px 0;
+    padding: 15px;
+    border-radius: 10px;
+    border: 1px solid #eee;
+    transition: .3s border-color;
+    font-size: 17px;
+}
+
+.registration-select {
+    width: 42%;
+    padding: 10px;
+    border-radius: 10px;
+    font-family: Arial, sans-serif;
+    font-size: 17px;
+}
+
+/*video list page*/
+
+#videoListPage {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(500px, 1fr));
+    grid-auto-rows: 350px;
+    grid-gap: 20px;
+}
+
+.videoList-video {
+    background-color: rgb(255, 255, 255, 0.5);
+    height: 350px;
+    width: 440px;
+}
+
+.videoList-video iframe {
+    width: 440px;
+    height: 261px;
+}
+
+.videoList-button-addVideo {
+    width: 15%;
+    height: 40px;
+    border: none;
+    font-weight: 600;
+    border-radius: 2px;
+    background-color: dodgerblue;
+    color: white;
+    font-size: 15px;
+}
+
+/*show video*/
+
+#showVideoPage {
+    width: 80%;
+    margin-left: 10%;
+    background-color: rgb(255, 255, 255, 0.5);
+}
+
+.showVideo-iframe {
+    width: 60%;
+    height: 500px;
+}
+
+.showVideo-p-title {
+    font-family: Arial, sans-serif;
+    font-size: 30px;
+    color: black;
+    font-weight: 600;
+}
+
+.showVideo-p-description, showVideo-p-comments {
+    font-family: Arial, sans-serif;
+    font-size: 20px;
+    color: black;
+}
+
+.showVideo-button-subscribe {
+    width: 59%;
+    height: 40px;
+    border: none;
+    font-weight: 600;
+    border-radius: 2px;
+    background-color: dodgerblue;
+    color: white;
+    font-size: 15px;
+}
+
+.showVideo-button-unsubscribe {
+    width: 59%;
+    height: 40px;
+    border: none;
+    font-weight: 600;
+    border-radius: 2px;
+    background-color: gray;
+    color: white;
+    font-size: 15px;
+}
+
+
+.showVideo-h2 {
+    font-family: Arial, sans-serif;
+    font-size: 35px;
+    font-weight: 200;
+    color: black
+}
+
+.showVideo-p-comment-commentator {
+    font-family: Arial, sans-serif;
+    font-size: 23px;
+    font-weight: 400;
+    color: black
+}
+
+.showVideo-p-comment {
+    font-family: Arial, sans-serif;
+    font-size: 20px;
+    font-weight: 200;
+    color: black
+}
+
+.showVideo-div-comment {
+    width: 60%;
+    border-radius: 10px;
+    background-color: lightgray;
+    padding: 7px;
+}
+
+.showVideo-input-comment {
+    width: 60%;
+    resize: vertical;
+    padding: 15px;
+    border-radius: 10px;
+    border: 0;
+    box-sizing: border-box;
+    height: 50px;
+    font-family: Arial, sans-serif;
+    font-size: 15px;
+    color: black
+}
+
+.showVideo-button-commented {
+    width: 59%;
+    height: 40px;
+    border: none;
+    font-weight: 600;
+    border-radius: 2px;
+    background-color: dodgerblue;
+    color: white;
+    font-size: 15px;
+}
+
+/*add video*/
+
+#addVideo {
+    width: 100%;
+    margin-left: 100px;
+}
+
+.addVideo-label {
+    font-family: Arial, sans-serif;
+    font-size: 21px;
+    color: black;
+}
+
+.addVideo-span-error {
+    font-family: Arial, sans-serif;
+    font-size: 1em;
+    color: red;
+}
+
+.addVideo-h2 {
+    font-family: Arial, sans-serif;
+    font-size: 35px;
+    color: black
+}
+
+.addVideo-label-switch {
+    position: relative;
+    display: inline-block;
+    width: 30px;
+    height: 15px;
+}
+
+.addVideo-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: .4s;
+    transition: .4s;
+    border-radius: 15px;
+}
+
+.addVideo-input {
+    display: block;
+    width: 40%;
+    margin: 10px 0;
+    padding: 15px;
+    border-radius: 10px;
+    border: 1px solid #eee;
+    transition: .3s border-color;
+    font-size: 17px;
+}
+
+.addVideo-button {
+    width: 43%;
+    height: 40px;
+    border: none;
+    font-weight: 600;
+    border-radius: 2px;
+    background-color: dodgerblue;
+    color: white;
+    font-size: 15px;
+}
+
+/*courses list*/
+
+#coursesListPage {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(500px, 1fr));
+    grid-auto-rows: 400px;
+    grid-gap: 20px;
+}
+
+.coursesList-h1 {
+    font-family: Arial, sans-serif;
+    font-size: 35px;
+    color: black
+}
+
+.coursesList-button-addVideo {
+    width: 15%;
+    height: 40px;
+    border: none;
+    font-weight: 600;
+    border-radius: 2px;
+    background-color: dodgerblue;
+    color: white;
+    font-size: 15px;
+}
+
+.coursesList-course {
+    background-color: rgb(255, 255, 255, 0.5);
+    height: 390px;
+    width: 440px;
+}
+
+.coursesList-courseLogo {
+    width: 320px;
+    height: 320px;
+    border-radius: 500px;
+}
+
+/*add course*/
+
+#addCourse {
+    width: 100%;
+    margin-left: 100px;
+}
+
+.addCourse-h2 {
+    font-family: Arial, sans-serif;
+    font-size: 35px;
+    color: black
+}
+
+.addCourse-label {
+    font-family: Arial, sans-serif;
+    font-size: 21px;
+    color: black;
+}
+
+.addCourse-input {
+    display: block;
+    width: 40%;
+    margin: 10px 0;
+    padding: 15px;
+    border-radius: 10px;
+    border: 1px solid #eee;
+    transition: .3s border-color;
+    font-size: 17px;
+}
+
+.addCourse-span {
+    font-family: Arial, sans-serif;
+    font-size: 1em;
+    color: red;
+}
+
+.addCourse-button {
+    width: 60%;
+    height: 40px;
+    border: none;
+    font-weight: 600;
+    border-radius: 2px;
+    background-color: dodgerblue;
+    color: white;
+    font-size: 15px;
+}
+
+.addCourses-selectVideos {
+    overflow: scroll;
+    width: 60%;
+}
+
+/*show course title*/
+
+#showCourseTitlePage {
+    width: 80%;
+    margin-left: 10%;
+    background-color: rgb(255, 255, 255, 0.5);
+}
+
+.showCourseTitle-h1 {
+    font-family: Arial, sans-serif;
+    font-size: 35px;
+    color: black
+}
+
+.showCourseTitle-p {
+    font-family: Arial, sans-serif;
+    font-size: 25px;
+    color: black;
+}
+
+.showCourseTitle-button {
+    width: 100%;
+    height: 40px;
+    border: none;
+    font-weight: 600;
+    border-radius: 2px;
+    background-color: dodgerblue;
+    color: white;
+    font-size: 15px;
+}
+
+/*show video*/
+
+#showCourse {
+    width: 80%;
+    margin-left: 10%;
+    background-color: rgb(255, 255, 255, 0.5);
+}
+
+/*selectcategory*/
+
+#selectCategory {
+    width: 100%;
+    margin-left: 100px;
+}
+
+.selectCategory-h2 {
+    font-family: Arial, sans-serif;
+    font-size: 30px;
+    color: black
+}
+
+.selectCategory-select {
+    width: 42%;
+    padding: 10px;
+    border-radius: 10px;
+    font-family: Arial, sans-serif;
+    font-size: 17px;
+}
+
+.selectCategory-button {
+    width: 41%;
+    height: 50px;
+    border: none;
+    font-weight: 600;
+    border-radius: 5px;
+    background-color: dodgerblue;
+    color: white;
+    font-size: 22px;
+}
+
+
+/*show category*/
+#showCategoryPage {
+
+}
+
+.addTrainer-button {
+    width: 15%;
+    height: 30px;
+    border: none;
+    font-weight: 600;
+    border-radius: 2px;
+    background-color: dodgerblue;
+    color: white;
+    font-size: 15px;
+}

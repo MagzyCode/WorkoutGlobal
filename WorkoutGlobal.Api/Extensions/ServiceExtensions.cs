@@ -1,15 +1,10 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using WorkoutGlobal.Api.Context;
-using WorkoutGlobal.Api.Contracts.AuthenticationManagerContracts;
-using WorkoutGlobal.Api.Contracts.RepositoryContracts;
-using WorkoutGlobal.Api.Contracts.RepositoryManagerContracts;
+using WorkoutGlobal.Api.Contracts;
 using WorkoutGlobal.Api.Filters.ActionFilters;
 using WorkoutGlobal.Api.Models;
-using WorkoutGlobal.Api.Repositories.AuthorizationRepositories;
-using WorkoutGlobal.Api.Repositories.BaseRepositories;
-using WorkoutGlobal.Api.Repositories.HealthRepository;
-using WorkoutGlobal.Api.Repositories.ModelsRepositories;
+using WorkoutGlobal.Api.Repositories;
 
 namespace WorkoutGlobal.Api.Extensions
 {
@@ -37,6 +32,18 @@ namespace WorkoutGlobal.Api.Extensions
             services.AddScoped<IHealthRepository, HealthRepository>();
             services.AddScoped<IUserCredentialsRepository, UserCredentialsRepository>();
             services.AddScoped<IAuthenticationRepository, AuthenticationRepository>();
+            services.AddScoped<IVideoRepository, VideoRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<ICommentsBlockRepository, CommentsBlockRepository>();
+            services.AddScoped<ICommentRepository, CommentRepository>();
+            services.AddScoped<ICourseRepository, CourseRepository>();
+            services.AddScoped<ICourseVideoRepository, CourseVideoRepository>();
+            services.AddScoped<ICategoryRepository, CategoryRepository>();
+            services.AddScoped<ISportEventRepository, SportEventRepository>();
+            services.AddScoped<IStoreVideoRepository, StoreVideoRepository>();
+            services.AddScoped<ISubscribeCourseRepository, SubscribeCourseRepository>();
+            services.AddScoped<ISubscribeEventRepository, SubscribeEventRepository>();
+            services.AddScoped<IPostRepository, PostRepository>();
 
             services.AddScoped<IRepositoryManager, RepositoryManager>();
         }

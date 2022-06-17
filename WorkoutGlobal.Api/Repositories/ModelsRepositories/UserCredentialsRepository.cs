@@ -1,35 +1,81 @@
-﻿using System.Security.Cryptography;
-using System.Text;
-using WorkoutGlobal.Api.Contracts.RepositoryContracts;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using WorkoutGlobal.Api.Context;
+using WorkoutGlobal.Api.Contracts;
+using WorkoutGlobal.Api.Models;
 
-namespace WorkoutGlobal.Api.Repositories.ModelsRepositories
+namespace WorkoutGlobal.Api.Repositories
 {
-    /// <summary>
-    /// Repository for main user credential actions.
-    /// </summary>
-    public class UserCredentialsRepository : IUserCredentialsRepository
+    public class UserCredentialsRepository : BaseRepository<UserCredentials>, IUserCredentialsRepository
     {
-        /// <summary>
-        /// Get user hashed password by real password and existed password salt.
-        /// </summary>
-        /// <param name="password">User password.</param>
-        /// <param name="salt">User pasword salt.</param>
-        /// <returns>Password hash.</returns>
-        public async Task<string> GetHashPasswordAsync(string password, string salt)
+        private readonly UserManager<UserCredentials> _userManager;
+
+        public UserCredentialsRepository(
+            WorkoutGlobalContext workoutGlobalContext, 
+            IConfiguration configurationManager,
+            UserManager<UserCredentials> userManager) 
+            : base(workoutGlobalContext, configurationManager)
         {
-            if (string.IsNullOrEmpty(password))
-                throw new ArgumentNullException(nameof(password));
+            _userManager = userManager;
+        }
 
-            if (string.IsNullOrEmpty(salt))
-                throw new ArgumentNullException(nameof(salt));
+        public async Task DeleteUserCredentialsAsync(UserCredentials userCredentials)
+        {
+            await _userManager.DeleteAsync(userCredentials); 
+            await SaveChangesAsync();
+        }
 
-            using var sha256 = SHA256.Create();
-            var hashedBytes = await sha256.ComputeHashAsync(
-                inputStream : new MemoryStream(Encoding.UTF8.GetBytes(password + salt)));
+        public async Task<IEnumerable<UserCredentials>> GetAllUserCredentialsAsync()
+        {
+            var users = await _userManager.Users.ToListAsync();
 
-            var hashPassword = BitConverter.ToString(hashedBytes).ToString().ToLower().Replace("-", "");
+            return users;
+        }
 
-            return hashPassword;
+        public Task<UserCredentials> GetUserCredentialsAsync(string userCredentialsId)
+        {
+            var model = _userManager.FindByIdAsync(userCredentialsId);
+
+            return model;
+        }
+
+        public UserCredentials GetUserCredentialsByUserName(string username)
+        {
+            var model = _userManager.Users
+                .Where(userCredentials => userCredentials.UserName == username)
+                .FirstOrDefault();
+
+            return model;
+        }
+
+        public string GetUserCredentialsRole(string userCredentialsId)
+        {
+            var userRole = Context.UserRoles.Where(x => x.UserId == userCredentialsId).FirstOrDefault();
+
+            var role = Context.Roles.Where(x => x.Id == userRole.RoleId).FirstOrDefault();
+
+            return role.Name;
+        }
+
+        public async Task UpdateUserCredentialsAsync(UserCredentials userCredentials)
+        {
+            await _userManager.UpdateAsync(userCredentials);
+            await SaveChangesAsync();
+        }
+
+        public async Task UpdateUserToTrainerAsync(string userCredentialsId)
+        {
+            var userCredentials = await Context.Users.FindAsync(userCredentialsId);
+
+            await _userManager.RemoveFromRoleAsync(userCredentials, "User");
+
+            await _userManager.AddToRoleAsync(userCredentials, "Trainer");
+
+            var userAccount = Context.UserAccounts.Where(x => x.UserCredentialsId == userCredentialsId).FirstOrDefault();
+            userAccount.IsStatusVerify = true;
+
+            Context.UserAccounts.Update(userAccount);
+            await Context.SaveChangesAsync();
         }
     }
 }

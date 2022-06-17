@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
-using WorkoutGlobal.Api.Models.DTOs.UserDTOs;
+using WorkoutGlobal.Api.Models.Dto;
 
-namespace WorkoutGlobal.Api.Models.Validators.UserValidators
+namespace WorkoutGlobal.Api.Models.Validators
 {
     /// <summary>
     /// Fluent Validator for UserRegistrationDto.
@@ -30,10 +30,6 @@ namespace WorkoutGlobal.Api.Models.Validators.UserValidators
                 .Length(6, 50)
                 .Matches(@"^([A-Za-z0-9_=+])([A-Za-z0-9_=+]){5,50}$")
                     .WithMessage("Check your '{PropertyName}' for using forbidden сharacters (@%?#<>%/) and cyrillic.");
-
-            RuleFor(user => user.ConfirmPassword)
-                .NotEmpty()
-                .Equal(user => user.Password);
         }
     }
 }

@@ -1,13 +1,14 @@
-﻿using WorkoutGlobal.Api.Context;
-using WorkoutGlobal.Api.Contracts.RepositoryContracts;
+﻿using Microsoft.EntityFrameworkCore;
+using WorkoutGlobal.Api.Context;
+using WorkoutGlobal.Api.Contracts;
 
-namespace WorkoutGlobal.Api.Repositories.BaseRepositories
+namespace WorkoutGlobal.Api.Repositories
 {
     /// <summary>
     /// Represents base repository for all model repositories.
     /// </summary>
     /// <typeparam name="TModel">Model type.</typeparam>
-    public abstract class BaseRepository<TModel> : BaseConnection, IBaseRepository<TModel>
+    public abstract class BaseRepository<TModel> : BaseConnectionRepository, IBaseRepository<TModel>
         where TModel : class
     {
         /// <summary>
@@ -58,7 +59,7 @@ namespace WorkoutGlobal.Api.Repositories.BaseRepositories
         /// <returns>Dingle model.</returns>
         public async Task<TModel> GetModelAsync(Guid id)
         {
-            var model = await Context.Set<TModel>().FindAsync();
+            var model = await Context.Set<TModel>().FindAsync(id);
 
             return model;
         }

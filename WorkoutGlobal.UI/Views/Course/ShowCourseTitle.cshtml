@@ -1,0 +1,25 @@
+﻿@model CourseViewModel
+
+<div id="showCourseTitlePage">
+    <h1 class="showCourseTitle-h1">
+        @Model.CourseName
+    </h1>
+    <p class="showCourseTitle-p">
+        @Model.Description
+    </p>
+    @{
+        var subscribers = await ServiceManager.SubscribeCourseService.GetAllSubscribeCoursesAsync();
+        var count = subscribers.Where(x => x.SubscribeCourseId == Model.Id).Count();
+    }
+    <p class="showCourseTitle-p">
+        Подписалось @count пользователей
+    </p>
+    <form method="get" asp-controller="Course" asp-action="ShowCourse">
+        <input type="hidden" asp-for="Id" value="@Model.Id"/>
+        <input type="hidden" asp-for="CourseName" value="@Model.CourseName"/>
+        <input type="hidden" asp-for="Description" value="@Model.Description"/>
+        <input type="hidden" asp-for="CreatorId" value="@Model.CreatorId"/>
+        <input type="hidden" asp-for="CategoryId" value="@Model.CategoryId"/>
+        <button class="showCourseTitle-button" type="submit">Начать курс</button>
+    </form>
+</div>

@@ -45,6 +45,8 @@ namespace WorkoutGlobal.UI.Middlewares
                         await HandleExceptionAsync(httpContext, exception, StatusCodes.Status400BadRequest);
                         break;
                     case ApiException:
+                        httpContext.Response.Redirect("/Home/Login?exception=true");
+                        break;
                     case Exception:
                     default:
                         await HandleExceptionAsync(httpContext, exception, StatusCodes.Status500InternalServerError);

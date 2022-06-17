@@ -1,0 +1,48 @@
+﻿@using WorkoutGlobal.UI.ViewModels
+@model IEnumerable<VideoWithCommentsAndSubscriptionViewModel>;
+
+<div >
+    <h1>Видео</h1>
+    <div>
+        @{
+            if (User.Identity.IsAuthenticated)
+            {
+                var user = await ServiceManager.UserService.GetUserByUsernameAsync(User.Identity.Name);
+                var userCredential = await ServiceManager.UserService.GetUserCredentialsAsync(user.Id);
+                var role = await ServiceManager.UserCredentialsServive.GetUserCredentialRoleAsync(userCredential.Id);
+
+                if (role == "Trainer")
+                {
+                    <form method="get">
+                        <button  asp-controller="Video" asp-action="AddVideo" type="submit" class="videoList-button-addVideo">Создать</button>
+                    </form>
+                <br>
+                }
+            }
+        }
+    </div>
+    <div id="videoListPage">
+        @foreach(var video in @Model)
+        {
+            <div class="videoList-video">
+                <a asp-controller="Video" asp-action="ShowVideo" asp-route-videoId="@video.Id" asp-route-username="@User.Identity.Name">
+                    <iframe src="@video.Link"></iframe>
+                    <br>
+                    @{
+                        var shortTitle = video.Title.Count() > 40
+                            ? video.Title.Substring(0, 40) + "..."
+                            : video.Title;
+                    }
+                    <p>@shortTitle</p>
+                </a>
+            </div>
+        }
+    </div>
+</div>
+
+
+@section scripts{
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+}
+

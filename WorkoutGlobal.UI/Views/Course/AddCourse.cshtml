@@ -1,0 +1,55 @@
+﻿@model CreationCourseViewModel;
+
+<div id="addCourse">
+    <h2 class="addCourse-h2">Добавить курс</h2>
+    <form method="post" asp-controller="Course" asp-action="AddCourse" asp-route-username="@User.Identity.Name">
+        <input type="hidden" asp-for="CreatorId" value="@Model.CreatorId"/>
+        @Html.HiddenFor(modelItem => Model.CourseImage)
+        @Html.HiddenFor(modelItem => Model.CourseImageForm)
+        <div>
+            <label class="addCourse-label" asp-for="CourseName">Наименование курса</label>
+            <br/>
+            <input class="addCourse-input" asp-for="CourseName" type="text" placeholder="Course #123">
+            <span class="addCourse-span" asp-validation-for="CourseName"></span>
+        </div>    
+        <div>
+            <label class="addCourse-label" asp-for="Description">Описание курса</label>
+            <br/>
+            <input class="addCourse-input" asp-for="Description" type="text" placeholder="Title">
+            <span class="addCourse-span" asp-validation-for="Description"></span>
+        </div>    
+        <div>
+            <label asp-for="CategoryName" class="addCourse-label">Категория курса</label>
+            <br />
+            <select asp-for="CategoryName" class="registration-select">
+                @foreach(var category in Model.Categories)
+                {
+                    <option>@category</option>
+                }
+            </select>
+            <span asp-validation-for="CategoryName"></span>
+            <br>
+            <br>
+        </div>
+        <div class="addCourses-selectVideos">
+            @{
+                for(int i = 0; i < Model.CourseVideos.Count; i++)
+                {
+                    <div class="showVideo-div-comment">
+                        <input asp-for="SelectedVideos[i]" type="checkbox" value="@Model.CourseVideos[i].videoId.ToString()">
+                        <label class="addVideo-label" asp-for="Description">@Model.CourseVideos[i].videoTitle</label>
+                        <br>
+                    </div>
+                }
+            }
+        </div>
+        <div>
+            <button class="addVideo-button" type="submit">Create video</button>
+        </div>
+    </form>
+</div>
+
+@section scripts{
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+}

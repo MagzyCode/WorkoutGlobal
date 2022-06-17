@@ -1,0 +1,21 @@
+﻿@model CategorySelectViewModel
+
+<div>
+    <div id="selectCategory">
+        <h2 class="selectCategory-h2">Выберите категорию</h2>
+        <form method="get" asp-controller="Category" asp-action="ShowCategory">
+            <select asp-for="CategoryName" class="selectCategory-select">
+                @{
+                    foreach(var category in Model.CategoryNames)
+                    {
+                        <option>@category</option>
+                    }
+                }
+            </select>
+            <br>
+            <br>
+            <button class="selectCategory-button" type="submit">Просмотреть категорию</button>
+        </form>
+
+    </div>
+</div>
