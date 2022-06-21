@@ -47,13 +47,11 @@ namespace WorkoutGlobal.Api.Controllers
         /// <response code="200">Get health status of API work.</response>
         /// <response code="500">Something going wrong on server.</response>
         [HttpGet("ping")]
-        [ProducesResponseType(type: typeof(HealthStatus), statusCode: StatusCodes.Status200OK)]
+        [ProducesResponseType(type: typeof(string), statusCode: StatusCodes.Status200OK)]
         [ProducesResponseType(type: typeof(ErrorDetails), statusCode: StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> CheckApiAlive()
+        public IActionResult CheckApiAlive()
         {
-            var connectionState = await _healthRepository.IsApiAlive();
-
-            return Ok(new { HealthStatus = connectionState.Status.ToString() });
+            return Ok("pong");
         }
 
     }
