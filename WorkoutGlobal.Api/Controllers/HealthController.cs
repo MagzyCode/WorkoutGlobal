@@ -51,7 +51,7 @@ namespace WorkoutGlobal.Api.Controllers
         [ProducesResponseType(type: typeof(ErrorDetails), statusCode: StatusCodes.Status500InternalServerError)]
         public IActionResult CheckApiAlive()
         {
-            return Ok("pong");
+            return Ok(new { HealthStatus = HealthCheckResult.Healthy() });
         }
 
     }
