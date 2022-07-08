@@ -4,7 +4,7 @@ namespace WorkoutGlobal.Api.Contracts
 {
     public interface ISubscribeEventRepository
     {
-        public Task CreateSubscribeEventAsync(SubscribeEvent subscribeEvent);
+        public Task<Guid> CreateSubscribeEventAsync(SubscribeEvent subscribeEvent);
 
         public Task UpdateSubscribeEventAsync(SubscribeEvent subscribeEvent);
 

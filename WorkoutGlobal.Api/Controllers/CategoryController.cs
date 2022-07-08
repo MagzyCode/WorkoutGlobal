@@ -30,9 +30,9 @@ namespace WorkoutGlobal.Api.Controllers
         {
             var category = _mapper.Map<Category>(categoryDto);
 
-            await _repositoryManager.CategoryRepository.CreateCategoryAsync(category);
+            var categoryId = await _repositoryManager.CategoryRepository.CreateCategoryAsync(category);
 
-            return StatusCode(StatusCodes.Status201Created);
+            return Created($"api/videos/{categoryId}", categoryId);
         }
 
         [HttpPut("{categoryId}")]
@@ -57,7 +57,6 @@ namespace WorkoutGlobal.Api.Controllers
         }
 
         [HttpDelete("{categoryId}")]
-        [ModelValidationFilter]
         public async Task<IActionResult> DeleteCategory(Guid categoryId)
         {
             var category = await _repositoryManager.CategoryRepository.GetCategoryAsync(categoryId);
@@ -78,7 +77,6 @@ namespace WorkoutGlobal.Api.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllCategories()
         {
-
             var categories = await _repositoryManager.CategoryRepository.GetAllCategoriesAsync();
 
             var categoriesDto = _mapper.Map<IEnumerable<CategoryDto>>(categories);

@@ -30,9 +30,9 @@ namespace WorkoutGlobal.Api.Controllers
         {
             var comment = _mapper.Map<Comment>(commentDto);
 
-            await _repositoryManager.CommentRepository.CreateCommentAsync(comment);
+            var commentId = await _repositoryManager.CommentRepository.CreateCommentAsync(comment);
 
-            return Ok(StatusCodes.Status201Created);
+            return Created($"api/videos/{commentId}", commentId);
         }
 
         [HttpGet("{commentId}")]

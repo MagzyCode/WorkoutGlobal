@@ -14,10 +14,12 @@ namespace WorkoutGlobal.Api.Repositories
         {
         }
 
-        public async Task CreateCategoryAsync(Category category)
+        public async Task<Guid> CreateCategoryAsync(Category category)
         {
             await CreateAsync(category);
             await SaveChangesAsync();
+
+            return category.Id;
         }
 
         public async Task DeleteCategoryAsync(Category category)

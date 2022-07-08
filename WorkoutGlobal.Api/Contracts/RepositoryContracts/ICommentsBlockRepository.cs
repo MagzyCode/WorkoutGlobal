@@ -6,6 +6,6 @@ namespace WorkoutGlobal.Api.Contracts
     {
         public Task<CommentsBlock> GetCommentsBlockAsync(Guid commentBlockId);
         public Task<IEnumerable<Comment>> GetCommentsBlockCommentsAsync(Guid commentBlockId);
-        public Task CreateCommentBlockAsync(CommentsBlock commentsBlock);
+        public Task<Guid> CreateCommentBlockAsync(CommentsBlock commentsBlock);
     }
 }

@@ -12,10 +12,12 @@ namespace WorkoutGlobal.Api.Repositories
             : base(workoutGlobalContext, configurationManager)
         { }
 
-        public async Task CreateCommentAsync(Comment comment)
+        public async Task<Guid> CreateCommentAsync(Comment comment)
         {
             await CreateAsync(comment);
             await SaveChangesAsync();
+
+            return comment.Id;
         }
 
         public async Task<Comment> GetCommentAsync(Guid commentId)

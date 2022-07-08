@@ -85,8 +85,7 @@ namespace WorkoutGlobal.Api.Tests.Controllers
 
             // assert
             result.Should().NotBeNull();
-            result.Should().BeOfType(typeof(StatusCodeResult));
-            result.As<StatusCodeResult>().StatusCode.Should().Be(StatusCodes.Status201Created);
+            result.Should().BeOfType(typeof(CreatedResult));
         }
 
         [Fact]

@@ -14,10 +14,12 @@ namespace WorkoutGlobal.Api.Repositories
         {
         }
 
-        public async Task CreatePostAsync(Post post)
+        public async Task<Guid> CreatePostAsync(Post post)
         {
             await CreateAsync(post);
             await SaveChangesAsync();
+
+            return post.Id;
         }
 
         public async Task DeletePostAsync(Post post)

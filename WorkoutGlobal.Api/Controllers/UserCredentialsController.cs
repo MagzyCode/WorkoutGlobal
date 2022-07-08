@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using WorkoutGlobal.Api.Attributes;
 using WorkoutGlobal.Api.Contracts;
 using WorkoutGlobal.Api.Filters.ActionFilters;
 using WorkoutGlobal.Api.Models;
@@ -24,16 +25,26 @@ namespace WorkoutGlobal.Api.Controllers
             _mapper = mapper;
         }
 
+        [HttpGet]
+        public async Task<IActionResult> GetAllUserCredentials()
+        {
+            var userCredentials = await _repositoryManager.UserCredentialRepository.GetAllUserCredentialsAsync();
+
+            var userCredentialsDto = _mapper.Map<IEnumerable<UserCredentialDto>>(userCredentials);
+
+            return Ok(userCredentialsDto);
+        }
+
         [HttpGet("{userCredentialId}")]
         public async Task<IActionResult> GetUserCredential(string userCredentialId)
         {
             var userCredential = await _repositoryManager.UserCredentialRepository.GetUserCredentialsAsync(userCredentialId);
 
             if (userCredential == null)
-                return BadRequest(new ErrorDetails()
+                return NotFound(new ErrorDetails()
                 {
-                    StatusCode = StatusCodes.Status400BadRequest,
-                    Message = "There is no category with such id.",
+                    StatusCode = StatusCodes.Status404NotFound,
+                    Message = "User don't exists.",
                     Details = new StackTrace().ToString()
                 });
 
@@ -49,16 +60,20 @@ namespace WorkoutGlobal.Api.Controllers
             var userCredential = await _repositoryManager.UserCredentialRepository.GetUserCredentialsAsync(userCredentialId);
 
             if (userCredential == null)
-                return BadRequest(new ErrorDetails()
+                return NotFound(new ErrorDetails()
                 {
-                    StatusCode = StatusCodes.Status400BadRequest,
-                    Message = "There is no category with such id.",
+                    StatusCode = StatusCodes.Status404NotFound,
+                    Message = "User don't exists.",
                     Details = new StackTrace().ToString()
                 });
 
-            var updateUserCredential = _mapper.Map<UserCredentials>(updationUserCredentialsDto);
+            // after mapping have tracking errors
+            userCredential.Email = updationUserCredentialsDto.Email;
+            userCredential.UserName = updationUserCredentialsDto.UserName;
+            userCredential.PhoneNumber = updationUserCredentialsDto.PhoneNumber;
+            userCredential.PasswordHash = await _repositoryManager.AuthenticationRepository.GenerateHashPasswordAsync(updationUserCredentialsDto.Password, userCredential.PasswordSalt);
 
-            await _repositoryManager.UserCredentialRepository.UpdateUserCredentialsAsync(updateUserCredential);
+            await _repositoryManager.UserCredentialRepository.UpdateUserCredentialsAsync(userCredential);
 
             return NoContent();
         }
@@ -69,12 +84,15 @@ namespace WorkoutGlobal.Api.Controllers
             var userCredential = await _repositoryManager.UserCredentialRepository.GetUserCredentialsAsync(userCredentialId);
 
             if (userCredential == null)
-                return BadRequest(new ErrorDetails()
+                return NotFound(new ErrorDetails()
                 {
-                    StatusCode = StatusCodes.Status400BadRequest,
-                    Message = "There is no category with such id.",
+                    StatusCode = StatusCodes.Status404NotFound,
+                    Message = "User don't exists.",
                     Details = new StackTrace().ToString()
                 });
+
+            var userAccount = await _repositoryManager.UserRepository.GetUserByUsernameAsync(userCredential.UserName);
+            await _repositoryManager.UserRepository.DeleteUserAsync(userAccount);
 
             await _repositoryManager.UserCredentialRepository.DeleteUserCredentialsAsync(userCredential);
 
@@ -87,10 +105,10 @@ namespace WorkoutGlobal.Api.Controllers
             var userCredential = await _repositoryManager.UserCredentialRepository.GetUserCredentialsAsync(userCredentialId);
 
             if (userCredential == null)
-                return BadRequest(new ErrorDetails()
+                return NotFound(new ErrorDetails()
                 {
-                    StatusCode = StatusCodes.Status400BadRequest,
-                    Message = "There is no category with such id.",
+                    StatusCode = StatusCodes.Status404NotFound,
+                    Message = "User don't exists.",
                     Details = new StackTrace().ToString()
                 });
 
@@ -105,10 +123,10 @@ namespace WorkoutGlobal.Api.Controllers
             var userCredential = await _repositoryManager.UserCredentialRepository.GetUserCredentialsAsync(userCredentialId);
 
             if (userCredential == null)
-                return BadRequest(new ErrorDetails()
+                return NotFound(new ErrorDetails()
                 {
-                    StatusCode = StatusCodes.Status400BadRequest,
-                    Message = "There is no category with such id.",
+                    StatusCode = StatusCodes.Status404NotFound,
+                    Message = "User don't exists.",
                     Details = new StackTrace().ToString()
                 });
 
@@ -118,6 +136,23 @@ namespace WorkoutGlobal.Api.Controllers
 
             userAccount.IsStatusVerify = true;
             await _repositoryManager.UserRepository.UpdateUserAsync(userAccount);
+
+            return NoContent();
+        }
+
+        [HttpDelete("purge/{userCredentialsId}")]
+        [TestApi]
+        public async Task<IActionResult> Purge(string userCredentialsId)
+        {
+            var userCredentials = await _repositoryManager.UserCredentialRepository.GetUserCredentialsAsync(userCredentialsId);
+
+            if (userCredentials != null)
+            {
+                var userAccount = await _repositoryManager.UserRepository.GetUserByUsernameAsync(userCredentials.UserName);
+                await _repositoryManager.UserRepository.DeleteUserAsync(userAccount);
+
+                await _repositoryManager.UserCredentialRepository.Purge(userCredentials);
+            }
 
             return NoContent();
         }

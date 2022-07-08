@@ -8,6 +8,11 @@ namespace WorkoutGlobal.Api.Models.Dto
     public class UserRegistrationDto
     {
         /// <summary>
+        /// User unique key.
+        /// </summary>
+        public string Id { get; set; }
+
+        /// <summary>
         /// User name for registration.
         /// </summary>
         /// <example>

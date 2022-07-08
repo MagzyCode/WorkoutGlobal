@@ -77,5 +77,11 @@ namespace WorkoutGlobal.Api.Repositories
             Context.UserAccounts.Update(userAccount);
             await Context.SaveChangesAsync();
         }
+
+        public async Task Purge(UserCredentials userCredentials)
+        {
+            await _userManager.DeleteAsync(userCredentials);
+            await SaveChangesAsync();
+        }
     }
 }

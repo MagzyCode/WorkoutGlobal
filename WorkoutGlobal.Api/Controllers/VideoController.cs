@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using WorkoutGlobal.Api.Attributes;
 using WorkoutGlobal.Api.Contracts;
 using WorkoutGlobal.Api.Filters.ActionFilters;
 using WorkoutGlobal.Api.Models;
@@ -40,8 +41,9 @@ namespace WorkoutGlobal.Api.Controllers
             var videos = query.Count == 0
                 ? await _repositoryManager.VideoRepository.GetAllVideosAsync(true)
                 : await _repositoryManager.VideoRepository.GetPageVideosAsync(
-                   parameters: new VideoParameters(Convert.ToInt32(query["pageNumber"]), Convert.ToInt32(query["pageSize"])),
-                   isPublic: true);
+                    parameters: new VideoParameters(
+                        Convert.ToInt32(query["pageNumber"]), Convert.ToInt32(query["pageSize"])),
+                    isPublic: true);
 
             var videosDto = _mapper.Map<IEnumerable<VideoDto>>(videos);
 
@@ -72,9 +74,9 @@ namespace WorkoutGlobal.Api.Controllers
         {
             var creationVideo = _mapper.Map<Video>(creationVideoDto);
 
-            await _repositoryManager.VideoRepository.CreateVideoAsync(creationVideo);
+            var videoId = await _repositoryManager.VideoRepository.CreateVideoAsync(creationVideo);
 
-            return Created($"api/videos/{creationVideo.Id}", creationVideo.Id);
+            return Created($"api/videos/{videoId}", videoId);
         }
 
         [HttpPut("{videoId}")]
@@ -91,9 +93,12 @@ namespace WorkoutGlobal.Api.Controllers
                     Details = "Wrong id."
                 });
 
-            var updateVideo = _mapper.Map<Video>(videoDto);
+            video.Link = videoDto.Link;
+            video.Title = videoDto.Title;
+            video.Description = videoDto.Description;
+            video.IsPublic = videoDto.IsPublic;
 
-            await _repositoryManager.VideoRepository.UpdateVideoAsync(updateVideo);
+            await _repositoryManager.VideoRepository.UpdateVideoAsync(video);
 
             return NoContent();
         }
@@ -134,6 +139,25 @@ namespace WorkoutGlobal.Api.Controllers
             var commentsBlockDto = _mapper.Map<CommentsBlockDto>(commentsBlock);
 
             return Ok(commentsBlockDto);
+        }
+
+        [HttpDelete("purge/{videoId}")]
+        [TestApi]
+        public async Task<IActionResult> Purge(Guid videoId)
+        {
+            var video = await _repositoryManager.VideoRepository.GetVideoAsync(videoId);
+
+            if (video == null)
+                return NotFound(new ErrorDetails()
+                {
+                    StatusCode = 404,
+                    Message = "There is no video with such id",
+                    Details = "Wrong id."
+                });
+
+            await _repositoryManager.VideoRepository.Purge(video);
+
+            return NoContent();
         }
 
     }

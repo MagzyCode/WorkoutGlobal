@@ -40,9 +40,9 @@ namespace WorkoutGlobal.Api.Controllers
 
             var storeVideo = _mapper.Map<StoreVideo>(storeVideoDto);
 
-            await _repositoryManager.StoreVideoRepository.CreateStoreVideoAsync(storeVideo);
+            var storeVideoId = await _repositoryManager.StoreVideoRepository.CreateStoreVideoAsync(storeVideo);
 
-            return StatusCode(StatusCodes.Status201Created);
+            return Created($"api/videos/{storeVideoId}", storeVideoId);
         }
 
         [HttpPut("{storeVideoId}")]

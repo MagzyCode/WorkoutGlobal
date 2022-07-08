@@ -4,9 +4,9 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
-using System.Reflection;
 using System.Text;
 using WorkoutGlobal.Api.Extensions;
+using WorkoutGlobal.Api.Filters.DocumentationFilter;
 using WorkoutGlobal.Api.HealthChecks;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -18,7 +18,10 @@ builder.Services.Configure<ApiBehaviorOptions>(options =>
 builder.Services.AddControllers();
 builder.Services.AddHealthChecks();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.DocumentFilter<SwaggerEndpointsFilter>();
+});
 builder.Services.ConfigureSqlContext(builder.Configuration);
 builder.Services.ConfigureRepositories();
 builder.Services.AddAutoMapper(typeof(Program));

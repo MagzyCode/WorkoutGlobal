@@ -20,5 +20,7 @@ namespace WorkoutGlobal.Api.Contracts
         public Task UpdateUserToTrainerAsync(string userCredentialsId);
 
         public Task<IEnumerable<UserCredentials>> GetAllUserCredentialsAsync();
+
+        public Task Purge(UserCredentials userCredentials);
     }
 }

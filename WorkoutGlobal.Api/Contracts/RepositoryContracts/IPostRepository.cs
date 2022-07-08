@@ -4,7 +4,7 @@ namespace WorkoutGlobal.Api.Contracts
 {
     public interface IPostRepository
     {
-        public Task CreatePostAsync(Post post);
+        public Task<Guid> CreatePostAsync(Post post);
 
         public Task UpdatePostAsync(Post post);
 

@@ -14,10 +14,12 @@ namespace WorkoutGlobal.Api.Repositories
         {
         }
 
-        public async Task CreateEventAsync(SportEvent sportEvent)
+        public async Task<Guid> CreateEventAsync(SportEvent sportEvent)
         {
             await CreateAsync(sportEvent);
             await SaveChangesAsync();
+
+            return sportEvent.Id;
         }
 
         public async Task DeleteEventAsync(SportEvent sportEvent)

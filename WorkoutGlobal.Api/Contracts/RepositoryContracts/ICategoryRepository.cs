@@ -4,7 +4,7 @@ namespace WorkoutGlobal.Api.Contracts
 {
     public interface ICategoryRepository
     {
-        public Task CreateCategoryAsync(Category category);
+        public Task<Guid> CreateCategoryAsync(Category category);
 
         public Task UpdateCategoryAsync(Category category);
 

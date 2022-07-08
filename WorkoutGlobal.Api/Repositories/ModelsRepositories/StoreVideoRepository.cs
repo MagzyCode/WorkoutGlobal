@@ -13,10 +13,12 @@ namespace WorkoutGlobal.Api.Repositories
             : base(workoutGlobalContext, configurationManager)
         { }
 
-        public async Task CreateStoreVideoAsync(StoreVideo storeVideo)
+        public async Task<Guid> CreateStoreVideoAsync(StoreVideo storeVideo)
         {
             await CreateAsync(storeVideo);
             await SaveChangesAsync();
+
+            return storeVideo.Id;
         }
 
         public async Task DeleteStoreVideoAsync(StoreVideo storeVideo)

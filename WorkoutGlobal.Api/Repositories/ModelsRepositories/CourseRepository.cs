@@ -17,6 +17,7 @@ namespace WorkoutGlobal.Api.Repositories
         {
             await CreateAsync(course);
             await SaveChangesAsync();
+
             return course.Id;
         }
 

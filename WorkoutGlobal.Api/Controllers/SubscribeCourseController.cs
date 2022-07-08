@@ -42,9 +42,9 @@ namespace WorkoutGlobal.Api.Controllers
 
             var subscribeCourse = _mapper.Map<SubscribeCourse>(subscribeCourseDto);
 
-            await _repositoryManager.SubscribeCourseRepository.CreateSubscribeCourseAsync(subscribeCourse);
+            var subscribeCourseId = await _repositoryManager.SubscribeCourseRepository.CreateSubscribeCourseAsync(subscribeCourse);
 
-            return StatusCode(StatusCodes.Status201Created);
+            return Created($"api/videos/{subscribeCourseId}", subscribeCourseId);
         }
 
         [HttpPut("{subscribeCourseId}")]
