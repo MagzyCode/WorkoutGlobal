@@ -44,7 +44,5 @@ namespace WorkoutGlobal.Api.Contracts
         public Task<UserCredentials> GenerateUserCredentialsAsync(UpdationUserCredentialsDto updationUserCredentialsDto);
 
         public Task<string> GenerateHashPasswordAsync(string password, string salt);
-
-        public Task Purge(UserCredentials userCredentials);
     }
 }

@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using WorkoutGlobal.Api.Attributes;
 using WorkoutGlobal.Api.Contracts;
 using WorkoutGlobal.Api.Filters.ActionFilters;
 using WorkoutGlobal.Api.Models;
@@ -142,7 +141,7 @@ namespace WorkoutGlobal.Api.Controllers
         }
 
         [HttpDelete("purge/{videoId}")]
-        [TestApi]
+        [ApiExplorerSettings(IgnoreApi = true)]
         public async Task<IActionResult> Purge(Guid videoId)
         {
             var video = await _repositoryManager.VideoRepository.GetVideoAsync(videoId);
@@ -155,7 +154,7 @@ namespace WorkoutGlobal.Api.Controllers
                     Details = "Wrong id."
                 });
 
-            await _repositoryManager.VideoRepository.Purge(video);
+            await _repositoryManager.VideoRepository.DeleteVideoAsync(video);
 
             return NoContent();
         }

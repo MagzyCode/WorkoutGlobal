@@ -1,10 +1,8 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
-using WorkoutGlobal.Api.Attributes;
 using WorkoutGlobal.Api.Contracts;
 using WorkoutGlobal.Api.Filters.ActionFilters;
-using WorkoutGlobal.Api.Models;
 using WorkoutGlobal.Api.Models.Dto;
 using WorkoutGlobal.Api.Models.ErrorModels;
 
@@ -141,7 +139,7 @@ namespace WorkoutGlobal.Api.Controllers
         }
 
         [HttpDelete("purge/{userCredentialsId}")]
-        [TestApi]
+        [ApiExplorerSettings(IgnoreApi = true)]
         public async Task<IActionResult> Purge(string userCredentialsId)
         {
             var userCredentials = await _repositoryManager.UserCredentialRepository.GetUserCredentialsAsync(userCredentialsId);
@@ -151,7 +149,7 @@ namespace WorkoutGlobal.Api.Controllers
                 var userAccount = await _repositoryManager.UserRepository.GetUserByUsernameAsync(userCredentials.UserName);
                 await _repositoryManager.UserRepository.DeleteUserAsync(userAccount);
 
-                await _repositoryManager.UserCredentialRepository.Purge(userCredentials);
+                await _repositoryManager.UserCredentialRepository.DeleteUserCredentialsAsync(userCredentials);
             }
 
             return NoContent();

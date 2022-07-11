@@ -1,15 +1,10 @@
 ﻿using FluentAssertions;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Net.Http;
 using System.Net.Http.Json;
-using System.Text;
 using System.Threading.Tasks;
-using WorkoutGlobal.Api.IntegrationTests.Configuration;
 using WorkoutGlobal.Api.Models.Dto;
 using WorkoutGlobal.Api.Models.ErrorModels;
 using Xunit;
@@ -18,20 +13,16 @@ namespace WorkoutGlobal.Api.IntegrationTests.Controllers
 {
     public class VideoControllerIntegrationTests : IAsyncLifetime
     {
-        private readonly HttpClient _httpClient = new();
-        private readonly IConfiguration _testConfiguration;
-        private readonly List<Guid> _purgeList = new();
+        private readonly AppTestConnection<Guid> _appTestConnection;
         private Guid _createdCategotyId;
         private Guid _createdUserAccountId;
         private string _createdUserCredentialsId;
 
-        public VideoControllerIntegrationTests() => _testConfiguration = ConfigurationAccessor.GetTestConfiguration();
+        public VideoControllerIntegrationTests() => _appTestConnection = new();
 
         public async Task InitializeAsync()
         {
-            _httpClient.BaseAddress = new Uri(_testConfiguration["BaseHost"]);
-
-            var response = await _httpClient.PostAsJsonAsync("api/categories",
+            var response = await _appTestConnection.AppClient.PostAsJsonAsync("api/categories",
                 new CreationCategoryDto()
                 {
                     CategoryName = "TestCategory",
@@ -41,7 +32,7 @@ namespace WorkoutGlobal.Api.IntegrationTests.Controllers
 
             var user = new UserRegistrationDto()
             {
-                UserName = "TestUser",
+                UserName = "TestUser999",
                 Email = "testUser@mail.ru",
                 Password = "testUserPassword",
                 PhoneNumber = "+375250000000",
@@ -56,24 +47,24 @@ namespace WorkoutGlobal.Api.IntegrationTests.Controllers
                 SportsActivity = Models.Enums.SportsActivity.Reduced,
                 ClassificationNumber = "RTD458S5891238"
             };
-            var registrationUserResponse = await _httpClient.PostAsJsonAsync("api/authentication/registration", user);
-            _createdUserCredentialsId = registrationUserResponse.Content.ReadAsStringAsync().Result.Replace("\"", "");
-            await _httpClient.PutAsync($"api/userCredentials/{_createdUserCredentialsId}/raising", null);
+            var registrationUserResponse = await _appTestConnection.AppClient.PostAsJsonAsync("api/authentication/registration", user);
+            _createdUserCredentialsId = await registrationUserResponse.Content.ReadFromJsonAsync<string>();
+            await _appTestConnection.AppClient.PutAsync($"api/userCredentials/{_createdUserCredentialsId}/raising", null);
 
-            response = await _httpClient.GetAsync($"api/accounts/account/{user.UserName}");
+            response = await _appTestConnection.AppClient.GetAsync($"api/accounts/account/{user.UserName}");
             var account = await response.Content.ReadFromJsonAsync<UserDto>();
-            _createdUserAccountId = account!.Id;
+            _createdUserAccountId = account.Id;
         }
 
         public async Task DisposeAsync()
         {
-            foreach (var id in _purgeList)
-                await _httpClient.DeleteAsync($"api/videos/purge/{id}");
+            foreach (var id in _appTestConnection.PurgeList)
+                await _appTestConnection.AppClient.DeleteAsync($"api/videos/purge/{id}");
 
-            await _httpClient.DeleteAsync($"api/categories/{_createdCategotyId}");
-            await _httpClient.DeleteAsync($"api/userCredentials/{_createdUserCredentialsId}");
+            await _appTestConnection.AppClient.DeleteAsync($"api/categories/{_createdCategotyId}");
+            await _appTestConnection.AppClient.DeleteAsync($"api/userCredentials/{_createdUserCredentialsId}");
 
-            _httpClient.Dispose();
+            _appTestConnection.AppClient.Dispose();
             await Task.CompletedTask;
         }
 
@@ -90,19 +81,19 @@ namespace WorkoutGlobal.Api.IntegrationTests.Controllers
                 CategoryId = _createdCategotyId,
                 UserId = _createdUserAccountId,
             };
-            var createVideoResponse = await _httpClient.PostAsJsonAsync("api/videos", creationVideo);
+            var createVideoResponse = await _appTestConnection.AppClient.PostAsJsonAsync("api/videos", creationVideo);
             var createVideoId = await createVideoResponse.Content.ReadFromJsonAsync<Guid>();
-            _purgeList.Add(createVideoId);
+            _appTestConnection.PurgeList.Add(createVideoId);
 
             // act
-            var getAllResponse = await _httpClient.GetAsync("api/videos");
+            var getAllResponse = await _appTestConnection.AppClient.GetAsync("api/videos");
             var getAllContent = await getAllResponse.Content.ReadFromJsonAsync<List<VideoDto>>();
 
             // assert
             getAllResponse.StatusCode.Should().Be(HttpStatusCode.OK);
 
             getAllContent.Should().NotBeEmpty();
-            getAllContent!.Count.Should().BeGreaterThanOrEqualTo(1);
+            getAllContent.Count.Should().BeGreaterThanOrEqualTo(1);
         }
 
         [Fact]
@@ -118,12 +109,12 @@ namespace WorkoutGlobal.Api.IntegrationTests.Controllers
                 CategoryId = _createdCategotyId,
                 UserId = _createdUserAccountId,
             };
-            var createVideoResponse = await _httpClient.PostAsJsonAsync("api/videos", creationVideo);
+            var createVideoResponse = await _appTestConnection.AppClient.PostAsJsonAsync("api/videos", creationVideo);
             var createVideoId = await createVideoResponse.Content.ReadFromJsonAsync<Guid>();
-            _purgeList.Add(createVideoId);
+            _appTestConnection.PurgeList.Add(createVideoId);
 
             // act
-            var getResponse = await _httpClient.GetAsync($"api/videos/{createVideoId}");
+            var getResponse = await _appTestConnection.AppClient.GetAsync($"api/videos/{createVideoId}");
             var getContent = await getResponse.Content.ReadFromJsonAsync<VideoDto>();
 
             // assert
@@ -140,14 +131,14 @@ namespace WorkoutGlobal.Api.IntegrationTests.Controllers
             var invalidVideoId = Guid.Empty;
 
             // act
-            var getResponse = await _httpClient.GetAsync($"api/videos/{invalidVideoId}");
+            var getResponse = await _appTestConnection.AppClient.GetAsync($"api/videos/{invalidVideoId}");
             var getContent = await getResponse.Content.ReadFromJsonAsync<ErrorDetails>();
 
             // assert
             getResponse.StatusCode.Should().Be(HttpStatusCode.NotFound);
 
-            getContent!.StatusCode.Should().Be(StatusCodes.Status404NotFound);
-            getContent!.Message.Should().Be("There is no video with such id");
+            getContent.StatusCode.Should().Be(StatusCodes.Status404NotFound);
+            getContent.Message.Should().Be("There is no video with such id");
         }
 
         [Fact]
@@ -165,10 +156,10 @@ namespace WorkoutGlobal.Api.IntegrationTests.Controllers
             };
 
             // act
-            var createVideoResponse = await _httpClient.PostAsJsonAsync("api/videos", creationVideo);
+            var createVideoResponse = await _appTestConnection.AppClient.PostAsJsonAsync("api/videos", creationVideo);
             var createVideoId = await createVideoResponse.Content.ReadFromJsonAsync<Guid>();
-            _purgeList.Add(createVideoId);
-            var getResponse = await _httpClient.GetAsync($"api/videos/{createVideoId}");
+            _appTestConnection.PurgeList.Add(createVideoId);
+            var getResponse = await _appTestConnection.AppClient.GetAsync($"api/videos/{createVideoId}");
             var getContent = await getResponse.Content.ReadFromJsonAsync<VideoDto>();
 
             // assert
@@ -196,13 +187,13 @@ namespace WorkoutGlobal.Api.IntegrationTests.Controllers
             };
 
             // act
-            var createVideoResponse = await _httpClient.PostAsJsonAsync("api/videos", creationVideo);
+            var createVideoResponse = await _appTestConnection.AppClient.PostAsJsonAsync("api/videos", creationVideo);
             var error = await createVideoResponse.Content.ReadFromJsonAsync<ErrorDetails>();
 
             // assert
             createVideoResponse.StatusCode.Should().Be(HttpStatusCode.BadRequest);
 
-            error!.StatusCode.Should().Be(StatusCodes.Status400BadRequest);
+            error.StatusCode.Should().Be(StatusCodes.Status400BadRequest);
             error.Message.Should().Be("Dto model isn't valid.");
         }
 
@@ -219,7 +210,7 @@ namespace WorkoutGlobal.Api.IntegrationTests.Controllers
                 CategoryId = _createdCategotyId,
                 UserId = _createdUserAccountId,
             };
-            var createVideoResponse = await _httpClient.PostAsJsonAsync("api/videos", creationVideo);
+            var createVideoResponse = await _appTestConnection.AppClient.PostAsJsonAsync("api/videos", creationVideo);
             var createdVideoId = await createVideoResponse.Content.ReadFromJsonAsync<Guid>();
             var updationUser = new VideoDto()
             {
@@ -231,11 +222,11 @@ namespace WorkoutGlobal.Api.IntegrationTests.Controllers
                 CategoryId = _createdCategotyId,
                 UserId = _createdUserAccountId,
             };
-            _purgeList.Add(createdVideoId);
+            _appTestConnection.PurgeList.Add(createdVideoId);
 
             // act
-            var updateResponse = await _httpClient.PutAsJsonAsync($"api/videos/{createdVideoId}", updationUser);
-            var getResponse = await _httpClient.GetAsync($"api/videos/{createdVideoId}");
+            var updateResponse = await _appTestConnection.AppClient.PutAsJsonAsync($"api/videos/{createdVideoId}", updationUser);
+            var getResponse = await _appTestConnection.AppClient.GetAsync($"api/videos/{createdVideoId}");
             var getContent = await getResponse.Content.ReadFromJsonAsync<VideoDto>();
 
             // assert
@@ -260,14 +251,14 @@ namespace WorkoutGlobal.Api.IntegrationTests.Controllers
             };
 
             // act
-            var updateResponse = await _httpClient.PutAsJsonAsync($"api/videos/{updationUser.Id}", updationUser);
+            var updateResponse = await _appTestConnection.AppClient.PutAsJsonAsync($"api/videos/{updationUser.Id}", updationUser);
             var updateContent = await updateResponse.Content.ReadFromJsonAsync<ErrorDetails>();
 
             // assert
             updateResponse.StatusCode.Should().Be(HttpStatusCode.NotFound);
 
             updateContent.Should().BeOfType<ErrorDetails>();
-            updateContent!.StatusCode.Should().Be(StatusCodes.Status404NotFound);
+            updateContent.StatusCode.Should().Be(StatusCodes.Status404NotFound);
             updateContent.Message.Should().Be("There is no video with such id");
         }
 
@@ -284,13 +275,13 @@ namespace WorkoutGlobal.Api.IntegrationTests.Controllers
                 CategoryId = _createdCategotyId,
                 UserId = _createdUserAccountId,
             };
-            var createVideoResponse = await _httpClient.PostAsJsonAsync("api/videos", creationVideo);
+            var createVideoResponse = await _appTestConnection.AppClient.PostAsJsonAsync("api/videos", creationVideo);
             var createdVideoId = await createVideoResponse.Content.ReadFromJsonAsync<Guid>();
-            _purgeList.Add(createdVideoId);
+            _appTestConnection.PurgeList.Add(createdVideoId);
 
             // act
-            var deleteResponse = await _httpClient.DeleteAsync($"api/videos/{createdVideoId}");
-            var getResponse = await _httpClient.GetAsync($"api/videos/{createdVideoId}");
+            var deleteResponse = await _appTestConnection.AppClient.DeleteAsync($"api/videos/{createdVideoId}");
+            var getResponse = await _appTestConnection.AppClient.GetAsync($"api/videos/{createdVideoId}");
             var getContent = await getResponse.Content.ReadFromJsonAsync<ErrorDetails>();
 
             // assert
@@ -299,7 +290,7 @@ namespace WorkoutGlobal.Api.IntegrationTests.Controllers
             getResponse.StatusCode.Should().Be(HttpStatusCode.NotFound);
 
             getContent.Should().BeOfType<ErrorDetails>();
-            getContent!.StatusCode.Should().Be(StatusCodes.Status404NotFound);
+            getContent.StatusCode.Should().Be(StatusCodes.Status404NotFound);
             getContent.Message.Should().Be("There is no video with such id");
         }
 
@@ -310,14 +301,14 @@ namespace WorkoutGlobal.Api.IntegrationTests.Controllers
             var invalidVideoId = Guid.Empty;
 
             // act
-            var deleteResponse = await _httpClient.DeleteAsync($"api/videos/{invalidVideoId}");
+            var deleteResponse = await _appTestConnection.AppClient.DeleteAsync($"api/videos/{invalidVideoId}");
             var deleteContent = await deleteResponse.Content.ReadFromJsonAsync<ErrorDetails>();
 
             // assert
             deleteResponse.StatusCode.Should().Be(HttpStatusCode.NotFound);
 
             deleteContent.Should().BeOfType<ErrorDetails>();
-            deleteContent!.StatusCode.Should().Be(StatusCodes.Status404NotFound);
+            deleteContent.StatusCode.Should().Be(StatusCodes.Status404NotFound);
             deleteContent.Message.Should().Be("There is no video with such id");
         }
 
@@ -334,19 +325,19 @@ namespace WorkoutGlobal.Api.IntegrationTests.Controllers
                 CategoryId = _createdCategotyId,
                 UserId = _createdUserAccountId,
             };
-            var createVideoResponse = await _httpClient.PostAsJsonAsync("api/videos", creationVideo);
+            var createVideoResponse = await _appTestConnection.AppClient.PostAsJsonAsync("api/videos", creationVideo);
             var createdVideoId = await createVideoResponse.Content.ReadFromJsonAsync<Guid>();
-            _purgeList.Add(createdVideoId);
+            _appTestConnection.PurgeList.Add(createdVideoId);
 
             // act
-            var getBlockResponse = await _httpClient.GetAsync($"api/videos/{createdVideoId}/commentsBlock");
+            var getBlockResponse = await _appTestConnection.AppClient.GetAsync($"api/videos/{createdVideoId}/commentsBlock");
             var getBlockContent = await getBlockResponse.Content.ReadFromJsonAsync<CommentsBlockDto>();
 
-            var getCommentBlockResponse = await _httpClient.GetAsync($"api/commentsBlocks/{getBlockContent!.Id}");
+            var getCommentBlockResponse = await _appTestConnection.AppClient.GetAsync($"api/commentsBlocks/{getBlockContent.Id}");
             var getCommentBlockContent = await getCommentBlockResponse.Content.ReadFromJsonAsync<CommentsBlockDto>();
 
             // assert
-            getBlockResponse!.StatusCode.Should().Be(HttpStatusCode.OK);
+            getBlockResponse.StatusCode.Should().Be(HttpStatusCode.OK);
 
             getBlockContent.Should().NotBeNull();
             getBlockContent.Should().BeEquivalentTo(getCommentBlockContent);
@@ -359,14 +350,14 @@ namespace WorkoutGlobal.Api.IntegrationTests.Controllers
             var invalidVideoId = Guid.Empty;
 
             // act
-            var getBlockResponse = await _httpClient.GetAsync($"api/videos/{invalidVideoId}/commentsBlock");
+            var getBlockResponse = await _appTestConnection.AppClient.GetAsync($"api/videos/{invalidVideoId}/commentsBlock");
             var getBlockContent = await getBlockResponse.Content.ReadFromJsonAsync<ErrorDetails>();
 
             // assert
             getBlockResponse.StatusCode.Should().Be(HttpStatusCode.NotFound);
 
             getBlockContent.Should().BeOfType<ErrorDetails>();
-            getBlockContent!.StatusCode.Should().Be(StatusCodes.Status404NotFound);
+            getBlockContent.StatusCode.Should().Be(StatusCodes.Status404NotFound);
             getBlockContent.Message.Should().Be("There is no video with such id");
         }
     }

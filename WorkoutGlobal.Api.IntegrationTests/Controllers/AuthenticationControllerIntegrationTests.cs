@@ -1,12 +1,7 @@
 ﻿using FluentAssertions;
-using Microsoft.Extensions.Configuration;
-using System;
-using System.Collections.Generic;
 using System.Net;
-using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
-using WorkoutGlobal.Api.IntegrationTests.Configuration;
 using WorkoutGlobal.Api.Models;
 using WorkoutGlobal.Api.Models.Dto;
 using Xunit;
@@ -15,29 +10,26 @@ namespace WorkoutGlobal.Api.IntegrationTests.Controllers
 {
     public class AuthenticationControllerIntegrationTests : IAsyncLifetime
     {
-        private readonly HttpClient _httpClient = new();
-        private readonly IConfiguration _testConfiguration;
-        private readonly List<string> _purgeList = new();
+        private readonly AppTestConnection<string> _appTestConnection;
 
         public AuthenticationControllerIntegrationTests()
         {
-            _testConfiguration = ConfigurationAccessor.GetTestConfiguration();
+            _appTestConnection = new();
         }
 
         public async Task InitializeAsync()
         {
             await Task.Factory.StartNew(() =>
             {
-                _httpClient.BaseAddress = new Uri(_testConfiguration["BaseHost"]);
+                _appTestConnection.PurgeList.Clear();
             });
         }
 
         public async Task DisposeAsync()
         {
-            foreach (var id in _purgeList)
-                _ = await _httpClient.DeleteAsync($"api/authentication/purge/{id}");
+            foreach (var id in _appTestConnection.PurgeList)
+                _ = await _appTestConnection.AppClient.DeleteAsync($"api/authentication/purge/{id}");
             
-            _httpClient.Dispose();
             await Task.CompletedTask;
         }
 
@@ -64,15 +56,15 @@ namespace WorkoutGlobal.Api.IntegrationTests.Controllers
             };
 
             // act
-            var registrationResponse = await _httpClient.PostAsJsonAsync("api/authentication/registration", userRegistrationDto);
-            var createdUserCredentialId = registrationResponse.Content.ReadAsStringAsync().Result.Replace("\"", "");
-            var userCredentialsResponse = await _httpClient.GetAsync($"api/userCredentials/{createdUserCredentialId}");
+            var registrationResponse = await _appTestConnection.AppClient.PostAsJsonAsync("api/authentication/registration", userRegistrationDto);
+            var createdUserCredentialId = await registrationResponse.Content.ReadFromJsonAsync<string>();
+            var userCredentialsResponse = await _appTestConnection.AppClient.GetAsync($"api/userCredentials/{createdUserCredentialId}");
             var userCredentials = await userCredentialsResponse.Content.ReadFromJsonAsync<UserCredentials>();
-            var userAccountResponse = await _httpClient.GetAsync($"api/accounts/account/{userCredentials?.UserName}");
+            var userAccountResponse = await _appTestConnection.AppClient.GetAsync($"api/accounts/account/{userCredentials.UserName}");
             var userAccount = await userAccountResponse.Content.ReadFromJsonAsync<User>();
-            var roleResponse = await _httpClient.GetAsync($"api/userCredentials/{createdUserCredentialId}/role");
+            var roleResponse = await _appTestConnection.AppClient.GetAsync($"api/userCredentials/{createdUserCredentialId}/role");
             var role = await roleResponse.Content.ReadAsStringAsync();
-            _purgeList.Add(createdUserCredentialId);
+            _appTestConnection.PurgeList.Add(createdUserCredentialId);
 
             // assert
             registrationResponse.StatusCode.Should().Be(HttpStatusCode.Created);
@@ -88,7 +80,7 @@ namespace WorkoutGlobal.Api.IntegrationTests.Controllers
 
             userAccount.Should().NotBeNull();
             userAccount.Should().BeOfType<User>();
-            userAccount!.UserCredentialsId.Should().Be(createdUserCredentialId);
+            userAccount.UserCredentialsId.Should().Be(createdUserCredentialId);
 
             roleResponse.StatusCode.Should().Be(HttpStatusCode.OK);
 
@@ -118,17 +110,17 @@ namespace WorkoutGlobal.Api.IntegrationTests.Controllers
             };
 
             // act
-            var registrationResponse = await _httpClient.PostAsJsonAsync("api/authentication/registration", userRegistrationDto);
-            var createdUserCredentialsId = registrationResponse.Content.ReadAsStringAsync().Result.Replace("\"", "");
+            var registrationResponse = await _appTestConnection.AppClient.PostAsJsonAsync("api/authentication/registration", userRegistrationDto);
+            var createdUserCredentialsId = await registrationResponse.Content.ReadFromJsonAsync<string>();
 
-            var authorizationResponce = await _httpClient.PostAsJsonAsync("api/authentication/login", new UserAuthorizationDto()
+            var authorizationResponce = await _appTestConnection.AppClient.PostAsJsonAsync("api/authentication/login", new UserAuthorizationDto()
             {
                 Password = userRegistrationDto.Password,
                 UserName = userRegistrationDto.UserName
             });
             var token = await authorizationResponce.Content.ReadAsStringAsync();
 
-            _purgeList.Add(createdUserCredentialsId);
+            _appTestConnection.PurgeList.Add(createdUserCredentialsId);
 
             // assert
             authorizationResponce.StatusCode.Should().Be(HttpStatusCode.OK);

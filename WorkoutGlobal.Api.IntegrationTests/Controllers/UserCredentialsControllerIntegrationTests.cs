@@ -1,13 +1,12 @@
 ﻿using FluentAssertions;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Net;
-using System.Net.Http;
 using System.Net.Http.Json;
+using System.Text.Json;
 using System.Threading.Tasks;
-using WorkoutGlobal.Api.IntegrationTests.Configuration;
 using WorkoutGlobal.Api.Models;
 using WorkoutGlobal.Api.Models.Dto;
 using WorkoutGlobal.Api.Models.Enums;
@@ -18,29 +17,27 @@ namespace WorkoutGlobal.Api.IntegrationTests.Controllers
 {
     public class UserCredentialsControllerIntegrationTests : IAsyncLifetime
     {
-        private readonly HttpClient _httpClient = new();
-        private readonly IConfiguration _testConfiguration;
-        private readonly List<string> _purgeList = new();
+        private readonly AppTestConnection<string> _appTestConnection;
 
         public UserCredentialsControllerIntegrationTests()
         {
-            _testConfiguration = ConfigurationAccessor.GetTestConfiguration();
+            _appTestConnection = new();
         }
 
         public async Task InitializeAsync()
         {
-            await Task.Factory.StartNew(() =>
-            {
-                _httpClient.BaseAddress = new Uri(_testConfiguration["BaseHost"]);
+            await Task.Factory.StartNew(() => 
+            { 
+                _appTestConnection.PurgeList.Clear();
             });
         }
 
         public async Task DisposeAsync()
         {
-            foreach (var id in _purgeList)
-                _ = await _httpClient.DeleteAsync($"api/userCredentials/purge/{id}");
+            foreach (var id in _appTestConnection.PurgeList)
+                _ = await _appTestConnection.AppClient.DeleteAsync($"api/userCredentials/purge/{id}");
 
-            _httpClient.Dispose();
+            _appTestConnection.AppClient.Dispose();
             await Task.CompletedTask;
         }
 
@@ -51,14 +48,14 @@ namespace WorkoutGlobal.Api.IntegrationTests.Controllers
             var url = "api/userCredentials";
 
             // act
-            var getAllUsersResponse = await _httpClient.GetAsync(url);
+            var getAllUsersResponse = await _appTestConnection.AppClient.GetAsync(url);
             var users = await getAllUsersResponse.Content.ReadFromJsonAsync<List<UserCredentialDto>>();
 
             // assert
             getAllUsersResponse.StatusCode.Should().Be(HttpStatusCode.OK);
 
             users.Should().NotBeEmpty();
-            users!.Count.Should().BeGreaterThanOrEqualTo(1);
+            users.Count.Should().BeGreaterThanOrEqualTo(1);
         }
 
         [Fact]
@@ -82,12 +79,14 @@ namespace WorkoutGlobal.Api.IntegrationTests.Controllers
                 SportsActivity = SportsActivity.Moderate,
                 ClassificationNumber = "RTD458S5890002"
             };
-            var creationResponse = await _httpClient.PostAsJsonAsync("api/authentication/registration", user);
-            var userId = creationResponse.Content.ReadAsStringAsync().Result.Replace("\"", "");
-            _purgeList.Add(userId);
+            var creationResponse = await _appTestConnection.AppClient.PostAsJsonAsync("api/authentication/registration", user);
+
+            var userId = await creationResponse.Content.ReadFromJsonAsync<string>();
+
+            _appTestConnection.PurgeList.Add(userId);
 
             // act
-            var getUserResponse = await _httpClient.GetAsync($"api/userCredentials/{userId}");
+            var getUserResponse = await _appTestConnection.AppClient.GetAsync($"api/userCredentials/{userId}");
             var responseUser = await getUserResponse.Content.ReadFromJsonAsync<UserCredentials>();
 
             // assert
@@ -95,9 +94,9 @@ namespace WorkoutGlobal.Api.IntegrationTests.Controllers
 
             responseUser.Should().NotBeNull();
             responseUser.Should().BeOfType<UserCredentials>();
-            responseUser!.UserName.Should().Be(user.UserName);
-            responseUser!.Email.Should().Be(user.Email);
-            responseUser!.PhoneNumber.Should().Be(user.PhoneNumber);
+            responseUser.UserName.Should().Be(user.UserName);
+            responseUser.Email.Should().Be(user.Email);
+            responseUser.PhoneNumber.Should().Be(user.PhoneNumber);
         }
 
         [Fact]
@@ -107,14 +106,14 @@ namespace WorkoutGlobal.Api.IntegrationTests.Controllers
             var invalidUserId = Guid.Empty;
 
             // act
-            var getUserResponse = await _httpClient.GetAsync($"api/userCredentials/{invalidUserId}");
+            var getUserResponse = await _appTestConnection.AppClient.GetAsync($"api/userCredentials/{invalidUserId}");
             var error = await getUserResponse.Content.ReadFromJsonAsync<ErrorDetails>();
 
             // assert
             getUserResponse.StatusCode.Should().Be(HttpStatusCode.NotFound);
 
-            error!.StatusCode.Should().Be(StatusCodes.Status404NotFound);
-            error!.Message.Should().Be("User don't exists.");
+            error.StatusCode.Should().Be(StatusCodes.Status404NotFound);
+            error.Message.Should().Be("User don't exists.");
         }
 
         [Fact]
@@ -138,8 +137,8 @@ namespace WorkoutGlobal.Api.IntegrationTests.Controllers
                 SportsActivity = SportsActivity.Moderate,
                 ClassificationNumber = "RTD458S5890003"
             };
-            var creationResponse = await _httpClient.PostAsJsonAsync("api/authentication/registration", registrateUser);
-            var userId = creationResponse.Content.ReadAsStringAsync().Result.Replace("\"", "");
+            var creationResponse = await _appTestConnection.AppClient.PostAsJsonAsync("api/authentication/registration", registrateUser);
+            var userId = await creationResponse.Content.ReadFromJsonAsync<string>();
             var updationModel = new UpdationUserCredentialsDto()
             {
                 Id = userId,
@@ -148,19 +147,19 @@ namespace WorkoutGlobal.Api.IntegrationTests.Controllers
                 Password = "testUserPassword3",
                 PhoneNumber = "+375250000003"
             };
-            _purgeList.Add(userId);
+            _appTestConnection.PurgeList.Add(userId);
 
             // act
-            var updateResponse = await _httpClient.PutAsJsonAsync($"api/userCredentials/{userId}", updationModel);
+            var updateResponse = await _appTestConnection.AppClient.PutAsJsonAsync($"api/userCredentials/{userId}", updationModel);
 
-            var createdUserResponse = await _httpClient.GetAsync($"api/userCredentials/{userId}");
+            var createdUserResponse = await _appTestConnection.AppClient.GetAsync($"api/userCredentials/{userId}");
             var createdUser = await createdUserResponse.Content.ReadFromJsonAsync<UserCredentials>();
 
             // assert
             updateResponse.StatusCode.Should().Be(HttpStatusCode.NoContent);
-            createdUser!.UserName.Should().Be("ChangeValue");
-            createdUser!.Email.Should().Be(registrateUser.Email);
-            createdUser!.PhoneNumber.Should().Be(registrateUser.PhoneNumber);
+            createdUser.UserName.Should().Be("ChangeValue");
+            createdUser.Email.Should().Be(registrateUser.Email);
+            createdUser.PhoneNumber.Should().Be(registrateUser.PhoneNumber);
         }
 
         [Fact]
@@ -177,14 +176,14 @@ namespace WorkoutGlobal.Api.IntegrationTests.Controllers
             };
 
             // act
-            var updateResponse = await _httpClient.PutAsJsonAsync($"api/userCredentials/{invalidUpdationModel.Id}", invalidUpdationModel);
+            var updateResponse = await _appTestConnection.AppClient.PutAsJsonAsync($"api/userCredentials/{invalidUpdationModel.Id}", invalidUpdationModel);
             var error = await updateResponse.Content.ReadFromJsonAsync<ErrorDetails>();
 
             // assert
             updateResponse.StatusCode.Should().Be(HttpStatusCode.NotFound);
 
-            error!.StatusCode.Should().Be(StatusCodes.Status404NotFound);
-            error!.Message.Should().Be("User don't exists.");
+            error.StatusCode.Should().Be(StatusCodes.Status404NotFound);
+            error.Message.Should().Be("User don't exists.");
 
         }
 
@@ -209,13 +208,13 @@ namespace WorkoutGlobal.Api.IntegrationTests.Controllers
                 SportsActivity = SportsActivity.Moderate,
                 ClassificationNumber = "RTD458S5890004"
             };
-            var creationResponse = await _httpClient.PostAsJsonAsync("api/authentication/registration", registrateUser);
-            var userId = creationResponse.Content.ReadAsStringAsync().Result.Replace("\"", "");
-            _purgeList.Add(userId);
+            var creationResponse = await _appTestConnection.AppClient.PostAsJsonAsync("api/authentication/registration", registrateUser);
+            var userId = await creationResponse.Content.ReadFromJsonAsync<string>();
+            _appTestConnection.PurgeList.Add(userId);
 
             // act
-            var deleteResponse = await _httpClient.DeleteAsync($"api/userCredentials/{userId}");
-            var getUserResponce = await _httpClient.GetAsync($"api/userCredentials/{userId}");
+            var deleteResponse = await _appTestConnection.AppClient.DeleteAsync($"api/userCredentials/{userId}");
+            var getUserResponce = await _appTestConnection.AppClient.GetAsync($"api/userCredentials/{userId}");
             var getUserContent = await getUserResponce.Content.ReadFromJsonAsync<ErrorDetails>();
 
             // assert
@@ -225,8 +224,8 @@ namespace WorkoutGlobal.Api.IntegrationTests.Controllers
 
             getUserContent.Should().NotBeNull();
             getUserContent.Should().BeOfType<ErrorDetails>();
-            getUserContent!.StatusCode.Should().Be(StatusCodes.Status404NotFound);
-            getUserContent!.Message.Should().Be("User don't exists.");
+            getUserContent.StatusCode.Should().Be(StatusCodes.Status404NotFound);
+            getUserContent.Message.Should().Be("User don't exists.");
         }
 
         [Fact]
@@ -236,15 +235,15 @@ namespace WorkoutGlobal.Api.IntegrationTests.Controllers
             var invalidUserId = Guid.Empty;
 
             // act
-            var deleteResponse = await _httpClient.DeleteAsync($"api/userCredentials/{invalidUserId}");
+            var deleteResponse = await _appTestConnection.AppClient.DeleteAsync($"api/userCredentials/{invalidUserId}");
             var deleteContent = await deleteResponse.Content.ReadFromJsonAsync<ErrorDetails>();
-            var getResponse = await _httpClient.GetAsync($"api/userCredentials/{invalidUserId}");
+            var getResponse = await _appTestConnection.AppClient.GetAsync($"api/userCredentials/{invalidUserId}");
 
             // assert
             deleteResponse.StatusCode.Should().Be(HttpStatusCode.NotFound);
             
-            deleteContent!.StatusCode.Should().Be(StatusCodes.Status404NotFound);
-            deleteContent!.Message.Should().Be("User don't exists.");
+            deleteContent.StatusCode.Should().Be(StatusCodes.Status404NotFound);
+            deleteContent.Message.Should().Be("User don't exists.");
 
             getResponse.StatusCode.Should().Be(HttpStatusCode.NotFound);
         }
@@ -270,37 +269,39 @@ namespace WorkoutGlobal.Api.IntegrationTests.Controllers
                 SportsActivity = SportsActivity.Moderate,
                 ClassificationNumber = "RTD458S5890005"
             };
-            var creationResponse = await _httpClient.PostAsJsonAsync("api/authentication/registration", registrateUser);
-            var userId = creationResponse.Content.ReadAsStringAsync().Result.Replace("\"", "");
-            _purgeList.Add(userId);
+            var creationResponse = await _appTestConnection.AppClient.PostAsJsonAsync("api/authentication/registration", registrateUser);
+            var userId = await creationResponse.Content.ReadFromJsonAsync<string>();
+            _appTestConnection.PurgeList.Add(userId);
 
             // act
-            var getRoleResponse = await _httpClient.GetAsync($"api/userCredentials/{userId}/role");
+            var getRoleResponse = await _appTestConnection.AppClient.GetAsync($"api/userCredentials/{userId}/role");
             var getRoleContent = await getRoleResponse.Content.ReadAsStringAsync();
 
             // assert
             getRoleResponse.StatusCode.Should().Be(HttpStatusCode.OK);
 
-            getRoleContent!.Should().NotBeEmpty("User");
-            getRoleContent!.Should().Be("User");
+            getRoleContent.Should().NotBeEmpty("User");
+            getRoleContent.Should().Be("User");
         }
 
+        [Fact]
         public async Task GetUserCredentialRole_UserRole_ReturnNoContentStatus()
         {
             // arrange
             var invalidUserId = Guid.Empty;
 
             // act
-            var getRoleResponse = await _httpClient.GetAsync($"api/userCredentials/{invalidUserId}/role");
+            var getRoleResponse = await _appTestConnection.AppClient.GetAsync($"api/userCredentials/{invalidUserId}/role");
             var getRoleContent = await getRoleResponse.Content.ReadFromJsonAsync<ErrorDetails>();
 
             // assert
             getRoleResponse.StatusCode.Should().Be(HttpStatusCode.NotFound);
 
-            getRoleContent!.StatusCode.Should().Be(StatusCodes.Status404NotFound);
-            getRoleContent!.Message.Should().Be("User don't exists.");
+            getRoleContent.StatusCode.Should().Be(StatusCodes.Status404NotFound);
+            getRoleContent.Message.Should().Be("User don't exists.");
         }
 
+        [Fact]
         public async Task GetUserCredentialRole_TrainerRole_ReturnNoContentStatus()
         {
             // arrange
@@ -321,19 +322,19 @@ namespace WorkoutGlobal.Api.IntegrationTests.Controllers
                 SportsActivity = SportsActivity.Moderate,
                 ClassificationNumber = "RTD458S5890005"
             };
-            var creationResponse = await _httpClient.PostAsJsonAsync("api/authentication/registration", registrateUser);
-            var userId = creationResponse.Content.ReadAsStringAsync().Result.Replace("\"", "");
-            _purgeList.Add(userId);
+            var creationResponse = await _appTestConnection.AppClient.PostAsJsonAsync("api/authentication/registration", registrateUser);
+            var userId = await creationResponse.Content.ReadFromJsonAsync<string>();
+            _appTestConnection.PurgeList.Add(userId);
 
             // act
-            var beforeRaisingResponse = await _httpClient.GetAsync($"api/userCredentials/{userId}/role");
+            var beforeRaisingResponse = await _appTestConnection.AppClient.GetAsync($"api/userCredentials/{userId}/role");
             var beforeRaisingContent = await beforeRaisingResponse.Content.ReadAsStringAsync();
-            var raisingResponse = await _httpClient.PutAsync($"api/userCredentials/{userId}/raising", null);
-            var afterRaisingResponse = await _httpClient.GetAsync($"api/userCredentials/{userId}/role");
+            var raisingResponse = await _appTestConnection.AppClient.PutAsync($"api/userCredentials/{userId}/raising", null);
+            var afterRaisingResponse = await _appTestConnection.AppClient.GetAsync($"api/userCredentials/{userId}/role");
             var afterRaisingContent = await afterRaisingResponse.Content.ReadAsStringAsync();
 
             // assert
-            beforeRaisingContent!.Should().BeEquivalentTo("User");
+            beforeRaisingContent.Should().BeEquivalentTo("User");
 
             raisingResponse.StatusCode.Should().Be(HttpStatusCode.NoContent);
 

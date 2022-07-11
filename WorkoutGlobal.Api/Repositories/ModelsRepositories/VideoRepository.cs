@@ -80,11 +80,5 @@ namespace WorkoutGlobal.Api.Repositories
 
             return commentBlock;
         }
-
-        public async Task Purge(Video video)
-        {
-            Delete(video);
-            await SaveChangesAsync();
-        }
     }
 }

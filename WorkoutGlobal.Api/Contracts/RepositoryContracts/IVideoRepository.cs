@@ -23,7 +23,5 @@ namespace WorkoutGlobal.Api.Contracts
         public Task DeleteVideoAsync(Video video);
 
         public Task<CommentsBlock> GetVideoCommentsBlockAsync(Guid videoId);
-
-        public Task Purge(Video video);
     }
 }

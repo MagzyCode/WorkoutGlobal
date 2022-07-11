@@ -187,12 +187,6 @@ namespace WorkoutGlobal.Api.Repositories
 
             return userCredentials;
         }
-
-        public async Task Purge(UserCredentials userCredentials)
-        {
-            await _userManager.DeleteAsync(userCredentials);
-            await SaveChangesAsync();
-        }
     }
 }
 
