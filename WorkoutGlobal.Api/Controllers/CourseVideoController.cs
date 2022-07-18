@@ -27,9 +27,9 @@ namespace WorkoutGlobal.Api.Controllers
         {
             var courseVideo = _mapper.Map<CourseVideo>(creationCourseVideoDto);
 
-            var id = await _repositoryManager.CourseVideosRepository.CreateCourseVideoAsync(courseVideo);
+            var courseVideoId = await _repositoryManager.CourseVideosRepository.CreateCourseVideoAsync(courseVideo);
 
-            return Ok(id);
+            return Created($"api/videos/{courseVideoId}", courseVideoId);
         }
 
         [HttpGet]

@@ -16,7 +16,7 @@ namespace WorkoutGlobal.Api.Contracts
 
         public Task<IEnumerable<Video>> GetPageVideosAsync(VideoParameters parameters, bool isPublic);
 
-        public Task CreateVideoAsync(Video video);
+        public Task<Guid> CreateVideoAsync(Video video);
 
         public Task UpdateVideoAsync(Video video);
 

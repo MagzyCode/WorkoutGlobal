@@ -68,9 +68,9 @@ namespace WorkoutGlobal.Api.Controllers
         {
             var creationCommentsBlock = _mapper.Map<CommentsBlock>(commentsBlockDto);
 
-            await _repositoryManager.CommentsBlockRepository.CreateCommentBlockAsync(creationCommentsBlock);
+            var commentsBlockId = await _repositoryManager.CommentsBlockRepository.CreateCommentBlockAsync(creationCommentsBlock);
 
-            return Created($"api/commentsBlock/{creationCommentsBlock.Id}", creationCommentsBlock.Id);
+            return Created($"api/commentsBlock/{commentsBlockId}", commentsBlockId);
         }
     }
 }

@@ -93,7 +93,7 @@ namespace WorkoutGlobal.Api.Repositories
         /// </summary>
         /// <param name="userCredentials">Registration user credentials.</param>
         /// <returns>A task that represents asynchronous Registrate action.</returns>
-        public async Task RegistrateUserAsync(UserRegistrationDto userRegistrationDto)
+        public async Task<string> RegistrateUserAsync(UserRegistrationDto userRegistrationDto)
         {
             var userCredentialsDto = _mapper.Map<UpdationUserCredentialsDto>(userRegistrationDto);
             var userCredentials = await GenerateUserCredentialsAsync(userCredentialsDto);
@@ -106,6 +106,8 @@ namespace WorkoutGlobal.Api.Repositories
 
             await Context.UserAccounts.AddAsync(user);
             await Context.SaveChangesAsync();
+
+            return userCredentials.Id;
         }
 
         /// <summary>

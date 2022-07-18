@@ -82,9 +82,31 @@ namespace WorkoutGlobal.Api.Controllers
                     Details = new StackTrace().ToString()
                 });
 
-            await _repositoryManager.AuthenticationRepository.RegistrateUserAsync(userRegistrationDto);
+            var userId = await _repositoryManager.AuthenticationRepository.RegistrateUserAsync(userRegistrationDto);
 
-            return StatusCode(StatusCodes.Status201Created);
+            return Created($"api/userCredentials/{userId}", userId);
+        }
+
+        [HttpDelete("purge/{userCredentialsId}")]
+        [ApiExplorerSettings(IgnoreApi = true)]
+        public async Task<IActionResult> Purge(string userCredentialsId)
+        {
+            var userCredentials = await _repositoryManager.UserCredentialRepository.GetUserCredentialsAsync(userCredentialsId);
+
+            if (userCredentials == null)
+                return NotFound(new ErrorDetails() 
+                {
+                    StatusCode = StatusCodes.Status404NotFound,
+                    Message = "User don't exists.",
+                    Details = new StackTrace().ToString()
+                });
+
+            var userAccount = await _repositoryManager.UserRepository.GetUserByUsernameAsync(userCredentials.UserName);
+            await _repositoryManager.UserRepository.DeleteUserAsync(userAccount);
+
+            await _repositoryManager.UserCredentialRepository.DeleteUserCredentialsAsync(userCredentials);
+
+            return NoContent();
         }
     }
 }

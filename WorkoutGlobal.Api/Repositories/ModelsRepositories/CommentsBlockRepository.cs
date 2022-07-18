@@ -13,8 +13,14 @@ namespace WorkoutGlobal.Api.Repositories
             : base(workoutGlobalContext, configurationManager)
         { }
 
-        public async Task CreateCommentBlockAsync(CommentsBlock commentsBlock)
-            => await CreateAsync(commentsBlock);
+        public async Task<Guid> CreateCommentBlockAsync(CommentsBlock commentsBlock)
+        {
+            await CreateAsync(commentsBlock);
+            await SaveChangesAsync();
+
+            return commentsBlock.Id;
+        }
+           
 
         public async Task<IEnumerable<Comment>> GetCommentsBlockCommentsAsync(Guid commentBlockId)
         {

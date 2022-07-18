@@ -11,8 +11,6 @@ namespace WorkoutGlobal.Api.Repositories
     /// </summary>
     public class VideoRepository : BaseRepository<Video>, IVideoRepository
     {
-        private readonly ICommentsBlockRepository _commentsBlockRepository;
-
         /// <summary>
         /// Ctor for video repository.
         /// </summary>
@@ -20,12 +18,9 @@ namespace WorkoutGlobal.Api.Repositories
         /// <param name="configurationManager"></param>
         public VideoRepository(
             WorkoutGlobalContext workoutGlobalContext, 
-            IConfiguration configurationManager,
-            ICommentsBlockRepository commentsBlockRepository) 
+            IConfiguration configurationManager) 
             : base(workoutGlobalContext, configurationManager)
-        { 
-            _commentsBlockRepository = commentsBlockRepository;
-        }
+        { }
 
         public int Count => Context.Videos.Count();
 
@@ -54,13 +49,15 @@ namespace WorkoutGlobal.Api.Repositories
             return pageVideos;
         }
 
-        public async Task CreateVideoAsync(Video video)
+        public async Task<Guid> CreateVideoAsync(Video video)
         {
             await CreateAsync(video);
 
-            await _commentsBlockRepository.CreateCommentBlockAsync(new CommentsBlock() { CommentedVideoId = video.Id });
+            await Context.CommentsBlocks.AddAsync(new CommentsBlock() { CommentedVideoId = video.Id }); 
 
             await SaveChangesAsync();
+
+            return video.Id;
         }
 
         public async Task UpdateVideoAsync(Video video)

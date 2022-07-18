@@ -31,9 +31,9 @@ namespace WorkoutGlobal.Api.Controllers
         {
             var post = _mapper.Map<Post>(postDto);
 
-            await _repositoryManager.PostRepository.CreatePostAsync(post);
+            var postId = await _repositoryManager.PostRepository.CreatePostAsync(post);
 
-            return StatusCode(StatusCodes.Status201Created);
+            return Created($"api/videos/{postId}", postId);
         }
 
         [HttpPut("{postId}")]

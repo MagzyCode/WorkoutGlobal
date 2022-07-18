@@ -52,9 +52,9 @@ namespace WorkoutGlobal.Api.Controllers
             sportEvent.JoinLink = joinLink;
             sportEvent.HostLink = hostLink;
 
-            await _repositoryManager.SportEventRepository.CreateEventAsync(sportEvent);
+            var sportEventId = await _repositoryManager.SportEventRepository.CreateEventAsync(sportEvent);
 
-            return StatusCode(StatusCodes.Status201Created);
+            return Created($"api/videos/{sportEventId}", sportEventId);
         }
 
         [HttpPut("{sportEventId}")]

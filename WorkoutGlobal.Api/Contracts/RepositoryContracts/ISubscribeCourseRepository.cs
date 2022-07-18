@@ -4,7 +4,7 @@ namespace WorkoutGlobal.Api.Contracts
 {
     public interface ISubscribeCourseRepository
     {
-        public Task CreateSubscribeCourseAsync(SubscribeCourse subscribeCourse);
+        public Task<Guid> CreateSubscribeCourseAsync(SubscribeCourse subscribeCourse);
 
         public Task UpdateSubscribeCourseAsync(SubscribeCourse subscribeCourse);
         

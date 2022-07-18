@@ -4,7 +4,7 @@ namespace WorkoutGlobal.Api.Contracts
 {
     public interface IStoreVideoRepository
     {
-        public Task CreateStoreVideoAsync(StoreVideo storeVideo);
+        public Task<Guid> CreateStoreVideoAsync(StoreVideo storeVideo);
 
         public Task UpdateStoreVideoAsync(StoreVideo storeVideo);
 

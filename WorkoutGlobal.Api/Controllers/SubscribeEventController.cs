@@ -42,9 +42,9 @@ namespace WorkoutGlobal.Api.Controllers
 
             var subscribeEvent = _mapper.Map<SubscribeEvent>(subscribeEventDto);
 
-            await _repositoryManager.SubscribeEventRepository.CreateSubscribeEventAsync(subscribeEvent);
+            var subscribeEventId = await _repositoryManager.SubscribeEventRepository.CreateSubscribeEventAsync(subscribeEvent);
 
-            return StatusCode(StatusCodes.Status201Created);
+            return Created($"api/videos/{subscribeEventId}", subscribeEventId);
         }
 
         [HttpPut("{subscribeEventId}")]

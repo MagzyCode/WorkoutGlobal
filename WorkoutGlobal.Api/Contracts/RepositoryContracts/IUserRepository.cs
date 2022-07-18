@@ -4,7 +4,7 @@ namespace WorkoutGlobal.Api.Contracts
 {
     public interface IUserRepository
     {
-        public Task CreateUserAsync(User user);
+        public Task<Guid> CreateUserAsync(User user);
 
         public Task UpdateUserAsync(User user);
 

@@ -13,10 +13,12 @@ namespace WorkoutGlobal.Api.Repositories
             : base(workoutGlobalContext, configurationManager)
         { }
 
-        public async Task CreateUserAsync(User user)
+        public async Task<Guid> CreateUserAsync(User user)
         {
             await CreateAsync(user);
             await SaveChangesAsync();
+
+            return user.Id;
         }
 
         public async Task DeleteUserAsync(User user)

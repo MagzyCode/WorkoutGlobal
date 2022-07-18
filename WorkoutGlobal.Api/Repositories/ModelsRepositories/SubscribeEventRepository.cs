@@ -13,10 +13,12 @@ namespace WorkoutGlobal.Api.Repositories
             : base(workoutGlobalContext, configurationManager)
         { }
 
-        public async Task CreateSubscribeEventAsync(SubscribeEvent subscribeEvent)
+        public async Task<Guid> CreateSubscribeEventAsync(SubscribeEvent subscribeEvent)
         {
             await CreateAsync(subscribeEvent);
             await SaveChangesAsync();
+
+            return subscribeEvent.Id;
         }
 
         public async Task DeleteSubscribeEventAsync(SubscribeEvent subscribeEvent)

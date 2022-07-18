@@ -56,7 +56,7 @@
 
     <div class="video-list-background">
         <h2 class="showVideo-h2">Комментарии</h2>
-        @if (User.Identity.IsAuthenticated && role == "User")
+        @if (User.Identity.IsAuthenticated @*&& role == "User"*@)
         {
             <form method="post">
                 <input class="showVideo-input-comment" type="text" asp-for="AdditionComment" placeholder="Type comment..." class="form-control"/>

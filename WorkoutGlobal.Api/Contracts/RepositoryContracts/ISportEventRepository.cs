@@ -4,7 +4,7 @@ namespace WorkoutGlobal.Api.Contracts
 {
     public interface ISportEventRepository
     {
-        public Task CreateEventAsync(SportEvent sportEvent);
+        public Task<Guid> CreateEventAsync(SportEvent sportEvent);
 
         public Task UpdateEventAsync(SportEvent sportEvent);
 

@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
-using System.Reflection;
 using System.Text;
 using WorkoutGlobal.Api.Extensions;
 using WorkoutGlobal.Api.HealthChecks;

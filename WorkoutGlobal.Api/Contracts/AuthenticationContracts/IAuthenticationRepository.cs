@@ -27,8 +27,8 @@ namespace WorkoutGlobal.Api.Contracts
         /// Registrate user is system.
         /// </summary>
         /// <param name="userRegistrationDto">User registration credentials. </param>
-        /// <returns></returns>
-        public Task RegistrateUserAsync(UserRegistrationDto userRegistrationDto);
+        /// <returns>Created user id.</returns>
+        public Task<string> RegistrateUserAsync(UserRegistrationDto userRegistrationDto);
 
         /// <summary>
         /// Checks is registration use credentials already exists in system.

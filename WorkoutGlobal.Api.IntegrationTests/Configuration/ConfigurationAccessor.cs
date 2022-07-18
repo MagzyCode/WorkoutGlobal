@@ -1,9 +1,9 @@
 ﻿using Microsoft.Extensions.Configuration;
 using System.IO;
 
-namespace WorkoutGlobal.Api.Tests.Configuration
+namespace WorkoutGlobal.Api.IntegrationTests.Configuration
 {
-    internal static class ConfigurationAccessor
+    public static class ConfigurationAccessor
     {
         public static IConfiguration GetTestConfiguration(string settingFilePath = "appsettings.json")
         {

@@ -346,9 +346,9 @@ namespace WorkoutGlobal.Api.Controllers
         {
             var user = _mapper.Map<User>(userDto);
 
-            await _repositoryManager.UserRepository.CreateUserAsync(user);
+            var userId = await _repositoryManager.UserRepository.CreateUserAsync(user);
 
-            return StatusCode(StatusCodes.Status201Created);
+            return Created($"api/videos/{userId}", userId);
         }
 
         [HttpGet("{accountId}/subscriveCourses")]
